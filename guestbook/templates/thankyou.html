@@ -1,0 +1,49 @@
+{% load staticfiles %}
+<html>
+<head>
+    <title>Thank You!</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
+<script type="text/javascript">
+    window.setTimeout("redirectpage();", 10000);    
+    function redirectpage(){
+    window.top.location.href = '/ophouse/signin/';
+    }
+</script>
+    <title>Thank You</title>
+</head>
+<body>
+<div class="container>
+<div style="width:100%; padding:10px">
+<form name="login" action="/ophouse/signin/" method="get">
+                    {%csrf_token%}
+                    {% for error in form.non_field_errors %}
+                    <div class="form-group has-errors text-danger small">
+                        {{error}}
+                    </div>
+                    {% endfor %}
+                    <div class="divTable">
+                       <div class="divTableBody">
+                         <div class="divTableRow">
+                            <div class="divTableCell">
+                              <button class="btn-primary" style="width:100%">Welcome to Opportunity House! / ¡Bienvenido a Opportunity House!</button>
+                            </div>
+                         </div>
+                        </div>
+                    </div>
+</form>
+</div>
+<div class="divTable" style="padding-left: 75px;">
+                       <h3>Thank you! Someone will be with you shortly.</h3>
+                       <div class="divTableBody">
+                         <div class="divTableRow">
+                            <div class="divTableCell">
+                               <img src="{% static 'images/ophouse.png' %}" alt="Opportunity House">
+                            </div>
+                         </div>
+                       </div>
+</div>
+</div>
+</body
+</html>

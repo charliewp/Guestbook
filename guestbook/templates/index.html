@@ -1,0 +1,43 @@
+{% load staticfiles %}
+<html>
+<head>
+    <title>Guestbook Index</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
+<script type="text/javascript">
+    window.setTimeout("redirectpage();", 120000);    
+    function redirectpage(){
+    window.top.location.href = '/ophouse/signin';
+    }
+</script>
+    <title>Guestbook Home</title>
+</head>
+<body>
+<table>
+  <tr><td><help><a href="/ophouse/signin/">Client Portal</a></help></td><td><help><a href="/ophouse/staff">Staff Portal</a></help></td></tr>
+</table>
+<table>
+    <tr><td><h1>OpHouse Guestbook</h1></td></tr>
+    <!--<tr><td><h3>Thank's for helping us better serve you!</h3></td></tr>-->
+    <tr><table>
+    <tr><td><img src="{% static 'images/ophouse-240x236.png' %}" alt="Opportunity House"></td>
+    <!--
+    <td><c> "BREAK EVERY YOKE"</c></td>
+    <td>
+      <table>
+      <tr><td><img src="{% static 'images/i-58-200x200.png' %}" alt="I-58"><</td></tr>
+      <tr><td></td></tr>
+      </table>
+    </td>
+    </tr>
+    -->
+    </table>
+    </tr>
+    <!--
+    <tr><td><c>OpHouse Guestbook v1.0</c><td></tr>
+    <tr><td><c>A Vaporware Production / (c)2018 Jim Hood, Charlie Price - Solo Deo Gloria! <c></td></tr>-->
+</table>
+
+</body
+</html>

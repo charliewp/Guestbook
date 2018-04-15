@@ -1,0 +1,130 @@
+{% load staticfiles %}
+<html>
+<head>
+  <title>Reporter</title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+   <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+   <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js"></script>   
+  -<link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
+</head>
+<body>
+{% block extrahead %}
+<script type="text/javascript">
+$( document ).ready(function() {
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    fontColor: "#CCC",
+    data : {
+    labels: {{ labels }},
+    datasets: [{
+        fill: false,
+        label: 'Prompt Responses',
+        data: {{ values }},
+        borderColor: '#fe8b36',
+        backgroundColor: '#fe8b36',
+        lineTension: 0.3,
+        borderColor: 'orange',
+        backgroundColor: 'transparent',
+        pointBorderColor: 'orange',
+        pointBackgroundColor: 'orange',
+        pointRadius: 5,
+        pointHoverRadius: 15,
+        pointHitRadius: 30,
+        pointBorderWidth: 1,
+        pointStyle: 'rect',
+        showLine: true, //<- set this
+        borderDash: [3,5]
+    }]
+    },
+    options: {
+        fill: false,
+        responsive: true,
+        legend: {
+        display: false
+    },
+    tooltips: {
+        callbacks: {
+           label: function(tooltipItem) {
+                  return tooltipItem.yLabel;
+           }
+        }
+    },
+        scales: {
+            xAxes: [{
+                type: 'time',
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: "Date",
+                    fontColor: "#CCC"
+                },
+                ticks: {
+                  fontColor: "#CCC", // this here
+                  lineColor: "#CCC"
+                },
+                gridLines: {
+                  display: true ,
+                  color: "#FFFFFF"
+                }
+            }],
+            yAxes: [{
+                
+                display: true,
+                scaleLabel: {
+                    display: false,
+                    labelString: "Response",
+                },
+                ticks: {
+                  fontColor: "#CCC", // this here
+                  fontColor: "#CCC"
+                },
+                gridLines: {
+                  display: true ,
+                  color: "#FFFFFF"
+                }
+            }]
+        }
+    }
+});
+});
+</script> 
+{% endblock %}
+<div class="container" style="padding:0px">
+    <div>
+      <form name="login" action="/ophouse/reporter/" method="post">
+        {%csrf_token%}
+        <div class="divTable" style="width:100%;padding:5px">
+          <div class="divTableBody">
+             <div class="divTableRow">
+               <div class="divTableCell" style="width:25">
+                 {{ form.persons }}
+               </div>
+               <div class="divTableCell" style="width:50%">
+                 {{ form.prompts }}
+               </div>
+             </div>
+          </div>
+        </div style="width:100%;padding:5px;">
+        <button class="btn-success" style="width:100%;padding:5px;">Graph It!</button>
+      </form>
+    </div>    
+</div>
+<div class="container" style="padding:0px">
+<div class="divTable">
+      <div class="divTableBody">        
+        <div class="divTableRow">
+        {% for key in chartkeys %}
+          <div class="divTableCell">
+             <small>{{key.0}}</small> <small>{{key.1}}</small>
+          </div>
+        {% endfor %}
+        </div>
+      </div>
+</div>
+<canvas id="myChart" width="500" height="175"></canvas>
+ </div>
+</body>
+</html>

@@ -1,0 +1,138 @@
+{% load staticfiles %}
+<html>
+<head>
+    <title>Username Create</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
+<script type="text/javascript">
+    window.setTimeout("redirectpage();", 120000);    
+    function redirectpage(){
+    window.top.location.href = '/ophouse/signin';
+    }
+</script>
+</head>
+<body>
+{% if message %}
+   <p style="color: red;padding:10px">
+   <div class="container">
+      <div style="width:100%; padding:10px">
+        <c3>{{message}}</c3>
+      </div>
+   </div>
+   </p>
+{% endif %}
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="container">
+            <div style="width:100%; padding:10px">
+                <form name="login" action="/ophouse/signin/" method="get">
+                    {%csrf_token%}
+                    {% for error in form.non_field_errors %}
+                    <div class="form-group has-errors text-danger small">
+                        {{error}}
+                    </div>
+                    {% endfor %}
+                    <div class="divTable">
+                       <div class="divTableBody">
+                         <div class="divTableRow">
+                            <div class="divTableCell">
+                              <button class="btn-primary" style="width:100%">Go Back / Regresa</button>
+                            </div>
+                         </div>
+                        </div>
+                    </div>
+                </form>
+                <form name="login" action="/ophouse/createalias/" method="post">
+                    {%csrf_token%}
+                    {% for error in form.non_field_errors %}
+                    <div class="form-group has-errors text-danger small">
+                        {{error}}
+                    </div>
+                    {% endfor %}
+                    <div class="divTable">
+                       <div class="divTableBody">
+                         <div class="divTableRow">
+                           <div class="divTableCell">
+                              <div class="form-group" style="width:50%">{{form.firstname}}</div>
+                           </div>
+                           <div class="divTableCell">
+                              <div class="form-group" style="width:50%">{{form.lastname}}</div>
+                           </div>
+                         </div>
+                       </div>
+                       <div class="divTableRow">
+                           <div class="divTableCell">
+                             <div class="divTable">
+                              <div class="divTableBody">
+                                 <div class="divTableRow">
+                                    <div class="divTableCell" style="width:30%">
+                                       <div class="form-group" >{{form.aliasname}}</div>
+                                    </div>
+                                    <div class="divTableCell" style="width:70%;align:left;padding:5px;">
+                                       <div class="form-group" ><c3>a 3-8 letter Nickname</c3></div>
+                                    </div>
+                                 </div>
+                              </div>
+                             </div>
+                           </div>
+                           <div class="divTableCell">
+                             <div class="divTable">
+                              <div class="divTableBody">
+                                 <div class="divTableRow">
+                                    <div class="divTableCell" style="width:20%">
+                                       <div class="form-group" >{{form.aliaspin}}</div>
+                                    </div>
+                                    <div class="divTableCell" style="width:80%;align:left;padding:5px;">
+                                       <div class="form-group" ><c3>a 4 digit PIN</c3></div>
+                                    </div>
+                                 </div>
+                              </div>
+                             </div>
+                           </div>
+                       </div>
+                       <div class="divTableRow">
+                           <div class="divTableCell">
+                              <div class="divTable">
+                              <div class="divTableBody">
+                                 <div class="divTableRow">
+                                    <div class="divTableCell" style="width:30%">
+                                       <div class="form-group" >{{form.shortssn}}</div>
+                                    </div>
+                                    <div class="divTableCell" style="width:70%;align:left;padding:5px;">
+                                       <div class="form-group" ><c3>last 4 digits of your SSN</c3></div>
+                                    </div>
+                                 </div>
+                              </div>
+                             </div>                              
+                           </div>                           
+                           <div class="divTableCell">
+                           </div>
+                       </div>
+                    </div>
+                    <div class="divTable">
+                       <div class="divTableBody">
+                         <div class="divTableRow">
+                            <div class="divTableCell" style="width:100%">
+                              <button class="btn-primary" style="width:100%" >Create My Nickname</button>
+                            </div>
+                         </div>
+                       </div>
+                    </div>
+                </form>
+            </div>
+</div>
+</body>
+</html>

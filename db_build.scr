@@ -1,0 +1,275 @@
+#To fix Integrity Error
+python manage.py sqlsequencereset guestbook | python manage.py dbshell
+
+DELETE FROM public.guestbook_personnote;
+DELETE FROM public.guestbook_personservicerequest;
+DELETE FROM public.guestbook_personsurvey;
+DELETE FROM public.guestbook_persontimecard;
+DELETE FROM public.guestbook_personsnapshot;
+DELETE FROM public.guestbook_person_skills;
+DELETE FROM public.guestbook_person;
+
+DELETE FROM public.guestbook_appproperty;
+INSERT INTO public.guestbook_appproperty VALUES
+    (1, 'maxPrompts', '2'),
+    (2, 'language', '3');
+    
+
+DELETE FROM public.guestbook_preference;
+INSERT INTO public.guestbook_preference VALUES
+    (1, 'PROD',  2, 0, 1, 2),
+    (2, 'DEVT', 4, 5, 1440, 2);
+
+DELETE FROM public.guestbook_genderresponse;
+INSERT INTO public.guestbook_genderresponse VALUES
+    (1, False, 'Unknown',-1, 4),
+    (2, True, 'Male',1, 2),
+    (3, True, 'Female',2, 2),
+    (4, True, 'Masculino',1, 3),
+    (5, True, 'Femenino',2, 3);
+    
+DELETE FROM public.guestbook_ethnicityresponse;
+INSERT INTO public.guestbook_ethnicityresponse VALUES
+    (1, False, 'Unknown',-1, 4),
+    (2, True, 'Asian',1, 2),
+    (3, True, 'Black',2, 2),
+    (4, True, 'Hispanic',3, 2),
+    (5, True, 'Native American',4, 2),
+    (6, True, 'White',5, 2),
+    (7, True, 'Other',6, 2),
+    (8, True, 'asiático',1, 3),
+    (9, True, 'negro',2, 3),
+    (10, True, 'hispano',3, 3),
+    (11, True, 'nativo americano',4, 3),
+    (12, True, 'blanco',5, 3),
+    (13, True, 'otro',6, 3);
+    
+DELETE FROM public.guestbook_ratingresponse;
+INSERT INTO public.guestbook_ratingresponse VALUES
+    (1, False, 'Unknown',-1, 4),
+    (2, True, '1 (worst/peor)',1, 4),
+    (3, True, '2',2, 4),
+    (4, True, '3',3, 4),
+    (5, True, '4',4, 4),
+    (6, True, '5 (best/mejor)',5, 4);
+
+DELETE FROM public.guestbook_affiliateresponse;
+INSERT INTO public.guestbook_affiliateresponse VALUES
+    (1, True, 'Unaffiliated',0, 4),
+    (2, True, 'Back Creek ARP Church',0, 4),
+    (3, True, 'Kerr Street UMC',0, 4);
+
+DELETE FROM public.guestbook_educationresponse;
+INSERT INTO public.guestbook_educationresponse VALUES
+    (1, False, 'Unknown',-1, 4),
+    (2, True, 'Less than 12years',1, 2),
+    (3, True, 'GED',2, 2),
+    (4, True, 'High School Diploma',3, 2),
+    (5, True, 'Some College',4, 2),
+    (6, True, 'Trade School',5, 2),
+    (7, True, 'College Degree',6, 2),
+    (8, True, 'Menos de 12 años',1, 3),
+    (9, True, 'GED',2, 3),
+    (10, True, 'Diploma de escuela secundaria',3, 3),
+    (11, True, 'Alguna educación superior',4, 3),
+    (12, True, 'Escuela de Comercio',5, 3),
+    (13, True, 'Título universitario',6, 3);
+
+DELETE FROM public.guestbook_housingresponse;
+INSERT INTO public.guestbook_housingresponse VALUES
+    (1, False, 'Unknown',-1, 4),
+    (2, True, 'Stable housing (legal residence with expectation to be there at least 30 days)', 4, 2),
+    (3, True, 'Unstable housing (couch-surfing, temporary living, hotel, facing eviction, hospital)', 3, 2),
+    (4, True, 'Sheltered (Salvation Army or other shelter, rehab, halfway house)', 2, 2),
+    (5, True, 'Unsheltered (tent, car, porch, shed, abandoned bldg)', 1, 2),
+    (6, True, 'Jail or prison',0, 2),
+    (7, True, 'Vivienda estable (residencia legal con la expectativa de estar allí al menos 30 días)', 4, 3),
+    (8, True, 'Vivienda inestable (couchsurfing, residencia temporal, hotel, frente a desalojo, hospital)', 3, 3),
+    (9, True, 'Protegido (Salvation Army u otro albergue, rehabilitación, casa a medio camino)', 2, 3),
+    (10, True, 'Desprotegido (tienda, coche, porche, cobertizo, edificio abandonado)', 1, 3),
+    (11, True, 'Cárcel o prisión',0, 3);
+    
+DELETE FROM public.guestbook_yesnoresponse;
+INSERT INTO public.guestbook_yesnoresponse VALUES
+(1, False, 'Unknown',-1, 4),
+(2, True, 'Yes', 1, 2),
+(3, True, 'No', 0, 2),
+(4, True, 'Si', 1, 3),
+(5, True, 'No', 0, 3);
+
+DELETE FROM public.guestbook_physicalhealthresponse;
+INSERT INTO public.guestbook_physicalhealthresponse VALUES
+(1, False, 'Unknown',-1, 4),
+(2, True, 'I have life-threatening or disabling physical health issues.',1, 2),
+(3, True, 'I have physical health issues that prevent me from working.',2, 2),
+(4, True, 'I am able to work at least part-time, but have significant health issues.',3, 2),
+(5, True, 'I have physical health issues that are under control and am able to work full-time.',4, 2),
+(6, True, 'I am in reasonably good health and able to work without restriction.',5, 2),
+(7, True, 'Tengo problemas de salud física que ponen en peligro la vida o discapacitantes.',1, 3),
+(8, True, 'Tengo problemas de salud física que me impiden trabajar.',2, 3),
+(9, True, 'Puedo trabajar al menos a tiempo parcial, pero tengo problemas de salud importantes.',3, 3),
+(10, True, 'Tengo problemas de salud física que están bajo control y puedo trabajar a tiempo completo.',4, 3),
+(11, True, 'Tengo una salud razonablemente buena y puedo trabajar sin restricciones.',5, 3);
+
+DELETE FROM public.guestbook_emotionalhealthresponse;
+INSERT INTO public.guestbook_emotionalhealthresponse VALUES
+(1, False, 'Unknown',-1, 4),
+(2, True, 'I have serious emotional health issues.',1, 2),
+(3, True, 'I have emotional health issues that prevent me from working.',2, 2),
+(4, True, 'I have some emotional health issues, but am able to work at least part-time.',3, 2),
+(5, True, 'I have some emotional issues that are under control, and able to work full-time.',4, 2),
+(6, True, 'I am emotionally healthy and able to work without restriction.',5, 2),
+(7, True, 'Tengo serios problemas de salud emocional.',1, 3),
+(8, True, 'Tengo problemas de salud emocional que me impiden trabajar.',2, 3),
+(9, True, 'Tengo algunos problemas de salud emocionales, pero puedo trabajar al menos a tiempo parcial',3, 3),
+(10, True, 'Tengo algunos problemas emocionales que están bajo control y que puedo trabajar a tiempo completo.',4, 3),
+(11, True, 'Estoy emocionalmente saludable y puedo trabajar sin restricciones.',5, 3);
+
+DELETE FROM public.guestbook_skillsexperienceresponse;
+INSERT INTO public.guestbook_skillsexperienceresponse VALUES
+(1, True, 'Construction',1, 2),
+(2, True, 'Domestic',2, 2),
+(3, True, 'Landscaping/Agricultural',3, 2),
+(4, True, 'Manufacturing',4, 2),
+(5, True, 'Office',5, 2),
+(6, True, 'General labor',6, 2),
+(7, True, 'Health care (CNA or similar)',7, 2),
+(8, True, 'Construcción',1, 3),
+(9, True, 'Trabajo doméstico ',2, 3),
+(10, True, 'Paisajismo/Agrícola',3, 3),
+(11, True, 'Fabricación',4, 3),
+(12, True, 'Trabajo de oficina',5, 3),
+(13, True, 'Tarea general',6, 3),
+(14, True, 'Cuidado de la salud (CNA, etc.)',7, 3);
+
+DELETE FROM public.guestbook_numberrangeresponse;
+INSERT INTO public.guestbook_numberrangeresponse VALUES
+(1, False, 'Unknown',-1, 4),
+(2, True, '0-100',50, 4),
+(3, True, '101-300',200, 4),
+(4, True, '301-700',500, 4),
+(5, True, '701-1500',1100, 4),
+(6, True, '>1500',1500, 4);
+
+DELETE FROM public.guestbook_countresponse;
+INSERT INTO public.guestbook_countresponse VALUES
+(1, False, 'Unknown',-1, 4),
+(2, True, '0',0, 4),
+(3, True, '1',1, 4),
+(4, True, '2',2, 4),
+(5, True, '3',3, 4),
+(6, True, '4',4, 4),
+(7, True, '5',5, 4),
+(8, True, '5+',6, 4);
+
+DELETE FROM public.guestbook_hourrangeresponse;
+INSERT INTO public.guestbook_hourrangeresponse VALUES
+(1, False, 'Unknown',-1, 4),
+(2, True, '1 hour',1, 2),
+(3, True, '2 hours',2, 2),
+(4, True, '3 hours',3, 2),
+(5, True, '4 hours',2, 2),
+(6, True, '5 hours',5, 2),
+(7, True, '6 hours',6, 2),
+(8, True, '7 hours',7, 2),
+(9, True, '8 or more hours',8, 2),
+(10, True, '1 hora',1, 3),
+(11, True, '2 horas',2, 3),
+(12, True, '3 horas',3, 3),
+(13, True, '4 horas',4, 3),
+(14, True, '5 horas',5, 3),
+(15, True, '6 horas',6, 3),
+(16, True, '7 horas',7, 3),
+(17, True, '8 horas o mas',8, 3);
+
+DELETE FROM public.guestbook_roleresponse;
+INSERT INTO public.guestbook_roleresponse VALUES
+(1, False, 'Unknown',-1, 4),
+(2, True, 'Client',0, 4),
+(3, True, 'Volunteer',0, 4),
+(4, True, 'Staff',0, 4),
+(5, True, 'All',0, 4);
+
+DELETE FROM public.guestbook_languageresponse;
+INSERT INTO public.guestbook_languageresponse VALUES
+(1, False, 'Unknown',-1, 4),
+(2, True, 'English',0, 4),
+(3, True, 'Español',0, 4),
+(4, False, 'All',0, 4);
+    
+DELETE FROM public.guestbook_prompt;
+INSERT INTO public.guestbook_prompt VALUES
+(1, True,'Is this your current email address..',90,'email',NULL,NULL, NULL,1,NULL,2,5),
+(2, True,'Is this your current telephone number...',90,'telephone',NULL,NULL, NULL,1,NULL,2,5),
+(3, True,'Would you like to receive text messages from OpHouse?',90,'canText','YesNoResponse',NULL, NULL,1,NULL,2,2),
+(4, True,'Have you been involved in a law enforcement incident at any time in the past week?',7,'incidentLawEnforcement','YesNoResponse',NULL, NULL,1,NULL,2,2),
+(5, True,'Have you required emergency medical treatment at any time in the past week?',7,'incidentEmergencyMedical','YesNoResponse',NULL, NULL,1,NULL,2,2),
+(6, True,'Select your highest level of education...',180,'education','EducationResponse',NULL, NULL,1,NULL,2,2),
+(7, True,'Select all of your skills and experience...',90,'skills','SkillsExperienceResponse',NULL, NULL,1,NULL,2,2),
+(8, True,'Where did you spend last night?',1,'housing','HousingResponse',NULL, NULL,100,NULL,2,2),
+(9, True,'How do you identify ethnically?',0,'ethnicity','EthnicityResponse',NULL, NULL,1,NULL,2,2),
+(10, False,'What is your role here at Opportunity House?',0,'role','RoleResponse',NULL, NULL,1,NULL,2,5),
+(11, True,'What is your gender?',0,'gender','GenderResponse',NULL, NULL,1,NULL,2,2),
+(12, True,'Are you affiliated with any of our partner ministries?',90,'affiliation','AffiliateResponse',NULL, NULL,1,NULL,2,3),
+(13, True,'How would you describe your current physical health?',14,'physicalHealth','PhysicalHealthResponse',NULL, NULL,1,NULL,2,2),
+(14, True,'How would you describe your current emotional health?',14,'emotionalHealth','EmotionalHealthResponse',NULL, NULL,1,NULL,2,2),
+(15, True,'Are you a US Military Veteran?',0,'veteran','YesNoResponse',NULL, NULL,1,NULL,2,2),
+(16, True,'Are you a registered sex offender?',0,'registeredSexOffender','YesNoResponse',NULL, NULL,1,NULL,2,2),
+(17, True,'Do you currently receive SSI or disability income?',90,'receivesSSiOrDisabilityIncome','YesNoResponse',NULL, NULL,1,NULL,2,2),
+(18, True,'Do you currently receive income from child support payments?',90,'receivesChildSupportIncome','YesNoResponse',NULL, NULL,1,NULL,2,2),
+(19, True,'Do you currently receive non-SSI retirement income?',90,'receivesOtherRetirementIncome','YesNoResponse',NULL, NULL,1,NULL,2,2),
+(20, True,'What was your gross income from all employment sources in the past month?',30,'grossIncomeEmployment','NumberRangeResponse',NULL,'Yes',1,24,2,2),
+(21, True,'What was your gross SSI or disability income in the past month?',30,'grossIncomeSsiorDisability','NumberRangeResponse'     ,NULL,'Yes',1,17,2,2),
+(22, True,'What was your gross income from child support payments in the past month?',30,'grossIncomeChildSupport','NumberRangeResponse',NULL,'Yes',1,18,2,2),
+(23, True,'What was your gross income from all non-SSI retirement sources in the past month?',30,'grossIncomeOtherRetirement','NumberRangeResponse',NULL,'Yes',1,19,2,2),
+(24, True,'Are you currently employed?',90,'receivesEmploymentIncome','YesNoResponse',NULL, NULL,1,NULL,2,2),
+(25, True,'How long are you scheduled to be here today?',1,'lastHoursWorked','HourRangeResponse',NULL, NULL,100,NULL,2,3),
+(26, True,'What is your preferred language?/¿Cuál es tu idioma preferido?',0,'language','LanguageResponse',NULL, NULL,200,NULL,4,5),
+(27, True,'¿Es esta tu dirección de correo electrónico actual?',90,'email',NULL,NULL, NULL,1,NULL,3,5),
+(28, True,'¿Es este tu número de teléfono actual?',90,'telephone',NULL,NULL, NULL,1,NULL,3,5),
+(29, True,'¿Le gustaría recibir mensajes de texto de OpHouse?',90,'canText','YesNoResponse',NULL, NULL,1,NULL,3,2),
+(30, True,'¿Ha estado involucrado en un incidente policial en algún momento de la última semana?',7,'incidentLawEnforcement','YesNoResponse',NULL, NULL,1,NULL,3,2),
+(31, True,'¿Ha requerido tratamiento médico de emergencia en algún momento de la semana pasada?',7,'incidentEmergencyMedical','YesNoResponse',NULL, NULL,1,NULL,3,2),
+(32, True,'Seleccione su nivel más alto de educación …',180,'education','EducationResponse',NULL, NULL,1,NULL,3,2),
+(33, True,'Seleccione todas sus habilidades y experiencia …',90,'skills','SkillsExperienceResponse',NULL, NULL,1,NULL,3,2),
+(34, True,'¿Dónde pasaste la noche anterior?',1,'housing','HousingResponse',NULL, NULL,100,NULL,3,2),
+(35, True,'¿Cómo te identificas étnicamente?',0,'ethnicity','EthnicityResponse',NULL, NULL,1,NULL,3,2),
+(36, False,'¿Cuál es su función aquí en Opportunity House?',0,'role','RoleResponse',NULL, NULL,1,NULL,3,5),
+(37, True,'¿Cuál es su género?',0,'gender','GenderResponse',NULL, NULL,1,NULL,3,2),
+(38, True,'¿Estás afiliado a alguno de nuestros ministerios asociados?',90,'affiliation','AffiliateResponse',NULL, NULL,1,NULL,3,3),
+(39, True,'¿Cómo describirías tu salud física actual?',14,'physicalHealth','PhysicalHealthResponse',NULL, NULL,1,NULL,3,2),
+(40, True,'¿Cómo describirías tu salud emocional actual?',14,'emotionalHealth','EmotionalHealthResponse',NULL, NULL,1,NULL,3,2),
+(41, True,'¿Eres un veterano militar de los EE. UU.?',0,'veteran','YesNoResponse',NULL, NULL,1,NULL,3,2),
+(42, True,'¿Eres un delincuente sexual registrado?',0,'registeredSexOffender','YesNoResponse',NULL, NULL,1,NULL,3,2),
+(43, True,'¿Actualmente recibe ingresos de SSI o por discapacidad?',90,'receivesSSiOrDisabilityIncome','YesNoResponse',NULL, NULL,1,NULL,3,2),
+(44, True,'¿Actualmente recibe ingresos de pagos de manutención de niños?',90,'receivesChildSupportIncome','YesNoResponse',NULL, NULL,1,NULL,3,2),
+(45, True,'¿Actualmente recibe ingresos de jubilación no SSI?',90,'receivesOtherRetirementIncome','YesNoResponse',NULL, NULL,1,NULL,3,2),
+(46, True,'¿Cuál fue su ingreso bruto de todas las fuentes de empleo en el último mes?',30,'grossIncomeEmployment','NumberRangeResponse',NULL,'Yes',1,24,3,2),
+(47, True,'¿Cuál fue su ingreso bruto de SSI o discapacidad en el último mes?',30,'grossIncomeSsiorDisability','NumberRangeResponse'     ,NULL,'Yes',1,17,3,2),
+(48, True,'¿Cuál fue su ingreso bruto de pagos de manutención de niños en el último mes?',30,'grossIncomeChildSupport','NumberRangeResponse',NULL,'Yes',1,18,3,2),
+(49, True,'¿Cuál fue su ingreso bruto de todas las fuentes de retiro no SSI en el último mes?',30,'grossIncomeOtherRetirement','NumberRangeResponse',NULL,'Yes',1,19,3,2),
+(50, True,'¿Está trabajando actualmente?',90,'receivesEmploymentIncome','YesNoResponse',NULL, NULL,1,NULL,3,2),
+(51, True,'¿Cuánto tiempo estás programado para estar aquí hoy?',1,'lastHoursWorked','HourRangeResponse',NULL, NULL,100,NULL,3,3);
+
+
+DELETE FROM public.guestbook_service;
+INSERT INTO public.guestbook_service VALUES
+    (1, True,'Meals/Comidas', False, False, True, True, True, True, True, False,2),
+    (2, True,'Shower/Ducha', False, False, True, True, True, True, True, False,2),
+    (3, True,'Clothing/Ropa', False, False, True, True, True, True, True, False,2),
+    (4, True,'Laundry/Lavandería', False, False, True, True, True, True, True, False,2),
+    (5, True,'Computer/Computadora', False, False, True, True, True, True, True, False,2),
+    (6, True,'Nurse/Enfermera', False, False, True, True, True, True, True, False,2),
+    (7, True,'Employment Assistance/Asistencia de empleo', True, False, True, True, True, True, True, False,2),
+    (8, True,'Housing Assistance/Asistencia para la vivienda', True, False, True, True, True, True, True, False,2),
+    (9, True,'Transportation Assistance/Asistencia de transporte', True, False, True, True, True, True, True, False,2),
+    (10, True,'Pastor Consultation/Consulta del pastor', False, False, True, True, True, True, True, False,2),
+    (11, True,'Other Assistanc/Otra asistencia', True, False, True, True, True, True, True, False,2),
+    (12, True,'Food/Comida para hogar', True, False, True, True, True, True, True, False,2),
+    (13, True,'Group Class/Clase grupal', True, False, True, True, True, True, True, False,2),
+    (14, True,'Referral/Remisión', True, False, True, True, True, True, True, False,2),
+    (15, True,'Financial Assistance/Asistencia financiera', True, False, True, True, True, True, True, False,2),
+    (16, True,'Rent/Alquilar', True, False, True, True, True, True, True, False,2),
+    (17, True,'Utilities/Utilidades', True, False, True, True, True, True, True, False,2),
+    (18, True,'Gas/Transportation/Transporte', True, False, True, True, True, True, True, False,2),
+    (19, True,'Other/Otra', True, False, True, True, True, True, True, False,2);

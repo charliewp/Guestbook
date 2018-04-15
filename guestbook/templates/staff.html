@@ -1,0 +1,59 @@
+{% load staticfiles %}
+
+<html>
+    
+<head>
+    <title>Staff Portal</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
+        <script type="text/javascript">
+    window.setTimeout("redirectpage();", 10000);    
+    function redirectpage(){
+    window.top.location.href = '/ophouse/staff/';
+    }
+    </script>
+</head>
+<body>
+{% if error %}
+   <p style="color: red;">
+   {{error}}
+   </p>
+{% endif %}
+<div class="container" >
+<div style="width:100%; padding:10px">
+<form name="login" action="/ophouse/select/" method="get">
+                    {%csrf_token%}
+                    {% for error in form.non_field_errors %}
+                    <div class="form-group has-errors text-danger small">
+                        {{error}}
+                    </div>
+                    {% endfor %}
+                    <div class="divTable">
+                       <div class="divTableBody">
+                         <div class="divTableRow">
+                            <div class="divTableCell">
+                              <button class="btn-primary" style="width:100%">Go Back / Regresa</button>
+                            </div>
+                         </div>
+                        </div>
+                    </div>
+</form>
+</div>
+<c3>{{message}}</c3>
+<div class="divTable" style="width:100%">
+    <div class="divTableBody">
+                         <div class="divTableRow">
+                         {% for tup in snapshotLinks %}
+                         <!--<div class="divTableRow">-->
+                            <div class="divTableCell" >
+                                <a href="/ophouse/services?person={{ tup.1 }}&staff=1"><button class="gbcheckbox-inline">{{tup.2}}</button></a>
+                                <a href="/ophouse/note?connection={{ tup.0 }}&staff=1"><button class="gbcheckbox-inline">Add Note</button></a>
+                            </div>
+                         <!--</div>-->
+                         {% endfor %}
+                         </div>
+    </div>
+  </div>
+</div>
+</html>

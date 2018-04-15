@@ -1,0 +1,177 @@
+{% load staticfiles %}
+<html>
+<head>
+    <title>Survey</title>
+--   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>    
+    <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
+<script type="text/javascript">
+    window.setTimeout("redirectpage();", 360000);    
+    function redirectpage(){
+    window.top.location.href = '/ophouse/signin';
+    }
+</script>
+</head>
+<body>
+{% if message %}
+   <p style="color: red;">
+   <h2>{{message}}</h2>
+   </p>
+{% endif %}
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="container">
+            <div style="width:100%; padding:10px">                
+                    {% for error in form.non_field_errors %}
+                    <div class="form-group has-errors text-danger small">
+                        {{error}}
+                    </div>
+                    {% endfor %}
+                    <!--<div class="divTable">
+                       <div class="divTableBody">
+                         <div class="divTableRow">
+                            <div class="divTableCell">
+                              <button class="btn btn-primary" style="width:100%">Go Back / Regresa</button>
+                            </div>
+                         </div>
+                        </div>
+                    </div>-->
+                    <form action="/ophouse/prompt?connection={{connection}}" method="post">
+                    {%csrf_token%}
+                    {% for error in form.non_field_errors %}
+                    <div class="form-group has-errors text-danger small">
+                        {{error}}
+                    </div>
+                    {% endfor %}                    
+                    <div class="divTable" style="padding:5px">
+                       <div class="divTableBody">
+                         <div class="divTableRow">
+                            <div class="divTableCell" style="width:100%">
+                              <button class="btn-primary" style="width:100%" >Skip Survey/Omitir encuesta</button>
+                            </div>
+                         </div>
+                       </div>
+                    </div>
+                </form>
+                <div><c3>Please help us keep our information current / Ayúdenos a mantener nuestra información actualizada...</c3></div>
+                    {%csrf_token%}
+                    {% for error in form.non_field_errors %}
+                    <div class="form-group has-errors text-danger small">
+                        {{error}}
+                    </div>
+                    {% endfor %}
+                    <div class="divTable">
+                       <div class="divTableBody">
+                         <div class="divTableRow">
+                           <div class="divTableCell">
+                              <h2>{{survey}}</h2>
+                           </div>
+                         </div>
+                       </div>
+                    </div>
+                              <!--                                        -->
+                              <!-- CharField replacement Prompts are here -->
+                              <!--                                        -->
+                              <!--                                        -->
+                              {% if form.replaceText %} 
+                                 <form id="choiceForm" name="charField" action="/ophouse/prompt?connection={{connection}}&prompt={{whichQuestion.pk}}" method="post" >
+                                   {%csrf_token%}
+                                   <div class="divTableRow">
+                                         <div class="divTableCell" style="width:100%;padding:10px;">
+                                           {{form.replaceText}}
+                                         </div>
+                                   </div>                                   
+                                   <!--<div>{{form.fastTrack}} <c3>Keep asking me questions until I uncheck this box.</c3></div>-->
+                                   <button class="btn-success" style="width:100%" >Make changes if necessary then click here / Haga los cambios necesarios y haga clic aquí</button>
+                                 </form>
+                              {% endif %}
+                              <!--                                        -->
+                              <!-- ChoiceField Prompts are here           -->
+                              <!--                                        -->
+                              <!--                                        -->
+                              {% if form.choiceField %}
+                                    <div class="row" style="width:100%">
+                                    {% for choice in form.choiceField.field.choices %}
+                                      <div class="cel" style="padding:5px;width=10%">
+                                       <form id="choiceForm" action="/ophouse/prompt?connection={{connection}}&amp;prompt={{whichQuestion.pk}}" method="post">
+                                         {%csrf_token%}
+                                         <input type="radio" name="choiceField" hidden="true" value="{{choice.0}}" checked="checked"/>
+                                         <button class="gbcheckbox-inline" >{{choice.1}}</button>
+                                       </form>
+                                      </div>
+                                    {% endfor %}
+                                    </div>
+                              {% endif %}
+                              <!--                                        -->
+                              <!-- M2M or MultiChoice Prompts are here    -->
+                              <!--                                        -->
+                              <!--                                        -->
+                              {% if form.multiChoice %} 
+                                 <!--{{form.multiChoice}}-->
+                                 <div class="form-group badge-checkboxes" style="width:100%">
+                                 <form id="choiceForm" action="/ophouse/prompt?connection={{connection}}&amp;prompt={{whichQuestion.pk}}" method="post">
+                                 {%csrf_token%}
+                                 <div class="divTable" style="width:100%">
+                                   <div class="divTableBody">
+                                     <div class="divTableRow">
+                                       <div class="divTableCell" style="width:100%">
+                                         <div>
+                                           {% for choice_id, choice_label in form.multiChoice.field.widget.choices %}
+                                              <label for="id_options_{{ choice_id }}" class="checkbox-inline">
+                                                <input  type="checkbox" id="id_options_{{ choice_id }}" value="{{ choice_id }}" name="multichoice" {% if choice_id in form.multiChoice.value  %} checked="checked"{% endif %}/>
+                                                <span class="badge">{{choice_label}}</span>
+                                              {{choice}}
+                                              </label>
+                                           {% endfor %}
+                                         </div>
+                                        </div>
+                                     </div>
+                                     <div class="divTableRow">
+                                       <div class="divTableCell" style="width:25%">
+                                         <button class="btn btn-primary" style="width:25%" >Next / Siguiente</button>
+                                       </div>
+                                     </div>
+                                   </div>
+                                 </div>
+                                 </form>
+                                 </div>
+                              {% endif %}                                                         
+                    </div>                  
+                
+                <!--<form action="/ophouse/prompt?connection={{connection}}" method="post">
+                    {%csrf_token%}
+                    {% for error in form.non_field_errors %}
+                    <div class="form-group has-errors text-danger small">
+                        {{error}}
+                    </div>
+                    {% endfor %}                    
+                    <div class="divTable" style="padding:5px">
+                       <div class="divTableBody">
+                         <div class="divTableRow">
+                            <div class="divTableCell" style="width:25%">
+                              <button class="btn warning" style="width:25%" >Skip Survey/Omitir encuesta</button>
+                            </div>
+                         </div>
+                       </div>
+                    </div>
+                </form>-->
+            </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+{% load staticfiles %}
+<html>
+<head>
+    <title>Note</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
+</head>
+<body>
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="container">
+<div style="width:100%; padding:10px">
+<form name="login" action="/ophouse/staff/" method="get">
+                    {%csrf_token%}
+                    {% for error in form.non_field_errors %}
+                    <div class="form-group has-errors text-danger small">
+                        {{error}}
+                    </div>
+                    {% endfor %}
+                    <div class="divTable">
+                       <div class="divTableBody">
+                         <div class="divTableRow">
+                            <div class="divTableCell">
+                              <button class="btn-primary" style="width:100%">Go Back / Regresa</button>
+                            </div>
+                         </div>
+                        </div>
+                    </div>
+</form>
+</div>
+            <div style="width:100%">
+                <c3>Note / {{displayname}} / {{timestamp}}:</c3>
+                <form name="login" action="/ophouse/note?connection={{connection}}" method="post">
+                  {%csrf_token%}
+                  {{form.note}}
+                  <div style="padding:5px">
+                  </div>
+                  <button class="btn-success" style="width:100%;border:5px;">Save Note / Guardar la nota</button>
+                </form>
+            </div>
+</div>
+</body>
+</html>
