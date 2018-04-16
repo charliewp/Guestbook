@@ -14,8 +14,12 @@
 </head>
 <body>
 {% if message %}
-   <p style="color: red;">
-   <h2>{{message}}</h2>
+   <p style="color: red;padding:10px">
+   <div class="container">
+      <div style="width:100%; padding:10px">
+        <c3>{{message}}</c3>
+      </div>
+   </div>
    </p>
 {% endif %}
 {% if form.errors %}
@@ -51,7 +55,7 @@
                         </div>
                     </div>
                 </form>
-                <form name="login" action="/ophouse/createalias/" method="post">
+                <form name="resetalias" action="/ophouse/resetalias/" method="post">
                     {%csrf_token%}
                     {% for error in form.non_field_errors %}
                     <div class="form-group has-errors text-danger small">

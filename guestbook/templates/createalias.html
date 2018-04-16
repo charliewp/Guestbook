@@ -55,7 +55,7 @@
                         </div>
                     </div>
                 </form>
-                <form name="login" action="/ophouse/createalias/" method="post">
+                <form name="createalias" action="/ophouse/createalias/" method="post">
                     {%csrf_token%}
                     {% for error in form.non_field_errors %}
                     <div class="form-group has-errors text-danger small">

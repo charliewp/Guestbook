@@ -26,7 +26,7 @@ SNAPSHOT_STATUS_ACTIVE    = 800
 SNAPSHOT_STATUS_STALE     = 801
 SNAPSHOT_STATUS_CLOSED    = 802
 
-_ENV = 'DEVT'
+_ENV = 'PROD'
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
