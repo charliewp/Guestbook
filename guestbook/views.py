@@ -49,7 +49,11 @@ from guestbook.forms import ReporterForm
 #from guestbook.forms import VolunteerForm
 from django.forms import CharField, ModelChoiceField, RadioSelect, BaseForm
 
+<<<<<<< HEAD
 #from twilio.rest import Client
+=======
+from twilio.rest import Client
+>>>>>>> d218e7b096339ce2f6f010f1c3faaf5de7d8c8de
 import re
 from django.apps import apps
 
