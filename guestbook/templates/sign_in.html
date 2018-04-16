@@ -1,0 +1,97 @@
+{% load staticfiles %}
+<html>
+<head>
+    <title>Sign In</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
+</head>
+<body>
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="container">
+            <div style="width:100%; padding:10px">
+                {% if message %}
+                  <h2>{{message}}</h2>
+                {% endif %}
+                <form name="login" action="/ophouse/signin/" method="get">
+                    {%csrf_token%}
+                    {% for error in form.non_field_errors %}
+                    <div class="form-group has-errors text-danger small">
+                        {{error}}
+                    </div>
+                    {% endfor %}
+                    <div class="divTable">
+                       <div class="divTableBody">
+                         <div class="divTableRow">
+                            <div class="divTableCell">
+                              <button class="btn-primary" style="width:100%">Welcome to Opportunity House! / ¡Bienvenido a Opportunity House!</button>
+                            </div>
+                         </div>
+                        </div>
+                    </div>
+                </form>
+                <form name="login" action="/ophouse/signin/" method="post">
+                    {%csrf_token%}
+                    {% for error in form.non_field_errors %}
+                    <div class="form-group has-errors text-danger small">
+                        {{error}}
+                    </div>
+                    {% endfor %}                    
+                    <div class="divTable" style="width:100%">
+                       <div class="divTableBody" name="aliasInfo">
+                         <div class="divTableRow">
+                           <div class="divTableCell">
+                             <div class="divTable" style="width:100%">
+                                <div class="divTableBody">
+                                    <div class="divTableRow">
+                                       <div class="divTableCell">
+                                          <div class="form-group" style="width:60%">{{form.aliasname}}</div>
+                                       </div>
+                                       <div class="divTableCell">
+                                          <div class="form-group" style="width:40%">{{form.aliaspin}}</div>
+                                       </div>
+                                    </div>
+                                    <div class="divTableRow">
+                                       <div class="divTableCell">
+                                          <div style="width:100%;align:left;">
+                                             <a href="/ophouse/createalias/"><c3>Create Username / Crear nombre de usuario</c3></a>
+                                          </div>
+                                       </div>
+                                       <div class="divTableCell" >
+                                          <div style="width:100%;align:left;">
+                                             <a href="/ophouse/resetalias/"><c3>Reset Username / Restablecer nombre de usuario</c3></a>
+                                          </div>
+                                       </div>
+                                    </div>
+                                </div>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                    <div class="divTable">
+                       <div class="divTableBody">
+                         <div class="divTableRow">
+                            <div class="divTableCell" style="width:100%">
+                              <button class="btn-success" style="width:100%" >Sign In / Registrarse</button>
+                            </div>
+                         </div>
+                       </div>
+                    </div>
+                </form>
+            </div>
+</div>
+</body>
+</html>

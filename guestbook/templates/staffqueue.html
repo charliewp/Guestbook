@@ -1,0 +1,121 @@
+{% load staticfiles %}
+
+<html>
+    
+<head>
+    <title>Staff Service Queues</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
+    <script type="text/javascript">
+    window.setTimeout("redirectpage();", 10000);    
+    function redirectpage(){
+    window.top.location.href = '/ophouse/staffqueue?servicetype={{servicetype}}';
+    }
+    </script>
+    <script>
+    function clicked() {
+    return confirm('Click Ok to Complete, Cancel to go back.');}
+    </script>
+</head>
+<body>
+{% if message %}
+   <p style="color: red;">
+   {{message}}
+   </p>
+{% endif %}
+{% if error %}
+   <p style="color: red;">
+   {{error}}
+   </p>
+{% endif %}
+<div class="container" >
+  <div style="width:100%; padding:10px">
+                <form name="login" action="/ophouse/select/" method="get">
+                    {%csrf_token%}
+                    {% for error in form.non_field_errors %}
+                    <div class="form-group has-errors text-danger small">
+                        {{error}}
+                    </div>
+                    {% endfor %}
+                    <div class="divTable">
+                       <div class="divTableBody">
+                         <div class="divTableRow">
+                            <div class="divTableCell">
+                              <button class="btn-primary" style="width:100%">Go Back / Regresa</button>
+                            </div>
+                         </div>
+                        </div>
+                    </div>
+                </form>
+  <div class="divTable" style="width:100%">
+    <div class="divTableBody">
+                         <div class="divTableRow">
+                            <div class="divTableCell" style="padding:2px">
+                               <c3>Select a queue to watch / Selecciona una cola para mirar</c3>
+                            </div>
+                         </div>
+                         <div class="divTableRow">
+                            <div class="divTableCell" style="width:10%">
+                                  {% for tup in servicelinks %}
+                                    {% if tup.2 == 0 %}
+                                      {% if tup.0 == servicetype %}
+                                         <a class="btn:hover" href="/ophouse/staffqueue?servicetype={{tup.0}}"><button class="gbcheckbox-watching">{{tup.1}}{{ tup.3 }}</button></a>
+                                      {% else %}
+                                         <a class="btn:hover" href="/ophouse/staffqueue?servicetype={{tup.0}}"><button class="gbcheckbox-inline">{{tup.1}}{{ tup.3 }}</button></a>                                       
+                                      {% endif %}   
+                                    {% endif %}
+                                    {% if tup.2 == 1 %}
+                                      {% if tup.0 == servicetype %}
+                                        <a class="btn:hover" href="/ophouse/staffqueue?servicetype={{tup.0}}"><button class="gbcheckbox-watching">{{tup.1}}{{ tup.3 }}</button></a>
+                                      {% else %}
+                                        <a class="btn:hover" href="/ophouse/staffqueue?servicetype={{tup.0}}"><button class="gbcheckbox-inline-highlight">{{tup.1}}{{ tup.3 }}</button></a>                                    
+                                      {% endif %}  
+                                    {% endif %}    
+                                  {% endfor %}
+                            </div>
+                         </div>
+    </div>                     
+  </div>
+  </div>
+</div>
+<div class="container">
+{% csrf_token %}
+
+<div class="divTable" style="width:100%">
+                            <div class="divTableBody">
+                               {% if queuesize > 0 %}
+                               <div class="divTableRow">
+                                  <div class="divTableCell" style="width:100%;padding:10px">
+                                     <c3>{{ queuemessage }} Select client to complete service</c3>
+                                  </div>
+                               </div>
+                               {% endif %}
+                               <div class="divTableRow">
+                                 <div class="divTableCell" style="width:100%">
+                                   <div>                                    
+                                      {% for choice in form.services.field.choices %}
+                                           <div class="cel" style="padding:5px;width=10%">
+                                             <form method="post" action="/ophouse/staffqueue?servicetype={{servicetype}}" onsubmit="return clicked();">
+                                               {%csrf_token%}
+                                               {% if forloop.counter == 1 %}
+                                                 <input type="radio" name="services" hidden="true" value="{{choice.0}}" checked="checked"/>
+                                                 <button class="gbcheckbox-inline-nextup" >{{choice.1}}</button>
+                                               {% else %}
+                                                 <input type="radio" name="services" hidden="true" value="{{choice.0}}" checked="checked"/>
+                                                 <button class="gbcheckbox-inline" >{{choice.1}}</button>
+                                               {% endif %}
+                                             </form>
+                                           </div>
+                                       {% endfor %}
+                                    
+                                   </div>
+                                 </div>
+                               </div>
+                            </div>
+</div>
+</div>
+</td>
+</table>
+</body>
+</html>

@@ -1,0 +1,32 @@
+curl 'https://api.twilio.com/2010-04-01/Accounts/ACf4e03c7158dfd7b1abafc77d830c606a/Messages.json' -X POST \
+--data-urlencode 'To=+17042583902' \
+--data-urlencode 'From=+17049466207' \
+--data-urlencode 'Body=Hello from Twilio' \
+-u ACf4e03c7158dfd7b1abafc77d830c606a:b26623c93d3a50ed38cad1cc8769e167
+
+201 - CREATED - The request was successful. We created a new resource and the response body contains the representation.
+
+{
+    "sid": "SM371c0b95993342cd931d748d140daacd",
+    "date_created": "Wed, 14 Mar 2018 19:58:26 +0000",
+    "date_updated": "Wed, 14 Mar 2018 19:58:26 +0000",
+    "date_sent": null,
+    "account_sid": "ACf4e03c7158dfd7b1abafc77d830c606a",
+    "to": "+17042583902",
+    "from": "+17049466207",
+    "messaging_service_sid": null,
+    "body": "Sent from your Twilio trial account - Hello from Twilio",
+    "status": "queued",
+    "num_segments": "1",
+    "num_media": "0",
+    "direction": "outbound-api",
+    "api_version": "2010-04-01",
+    "price": null,
+    "price_unit": "USD",
+    "error_code": null,
+    "error_message": null,
+    "uri": "/2010-04-01/Accounts/ACf4e03c7158dfd7b1abafc77d830c606a/Messages/SM371c0b95993342cd931d748d140daacd.json",
+    "subresource_uris": {
+        "media": "/2010-04-01/Accounts/ACf4e03c7158dfd7b1abafc77d830c606a/Messages/SM371c0b95993342cd931d748d140daacd/Media.json"
+    }
+}
