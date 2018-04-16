@@ -4,7 +4,6 @@ python manage.py sqlsequencereset guestbook | python manage.py dbshell
 DELETE FROM public.guestbook_personnote;
 DELETE FROM public.guestbook_personservicerequest;
 DELETE FROM public.guestbook_personsurvey;
-DELETE FROM public.guestbook_persontimecard;
 DELETE FROM public.guestbook_personsnapshot;
 DELETE FROM public.guestbook_person_skills;
 DELETE FROM public.guestbook_person;
@@ -254,22 +253,22 @@ INSERT INTO public.guestbook_prompt VALUES
 
 DELETE FROM public.guestbook_service;
 INSERT INTO public.guestbook_service VALUES
-    (1, True,'Meals/Comidas', False, False, True, True, True, True, True, False,2),
-    (2, True,'Shower/Ducha', False, False, True, True, True, True, True, False,2),
-    (3, True,'Clothing/Ropa', False, False, True, True, True, True, True, False,2),
-    (4, True,'Laundry/Lavandería', False, False, True, True, True, True, True, False,2),
-    (5, True,'Computer/Computadora', False, False, True, True, True, True, True, False,2),
-    (6, True,'Nurse/Enfermera', False, False, True, True, True, True, True, False,2),
-    (7, True,'Employment Assistance/Asistencia de empleo', True, False, True, True, True, True, True, False,2),
-    (8, True,'Housing Assistance/Asistencia para la vivienda', True, False, True, True, True, True, True, False,2),
-    (9, True,'Transportation Assistance/Asistencia de transporte', True, False, True, True, True, True, True, False,2),
-    (10, True,'Pastor Consultation/Consulta del pastor', False, False, True, True, True, True, True, False,2),
-    (11, True,'Other Assistanc/Otra asistencia', True, False, True, True, True, True, True, False,2),
-    (12, True,'Food/Comida para hogar', True, False, True, True, True, True, True, False,2),
-    (13, True,'Group Class/Clase grupal', True, False, True, True, True, True, True, False,2),
-    (14, True,'Referral/Remisión', True, False, True, True, True, True, True, False,2),
-    (15, True,'Financial Assistance/Asistencia financiera', True, False, True, True, True, True, True, False,2),
-    (16, True,'Rent/Alquilar', True, False, True, True, True, True, True, False,2),
-    (17, True,'Utilities/Utilidades', True, False, True, True, True, True, True, False,2),
-    (18, True,'Gas/Transportation/Transporte', True, False, True, True, True, True, True, False,2),
-    (19, True,'Other/Otra', True, False, True, True, True, True, True, False,2);
+    (1, True,'Meals/Comidas', False, False, 0, False, True, True, True, True, True, False,2),
+    (2, True,'Shower/Ducha', False, False, 0, False, True, True, True, True, True, False,2),
+    (3, True,'Clothing/Ropa', False, False, 0, False, True, True, True, True, True, False,2),
+    (4, True,'Laundry/Lavandería', False, False, 0, False, True, True, True, True, True, False,2),
+    (5, True,'Computer/Computadora', False, False, 0, False, True, True, True, True, True, False,2),
+    (6, True,'Nurse/Enfermera', False, False, 0, False, True, True, True, True, True, False,2),
+    (7, True,'Employment Assistance/Asistencia de empleo', True, False, 0, False, True, True, True, True, True, False,2),
+    (8, True,'Housing Assistance/Asistencia para la vivienda', True, False, 0, False, True, True, True, True, True, False,2),
+    (9, True,'Transportation Assistance/Asistencia de transporte', True, False, 0, False, True, True, True, True, True, False,2),
+    (10, True,'Pastor Consultation/Consulta del pastor', False, False, 0, False, True, True, True, True, True, False,2),
+    (11, True,'Other Assistanc/Otra asistencia', True, False, 0, False, True, True, True, True, True, False,2),
+    (12, True,'Food/Comida para hogar', True, False, 0, False, True, True, True, True, True, False,2),
+    (13, True,'Group Class/Clase grupal', True, False, 0, False, True, True, True, True, True, False,2),
+    (14, True,'Referral/Remisión', True, False, 0, False, True, True, True, True, True, False,2),
+    (15, True,'Financial Assistance/Asistencia financiera', True, False, 0, False, True, True, True, True, True, False,2),
+    (16, True,'Rent/Alquilar', True, False, 0, False, True, True, True, True, True, False,2),
+    (17, True,'Utilities/Utilidades', True, False, 0, False, True, True, True, True, True, False,2),
+    (18, True,'Gas/Transportation/Transporte', True, False, 0, False, True, True, True, True, True, False,2),
+    (19, True,'Other/Otra', True, False, 0, False, True, True, True, True, True, False,2);
