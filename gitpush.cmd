@@ -3,6 +3,7 @@ set month=%date:~4,2%
 set day=%date:~7,2%
 
 echo  %year%.%month%.%day%.%2  -m "%1"
+echo off
 REM all of the files, set commit and tag values
 git add .
 git commit -m “%1”
