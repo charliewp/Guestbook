@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
 </head>
 <body>
+<div class="container">
+<c><small> charliewp/Guestbook uses the GNU GPL v3.0 [v20180416]</small></c>
+</div>
 {% if form.errors %}
     {% for field in form %}
         {% for error in field.errors %}

@@ -10,6 +10,9 @@
   -<link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
 </head>
 <body>
+<div class="container">
+<c><small> charliewp/Guestbook uses the GNU GPL v3.0 [v20180416]</small></c>
+</div>
 {% block extrahead %}
 <script type="text/javascript">
 $( document ).ready(function() {
@@ -93,10 +96,29 @@ var myChart = new Chart(ctx, {
 </script> 
 {% endblock %}
 <div class="container" style="padding:0px">
+    <div style="width:100%; padding:2px">
+                <form name="signin" action="/ophouse/select/" method="get">
+                    {%csrf_token%}
+                    {% for error in form.non_field_errors %}
+                    <div class="form-group has-errors text-danger small">
+                        {{error}}
+                    </div>
+                    {% endfor %}
+                    <div class="divTable">
+                       <div class="divTableBody">
+                         <div class="divTableRow">
+                            <div class="divTableCell">
+                              <button class="btn-primary" style="width:100%">Go Back / Regresa</button>
+                            </div>
+                         </div>
+                        </div>
+                    </div>
+                </form>
+    </div>
     <div>
       <form name="login" action="/ophouse/reporter/" method="post">
         {%csrf_token%}
-        <div class="divTable" style="width:100%;padding:5px">
+        <div class="divTable" style="width:100%;padding:2px">
           <div class="divTableBody">
              <div class="divTableRow">
                <div class="divTableCell" style="width:25">

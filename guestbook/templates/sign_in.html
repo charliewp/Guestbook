@@ -7,21 +7,24 @@
     <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
 </head>
 <body>
-{% if form.errors %}
-    {% for field in form %}
-        {% for error in field.errors %}
-            <div class="alert alert-danger">
-                <strong>{{ error|escape }}</strong>
-            </div>
-        {% endfor %}
-    {% endfor %}
-    {% for error in form.non_field_errors %}
-        <div class="alert alert-danger">
-            <strong>{{ error|escape }}</strong>
-        </div>
-    {% endfor %}
-{% endif %}
 <div class="container">
+<c><small> charliewp/Guestbook uses the GNU GPL v3.0 [v20180416]</small></c>
+</div>
+<div class="container">
+            {% if form.errors %}
+                {% for field in form %}
+                  {% for error in field.errors %}
+                     <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                     </div>
+                  {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                   <div class="alert alert-danger">
+                      <strong>{{ error|escape }}</strong>
+                   </div>
+                {% endfor %}
+            {% endif %}
             <div style="width:100%; padding:10px">
                 {% if message %}
                   <h2>{{message}}</h2>

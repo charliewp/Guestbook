@@ -322,14 +322,16 @@ def sign_in(request):
               return HttpResponseRedirect('/ophouse/services?person=%s' % (person_instance.pk))              
             else:
               error = True
-              message = 'Try again!'
+              message = 'Don\'t know that one, try again!'
               form = SignInForm()
               #return HttpResponseRedirect('/ophouse/signin/')
               return render(request, 'sign_in.html', {'form': form, 'error': error, 'message': message, 'date': formattedDate})
         else:
           print('sign_in POST form is NOT valid')
+          error = True
+          message = 'Don\'t know that one, try again!'
           form = SignInForm()
-          return render(request, 'sign_in.html', {'form': form, 'error': error, 'date': formattedDate})
+          return render(request, 'sign_in.html', {'form': form, 'error': error, 'message': message, 'date': formattedDate})
     else:
       form = SignInForm()
       return render(request, 'sign_in.html', {'form': form})

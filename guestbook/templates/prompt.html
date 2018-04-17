@@ -7,13 +7,16 @@
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>    
     <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
 <script type="text/javascript">
-    window.setTimeout("redirectpage();", 360000);    
+    window.setTimeout("redirectpage();", 120000);    
     function redirectpage(){
     window.top.location.href = '/ophouse/signin';
     }
 </script>
 </head>
 <body>
+<div class="container">
+<c><small> charliewp/Guestbook uses the GNU GPL v3.0 [v20180416]</small></c>
+</div>
 {% if message %}
    <p style="color: red;">
    <h2>{{message}}</h2>

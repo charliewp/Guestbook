@@ -7,12 +7,18 @@
     <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
 </head>
 <body>
+<div class="container">
+<c><small> charliewp/Guestbook uses the GNU GPL v3.0 [v20180416]</small></c>
+</div>
 {% if message %}
-   <p style="color: red;">
-   <h2>{{message}}</h2>
+   <p style="color: red;padding:10px">
+   <div class="container">
+      <div style="width:100%; padding:10px">
+        <c3>{{message}}</c3>
+      </div>
+   </div>
    </p>
 {% endif %}
-
 {% if form.errors %}
     {% for field in form %}
         {% for error in field.errors %}
@@ -53,6 +59,11 @@
                   <button class="btn-primary" style="width:100%">Start a Staff Portal</button>
                 </form>
             </div>
-            
+            <div style="width:100%">
+                <form name="login" action="/ophouse/reporter/" method="get">
+                  {%csrf_token%}
+                  <button class="btn-primary" style="width:100%">Data Visualizer</button>
+                </form>
+            </div>
 </body>
 </html>
