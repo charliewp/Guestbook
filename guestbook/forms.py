@@ -55,10 +55,10 @@ class LoginForm(forms.Form):
 
 class SignInForm(forms.Form):
     pin_regex = RegexValidator(regex=r'^\+?1?\d{4,4}$', message="The PIN is a 4 digit number. Try again!")
-    name_regex = RegexValidator(regex=r'^[a-zA-Z0-9]{3,8}$', message="The Shortname is 3 to 5 letters and numbers only. Try again!")
+    name_regex = RegexValidator(regex=r'^[a-zA-Z0-9]{3,12}$', message="The Shortname is 3 to 12 letters and numbers only. Try again!")
     #aliasname = forms.CharField(label='Shortname', validators=[name_regex], min_length=3, max_length=8, widget=forms.TextInput(attrs={'size':'8', 'class':'inputText'}))
     #aliaspin  = forms.CharField()
-    aliasname = forms.CharField(validators=[name_regex], max_length=8, widget=forms.TextInput(attrs={'size':'8', 'class':'form-control','placeholder':'Username'}))
+    aliasname = forms.CharField(validators=[name_regex], max_length=12, widget=forms.TextInput(attrs={'size':'12', 'class':'form-control','placeholder':'Username'}))
     aliaspin = forms.CharField(validators=[pin_regex], max_length=4, widget=forms.PasswordInput(attrs={'size':'4', 'class':'form-control','placeholder':'PIN'}))
     wipeHistory = forms.BooleanField(required=False)
     def clean_aliaspin(self):

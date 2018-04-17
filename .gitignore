@@ -2,3 +2,4 @@ guestbook/twilio.txt
 guestbook/migrations/*
 ophouse_v1/__pycache__/*
 gblog*
+getpush.cmd
