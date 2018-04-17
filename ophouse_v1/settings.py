@@ -140,10 +140,10 @@ LOGGING = {
         },
     },
     'handlers': {
-        'logfile': {
+        'dlogfile': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': settings.BASE_DIR + "/gblog.txt",
+            'filename': settings.BASE_DIR + "/gblog_debug.txt",
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
             'formatter': 'standard',

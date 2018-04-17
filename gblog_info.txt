@@ -40,3 +40,4 @@
 [17/Apr/2018 10:15:38] INFO [GBLOGGER:158] Django version= (2, 0, 2, 'final', 0)
 [17/Apr/2018 10:19:19] INFO [GBLOGGER:158] Django version= (2, 0, 2, 'final', 0)
 [17/Apr/2018 10:19:20] INFO [GBLOGGER:175] Guestbook Admin login complete. This is Django version= 2.0.2
+[17/Apr/2018 11:14:11] INFO [GBLOGGER:174] Guestbook Admin login complete. This is Django version= 2.0.2

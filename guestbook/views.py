@@ -155,7 +155,6 @@ def checksession(request):
 def login(request):
     error = False
     message = ''
-    log.info('Django version= %s' % str(django.VERSION))
     if request.method == 'POST':
         log.debug("post to login page")
         # create a form instance and populate it with data from the request:
