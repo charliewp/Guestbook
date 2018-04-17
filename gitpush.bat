@@ -10,4 +10,4 @@ git add .
 git commit -m “%1”
 REM git tag -a "Rel %year%.%month%.%day%"  -m "%1"
 
-REM git push https://github.com/charliewp/Guestbook.git master
+git push https://github.com/charliewp/Guestbook.git master
