@@ -174,7 +174,7 @@ class AliasForm(forms.Form):
     firstname = forms.CharField(max_length=24,widget=forms.TextInput(attrs={'size':'24', 'class':'form-control','placeholder':'Firstname'}))
     lastname = forms.CharField(max_length=24,widget=forms.TextInput(attrs={'size':'24', 'class':'form-control','placeholder':'Lastname'}))
     pin_regex = RegexValidator(regex=r'^\+?1?\d{4,4}$', message="The PIN is a 4 digit number. Try again!")
-    name_regex = RegexValidator(regex=r'^[a-zA-Z0-9]{3,12}$', message="The Shortname is 3 to 12 letters and numbers only. Try again!")
+    name_regex = RegexValidator(regex=r'^[a-zA-Z0-9]{3,16}$', message="The Shortname is 3 to 16 letters and numbers only. Try again!")
     ssn_regex = RegexValidator(regex=r'^\+?1?\d{4,4}$', message="The last 4 digits of your SSN are numeric.. Try again!")
     aliasname = forms.CharField(validators=[name_regex], max_length=16, widget=forms.TextInput(attrs={'size':'16','class':'form-control','placeholder':'Username'}))
     aliaspin  = forms.CharField(validators=[pin_regex], max_length=4, widget=forms.TextInput( attrs={'size':'4','class':'form-control','placeholder':'PIN'}))
