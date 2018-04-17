@@ -1,2 +1,0 @@
-[17/Apr/2018 09:53:12] WARNING [GBLOGGER:328] Person with fred/1111 is not authorized for the Client Kiosk.
-[17/Apr/2018 10:01:34] WARNING [GBLOGGER:175] userid charlie  is not-an authorized.Guestbook Admin.
