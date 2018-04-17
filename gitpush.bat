@@ -5,7 +5,7 @@ set day=%date:~7,2%
 
 echo  %year%.%month%.%day%.%1
 git status
-prompt
+pause
 REM all of the files, set commit and tag values
 git add .
 git commit -m “%1”
