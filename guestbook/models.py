@@ -192,7 +192,7 @@ class Person(models.Model):
     idperson = models.BigAutoField(primary_key=True)
     firstname = models.CharField(max_length=24)
     lastname = models.CharField(max_length=24)
-    aliasname = models.CharField(max_length=12, unique=True, default='none')
+    aliasname = models.CharField(max_length=16, unique=True, default='none')
     aliaspin = models.CharField( max_length=4, default='none')
     shortssn = models.CharField( max_length=4, default='none')
     birthdate = models.DateField(null=True, blank=True)
