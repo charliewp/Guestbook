@@ -7,7 +7,7 @@ from django.db import models
 from datetime import datetime
 from random import sample, randint
 from django.db import IntegrityError, DataError
-
+from django.conf import settings
 
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -51,6 +51,7 @@ from django.forms import CharField, ModelChoiceField, RadioSelect, BaseForm
 
 from twilio.rest import Client
 import re
+import django
 from django.apps import apps
 
 #charts
@@ -68,6 +69,9 @@ SERVICE_STATUS_NOTCOMPLETED    = 502
 SNAPSHOT_STATUS_ACTIVE         = 800
 SNAPSHOT_STATUS_STALE          = 801
 SNAPSHOT_STATUS_CLOSED         = 802
+
+import logging
+log = logging.getLogger('GBLOGGER')
 
 _ENV = 'PROD'
 
@@ -100,7 +104,7 @@ def reporter(request):
     error = False
     now = datetime.today()
     if request.method == 'POST':
-      print('reporter post')
+      log.debug('reporter post')
       #person = request.POST['persons'] 
       #prompt = request.POST['prompts']
       form = ReporterForm(request.POST)
@@ -123,7 +127,7 @@ def reporter(request):
         labels = []
         values = []
         for response in responses:
-          print('response=%s %s' % (response[0], response[1]))
+          log.debug('response=%s %s' % (response[0], response[1]))
           labels.append(response[0])
           values.append(response[1])
         #let's show the possible responses
@@ -142,22 +146,23 @@ def reporter(request):
 
 def checksession(request):
     if request.session.has_key('username'):
-      print('session-cookie found!')
+      log.debug('session-cookie found!')
       return True
     else:
-      print('session-cookie not found')
+      log.debug('session-cookie not found')
       return False
 
 def login(request):
     error = False
     message = ''
+    log.info('Django version= %s' % str(django.VERSION))
     if request.method == 'POST':
-        print("post to login page")
+        log.debug("post to login page")
         # create a form instance and populate it with data from the request:
         form = LoginForm(request.POST)
         
         if form.is_valid():
-          print('login form is valid')
+          log.debug('login form is valid')
           username = request.POST['username'] #form.cleaned_data['username']
           password = request.POST['password'] #form.cleaned_data['password']
           form.cleaned_data['username'] = ''
@@ -167,9 +172,10 @@ def login(request):
           if user is not None:
             #create the session
             request.session['username'] = username
+            log.info('Guestbook Admin login complete. This is Django version= %s.%s.%s' % (django.VERSION[0], django.VERSION[1], django.VERSION[2]))
             return HttpResponseRedirect('/ophouse/select/')
           else:
-            print('userid %s  / password are not-authorized.' % (username))
+            log.warn('userid %s  is not-an authorized.Guestbook Admin.' % (username))
             error = True
             message = 'user ' + username + ' / password are not authorized.'
             request.session['username'] = None
@@ -178,7 +184,7 @@ def login(request):
         else:
           error = True
           message = 'Check your input and try again!'
-          print('problem with the login form')
+          log.debug('problem with the login form')
           request.session['username'] = None
           form = LoginForm()
           return HttpResponseRedirect('/ophouse/login/')
@@ -190,13 +196,13 @@ def staff(request):
     error = False
     message = ''
     if request.method == 'POST':
-        print("post to login page")
+        log.debug("post to login page")
         # create a form instance and populate it with data from the request:
         form = StaffForm(request.POST)
         if form.is_valid():
-          print('staff form is valid')          
+          log.debug('staff form is valid')          
         else:
-          print('problem with the staff form')
+          log.debug('problem with the staff form')
           form = StaffForm()
           return HttpResponseRedirect('/ophouse/staff/')
     else:
@@ -233,11 +239,11 @@ def shorthelp(request):
     else:
        username = request.session['username']
     #End-Security
-    print("redirecting to shorthelp")
+    log.debug("redirecting to shorthelp")
     return render(request, 'shorthelp.html')
     
 def index(request):
-    print("redirecting request through the login/ view")
+    log.debug("redirecting request through the login/ view")
     return HttpResponseRedirect('/ophouse/login/')
     
 def select(request):
@@ -274,9 +280,9 @@ def sign_in(request):
         # check whether it's valid:
         aliasname = request.POST['aliasname']
         aliaspin = request.POST['aliaspin']
-        print (aliasname + " " + aliaspin)
+        log.debug (aliasname + " " + aliaspin)
         if form.is_valid():
-          #print('sign_in POST form is valid')
+          #log.debug('sign_in POST form is valid')
           createalias = int(request.GET.get("createalias", 0))
           if createalias==0:
             # find the Person, by aliasname and aliaspin
@@ -286,11 +292,11 @@ def sign_in(request):
             persons = Person.objects.all().filter(**query_attributes)
             if persons:
               # Found them!
-              print(aliasname + " was found in the DB, redirecting to the Services view.")
+              log.debug(aliasname + " was found in the DB, redirecting to the Services view.")
               person_instance = persons.first();
               # Wipe History?
               if request.POST.get('wipeHistory', False):
-                #print('Wiping all traces related to %s %s' % (person_instance.firstname, person_instance.lastname))
+                #log.debug('Wiping all traces related to %s %s' % (person_instance.firstname, person_instance.lastname))
                 # get and delete all PersonNote instances
                 query_attributes = {}
                 query_attributes['person'] = person_instance
@@ -317,17 +323,18 @@ def sign_in(request):
                      timecard.delete()
                   # delete the PersonSnapshot instance
                   snapShot.delete()
-                print('Wipe is complete!')
+                log.debug('Wipe is complete!')
                 form = SignInForm()
               return HttpResponseRedirect('/ophouse/services?person=%s' % (person_instance.pk))              
             else:
               error = True
+              log.warn('Username %s/%s is not authorized for the Client Kiosk.' % (aliasname, aliaspin))
               message = 'Don\'t know that one, try again!'
               form = SignInForm()
               #return HttpResponseRedirect('/ophouse/signin/')
               return render(request, 'sign_in.html', {'form': form, 'error': error, 'message': message, 'date': formattedDate})
         else:
-          print('sign_in POST form is NOT valid')
+          log.debug('sign_in POST form is NOT valid')
           error = True
           message = 'Don\'t know that one, try again!'
           form = SignInForm()
@@ -345,7 +352,7 @@ def createalias(request):
     #End-Security
     person_instance_pk = int(request.GET.get("person", 0))
     requestType = request.GET.get("fn", 0)
-    print('requestType=%s' % (requestType))
+    log.debug('requestType=%s' % (requestType))
     if request.method == 'POST':
          form = AliasForm(request.POST)
          firstname = request.POST['firstname']
@@ -357,10 +364,10 @@ def createalias(request):
            # aliasname must be unique - verify that it is now
            if Person.objects.all().filter(aliasname=aliasname.upper()).count()==0:
                #this aliasname is available
-               print('CreateAlias - aliasname %s is available.' % (aliasname))
+               log.debug('CreateAlias - aliasname %s is available.' % (aliasname))
                if Person.objects.all().filter(firstname=firstname.upper()).filter(lastname=lastname.upper()).filter(shortssn=shortssn).count()==0:
                  #the firstname, lastname, and ssn are not in the DB, create the Person
-                 print('CreateAlias - creating new person in the DB.')
+                 log.debug('CreateAlias - creating new person in the DB.')
                  person = Person()                 
                  person.role = RoleResponse.objects.all().filter(name='Client').first()
                  person.affiliate = AffiliateResponse.objects.all().filter(name='Unaffiliated').first()
@@ -370,16 +377,17 @@ def createalias(request):
                  person.aliaspin = aliaspin
                  person.shortssn = shortssn
                  person.save()
+                 log.info('%s %s has created Username=%s from the Client Kiosk.' % (person.firstname, person.lastname, person.aliasname))
                  message = 'Welcome ' + aliasname + ', your PIN is ' + aliaspin + " Go Back and sign-In now!"
                  return render(request, 'createalias.html', {'form': form, 'message': message, 'person': person.pk})
                else:
                  #firstname, lastname, and ssn are already in the DB - ResetUsername should be used
-                 print('CreateAlias - %s %s / SSN=%s already exist in the DB. Use Reset Username function.' % (firstname, lastname, shortssn))
+                 log.debug('CreateAlias - %s %s / SSN=%s already exist in the DB. Use Reset Username function.' % (firstname, lastname, shortssn))
                  message = 'Hmm, it looks like you already have a Username. Go Back and select Reset Username to change your Username or PIN!'
                  error = 'Use Reset Username'
            else:
                #this aliasname already exists, try another name
-               print('CreateAlias - the aliasname %s already exists, try something else.' % (aliasname))
+               log.debug('CreateAlias - the aliasname %s already exists, try something else.' % (aliasname))
                message = 'The username ' + aliasname + ' already exists, try something else.'
                error = 'Try another username'
            return render(request, 'createalias.html', {'form': form, 'message': message, 'error': error})
@@ -400,9 +408,9 @@ def resetalias(request):
     #End-Security
     person_instance_pk = int(request.GET.get("person", 0))
     requestType = request.GET.get("fn", 0)
-    print('requestType=%s' % (requestType))
+    log.debug('requestType=%s' % (requestType))
     if request.method == 'POST':
-         print("alias view POST")
+         log.debug("alias view POST")
          form = AliasForm(request.POST)
          firstname = request.POST['firstname']
          lastname = request.POST['lastname']
@@ -410,7 +418,7 @@ def resetalias(request):
          aliaspin = request.POST['aliaspin']
          shortssn = request.POST['shortssn']
          if form.is_valid():
-           print('alias POST form validation passed')
+           log.debug('alias POST form validation passed')
            query_attributes = {}
            query_attributes['firstname'] = firstname.upper()
            query_attributes['lastname']  = lastname.upper()
@@ -418,20 +426,21 @@ def resetalias(request):
            person = Person.objects.all().filter(**query_attributes).first()
            if person :
              # Found them and they are requesting a RESET!
-             print('%s %s found in the DB, updating aliasname and alias pin.' % (firstname, lastname))
+             log.debug('%s %s found in the DB, updating aliasname and alias pin.' % (firstname, lastname))
              person.aliasname = aliasname.upper()
              person.aliaspin = aliaspin
              person.save()
              message = 'Got it!  ' +  aliasname + '  - your PIN is ' + aliaspin
+             log.info('%s %s has reset a Username=%s from the Client Kiosk.' % (person.firstname, person.lastname, person.aliasname))
              return render(request, 'resetalias.html', {'form': form, 'message': message, 'person': person.pk})
            else:
-             print('Name and SSN are not in the DB')
+             log.debug('Name and SSN are not in the DB')
              message = 'Hmm, You need to Create a shortname'
              error = 'the SSN is wonky!'
              #return render(request, 'resetalias.html', {'form': form, 'message': message, 'error': error})
              return HttpResponseRedirect('/ophouse/createalias/')
          else:
-           print('resetalias POST form validation failed')
+           log.debug('resetalias POST form validation failed')
            return render(request, 'resetalias.html', {'form': form})
          return HttpResponseRedirect('/ophouse/services?person=%s' % (person_instance_pk))
     else:
@@ -455,7 +464,7 @@ def snapshot_lifecycle(person, autoCreate):
     TIMEWARP_FACTOR = preference.timewarp
     SNAPSHOT_TTL_MINUTES = preference.snapshotTimeout
     unarchivedSnapshots = PersonSnapshot.objects.all().filter(person=person.pk).filter(isArchived=False)
-    #print('Life-cycle management for %s unarchived PersonSnapshots.' % (unarchivedSnapshots.count()))
+    #log.debug('Life-cycle management for %s unarchived PersonSnapshots.' % (unarchivedSnapshots.count()))
     now = datetime.today()
     activeSnapshot = None
     for snapshot in unarchivedSnapshots:
@@ -474,7 +483,7 @@ def snapshot_lifecycle(person, autoCreate):
          for snapshotService in snapshotServices:
            snapshotService.status = SERVICE_STATUS_NOTCOMPLETED
            snapshotService.save()
-         print('Archiving STALE PersonSnapshot %s' % (snapshot))
+         log.info('Archiving STALE PersonSnapshot %s' % (snapshot))
          snapshot.isArchived = True
          snapshot.status = SNAPSHOT_STATUS_STALE
          snapshot.save()
@@ -482,10 +491,10 @@ def snapshot_lifecycle(person, autoCreate):
          #there are either zero or one currently active snapshot
          activeSnapshot = snapshot
     if activeSnapshot:
-      print('Using an OPEN PersonSnapshot instance %s PK=%s.' %(activeSnapshot,activeSnapshot.pk))
-      #print('PersonSnapshot timestamp=%s' % (activeSnapshot.timestamp))
+      log.debug('Using an OPEN PersonSnapshot instance %s PK=%s.' %(activeSnapshot,activeSnapshot.pk))
+      #log.debug('PersonSnapshot timestamp=%s' % (activeSnapshot.timestamp))
     elif autoCreate:
-      print('Creating new PersonSnapshot instance.')
+      log.debug('Creating new PersonSnapshot instance.')
       activeSnapshot = PersonSnapshot()
       activeSnapshot.person = person
       activeSnapshot.date = datetime.now
@@ -513,16 +522,16 @@ def services(request):
         serviceRoles = [connection_instance.person.role, RoleResponse.objects.all().filter(name='All').first()]
         form = ServicesForm(request.POST, query_filters=(showDiscretionaryServices, serviceRoles, today) )
         #connection_instance = PersonSnapshot.objects.get(pk=connection_instance_pk)
-        print('Using PersonSnapshot pk=%s' % (connection_instance.pk))
+        log.debug('Using PersonSnapshot pk=%s' % (connection_instance.pk))
         # check whether it's valid:
         if form.is_valid():
             #POST will pass the PersonSnapshot instance we should be using
-            print('processing service request form input')
+            log.debug('processing service request form input')
             # set the Services on the PersonSnapshot instance
             requestedServices = form.cleaned_data['services']
             for service in requestedServices:
               #have to be careful not to recreate Services that already exist on this connection
-              print(service.name)
+              log.debug(service.name)
               #get reference to the ServiceName
               query_attributes = {}
               query_attributes['name'] = service.name
@@ -533,9 +542,9 @@ def services(request):
               query_attributes['service'] = serviceType.pk
               serviceAlreadyOnConnection = PersonServiceRequest.objects.all().filter(**query_attributes).first()
               if serviceAlreadyOnConnection:
-                print('Service %s is already on this PersonSnapshot and will not be duplicated.' % (serviceType.pk))
+                log.debug('Service %s is already on this PersonSnapshot and will not be duplicated.' % (serviceType.pk))
               else:
-                print('Service %s is being added to this PersonSnapshot.'% (serviceType.pk))
+                log.debug('Service %s is being added to this PersonSnapshot.'% (serviceType.pk))
                 requestedService = PersonServiceRequest()
                 requestedService.service = serviceType
                 requestedService.status = SERVICE_STATUS_QUEUED
@@ -553,7 +562,7 @@ def services(request):
               if not foundInRequest:
                  queuedService.delete()
         else:
-          print('Service form input is invalid - no services are selected')
+          log.debug('Service form input is invalid - no services are selected')
           query_attributes = {}
           query_attributes['connection'] = connection_instance_pk
           #if any PersonServiceRequests exist we'll delete them now
@@ -627,9 +636,11 @@ def inference_engine(person, snapshotTimestamp):
     SNAPSHOT_TTL_MINUTES = preference.snapshotTimeout
     #all time deltas should be based on the current snapshot timestamp, not the current time
     #in this version we'll return the first prompt which has no response in the Person record
+    
+    #next, we'll get all of the PersonSnapshots that are less than 90days old
     ninetyDaysAgo =  snapshotTimestamp - timedelta(days=90)
     snapshots = PersonSnapshot.objects.all().filter(person=person, timestamp__gte=ninetyDaysAgo)
-    #print('There are %s snapshots' % (snapshots.count()))
+    #log.debug('There are %s snapshots' % (snapshots.count()))
     
     #include all prompts for the person's role plus the 'All' role
     promptRoles = [person.role, RoleResponse.objects.all().filter(name='All').first()]
@@ -642,54 +653,59 @@ def inference_engine(person, snapshotTimestamp):
       language = person.language
     languages = [language, LanguageResponse.objects.all().filter(name='All').first()]  
     
+    #next, we'll get all <Enabled> <Unfenced> prompts for the oersons specifice <Role> and the "All" Role
     unfencedPrompts = Prompt.objects.all().filter(isEnabled=True).filter(fencingPrompt_id__isnull=True).filter(targetRole__in=promptRoles).filter(language__in=languages)
-    #print('unfencedPrompt count=%s' % (unfencedPrompts.count()))
+    #log.debug('unfencedPrompt count=%s' % (unfencedPrompts.count()))
     #sorted by highest priority first
-    #print('first prompt is %s' % (unfencedPrompts.first().onscreenPrompt))
-    #get the most recent PersonSurvey for this prompt
+    log.debug('The highest priority prompt is %s' % (unfencedPrompts.first().onscreenPrompt))
+    #get the most recent PersonSurvey for each of these prompts
     for prompt in unfencedPrompts:
         promptSurveys = []
+        #next, we'll iterate over the most recent snapshots to determine if it is time for this prompt to be presented again
+        log.debug('The prompt is: %s' % (prompt.onscreenPrompt))
         for snapshot in snapshots:
-          #there should one instance, at most, of this prompt on any connection, so first() will do
-          #survey = PersonSurvey.objects.all().filter(connection=snapshot, prompt=prompt).first()
+          #there should one instance, at most, of this prompt on any Snapshot
           query_attributes = {}
           query_attributes['connection'] = snapshot.pk
           query_attributes['prompt'] = prompt.pk
           survey = PersonSurvey.objects.all().filter(**query_attributes).first()
           if survey:
-            surveyTuple = (survey, snapshot.timestamp)
+            #we've found a response to this prompt in the snapshot, nominalize the snapshot date to 00:00:00 
+            #in this way we are not bound to a strict 24hours=1day 
+            surveyTuple = (survey, snapshot.timestamp.replace(hour=0, minute=0, second=0))
             promptSurveys.append(surveyTuple)
-        #we now have all of the Surveys for this Prompt
-        #print('\n%s' % (prompt.onscreenPrompt.encode("utf-8")))
-        #now sort according to the timestamp        reverse=True is descending order
         if len(promptSurveys)>0:
+          #we now have all of the Surveys for this Prompt, sort according to the timestamp  reverse=True is descending order, most recent is first
           promptSurveys.sort(key = operator.itemgetter(1), reverse = True)
           #most recent promptSurvey is in the first position
           latestPromptSurvey = promptSurveys[0]
-          #print('Most recent survey for this prompt is %s' % (latestPromptSurvey[0].connection.timestamp))
+          log.debug('The most recent survey for this prompt is %s' % (latestPromptSurvey[0].connection.timestamp))
           if prompt.intervalDays>0:
             #is the latestPromptSurvey older than the intervalDays of the Prompt?
-            #notBeforeTime = datetime.today() - timedelta(days=prompt.intervalDays)
+            #for the daily prompts we have to do some time arithmetic, rounding the times to days
             notBeforeTime = snapshotTimestamp - timedelta(minutes=prompt.intervalDays*24*60/TIMEWARP_FACTOR)
             if latestPromptSurvey[1] < notBeforeTime:
-              print('...Expired - %s on %s' % (latestPromptSurvey[0].content_object, latestPromptSurvey[1]))
+              log.debug('...the most recent response is stale, %s on %s' % (latestPromptSurvey[0].content_object, latestPromptSurvey[1]))
+              #this is the prompt we're going to use!
+              log.info('Username %s is asked -- %s' % (person.aliasname, prompt.onscreenPrompt))
               return prompt.pk
-          else:
+          #else:
             #this is a one-time prompt (intervaldays=0)
-            print("One-time prompts are never reused.")
+            #log.debug("One-time prompts are never reused!")
         else:
+          log.info('Username %s is asked -- %s' % (person.aliasname, prompt.onscreenPrompt))
           return prompt.pk
           
     fencedPrompts = Prompt.objects.all().filter(isEnabled=True).filter(fencingPrompt_id__isnull=False).filter(targetRole__in=promptRoles).filter(language__in=languages)
-    #print('fencedPrompt count=%s' % (fencedPrompts.count()))
+    #log.debug('fencedPrompt count=%s' % (fencedPrompts.count()))
     #get the most recent PersonSurvey for this prompt
     for prompt in fencedPrompts:
         #first, determine if the fence for this prompt has been satisfied
         fencePrompt = prompt.fencingPrompt
         personField = fencePrompt.anchorField
-        #print('Fence prompt=%s references Person field=%s key=%s' % (fencePrompt, personField, prompt.fencingResponse))
+        #log.debug('Fence prompt=%s references Person field=%s key=%s' % (fencePrompt, personField, prompt.fencingResponse))
         if getattr(person, personField).name == prompt.fencingResponse:
-          #print('the fence %s is unlocked' % (prompt.onscreenPrompt))
+          #log.debug('the fence %s is unlocked' % (prompt.onscreenPrompt))
           promptSurveys = []
           for snapshot in snapshots:
             #there should one instance, at most, of this prompt on any connection, so first() will do
@@ -702,7 +718,7 @@ def inference_engine(person, snapshotTimestamp):
               surveyTuple = (survey, snapshot.timestamp)
               promptSurveys.append(surveyTuple)
           #we now have all of the Surveys for this Prompt
-          #print('\n%s' % (prompt.onscreenPrompt))
+          #log.debug('\n%s' % (prompt.onscreenPrompt))
           #now sort according to the timestamp        reverse=True is descending order
           if len(promptSurveys)>0:
             promptSurveys.sort(key = operator.itemgetter(1), reverse = True)
@@ -712,9 +728,11 @@ def inference_engine(person, snapshotTimestamp):
             #notBeforeTime = datetime.today() - timedelta(days=prompt.intervalDays)
             notBeforeTime = snapshotTimestamp - timedelta(minutes=prompt.intervalDays*5)
             if latestPromptSurvey[1] < notBeforeTime:
-                print('...Expired - %s on %s' % (latestPromptSurvey[0].content_object, latestPromptSurvey[1]))
+                log.debug('...Expired - %s on %s' % (latestPromptSurvey[0].content_object, latestPromptSurvey[1]))
+                log.info('Username %s is asked -- %s' % (person.aliasname, prompt.onscreenPrompt))
                 return prompt.pk
           else:
+            log.info('Username %s is asked -- %s' % (person.aliasname, prompt.onscreenPrompt))
             return prompt.pk
     #we've looked at all the prompts now
     return 0
@@ -730,7 +748,7 @@ def prompt(request):
     connection_instance_pk = int(request.GET.get("connection", False))
     connection_instance = PersonSnapshot.objects.get(pk=connection_instance_pk)
     #if connection_instance:
-    #  print('PersonSurvey results will be attached to PersonSnapshot with PK=%s' %(connection_instance_pk))
+    #  log.debug('PersonSurvey results will be attached to PersonSnapshot with PK=%s' %(connection_instance_pk))
     # if this is a POST request we need to process the form data
     preference = Preference.objects.all().filter(name=_ENV).first()
     LANGUAGE = preference.language
@@ -740,11 +758,11 @@ def prompt(request):
     if request.method == 'POST':
         promptPk = int(request.GET.get('prompt', -1))
         fastTrack = request.POST.get('fastTrack', False)
-        #if promptPk is False - Skip Survey has been selected
-        print('promptPk=%s' % (promptPk))
+        #if promptPk is -1 - Skip Survey has been selected
+        log.debug('promptPk=%s' % (promptPk))
         if promptPk > 0:
           prompt = Prompt.objects.get(pk=promptPk)
-          print('request.POST=%s' % (request.POST))
+          log.debug('request.POST=%s' % (request.POST))
           query_attributes = {}
           query_attributes['connection'] = connection_instance.pk
           #the services in the active Connection
@@ -754,7 +772,7 @@ def prompt(request):
           attribute = prompt.anchorField
           person = connection_instance.person
           if len(prompt.anchorField) > 0:
-            print('attribute=%s' % (prompt.anchorField))
+            log.debug('attribute=%s' % (prompt.anchorField))
             if type(Person._meta.get_field(prompt.anchorField)) == models.fields.CharField:
               survey = PersonSurvey()
               survey.connection = connection_instance
@@ -762,7 +780,7 @@ def prompt(request):
               #the response is in the 'replaceText'
               replaceText = request.POST['replaceText']              
               regex = prompt.regexValidator              
-              print('The new value is %s' % (replaceText))
+              log.debug('The new value is %s' % (replaceText))
               try:
                 setattr(person, attribute, replaceText)
                 survey = PersonSurvey(content_object=None)
@@ -772,23 +790,23 @@ def prompt(request):
                 survey.save()
                 person.save()
               except DataError as e:
-                print('input data was not valid')
+                log.debug('input data was not valid')
             elif isinstance(Person._meta.get_field(prompt.anchorField), models.ForeignKey):
-              print('request.POST=%s' % (request.POST))
+              log.debug('request.POST=%s' % (request.POST))
               choice = request.POST.get('choiceField')
               if not choice:        #if they don't select anything use default = Unknown
                 choice = 1
-              print('The choice is %s' % (choice))
+              log.debug('The choice is %s' % (choice))
               try:
                 fkRelationship = prompt.responseType #re.sub(r'([_])', r' \1', prompt.anchorField).split()[1][1:]
                 responseContent = apps.get_model(app_label='guestbook', model_name=fkRelationship).objects.get(pk=choice)
-                print('responseContent.pk=%s' % (responseContent.pk))
+                log.debug('responseContent.pk=%s' % (responseContent.pk))
                 #need to record the response in the application language, normally English
                 # to correlate we are using the points field of the response object
                 languages = [LANGUAGE, LanguageResponse.objects.all().filter(name='All').first()]
                 if responseContent.language not in languages:
                    responseContent = apps.get_model(app_label='guestbook', model_name=fkRelationship).objects.all().filter(language=LANGUAGE).filter(points=responseContent.points).first()
-                print('responseContent.pk=%s' % (responseContent.pk))
+                log.debug('responseContent.pk=%s' % (responseContent.pk))
                 setattr(person, attribute, responseContent)
                 survey = PersonSurvey(content_object=responseContent)
                 survey.connection = connection_instance
@@ -799,18 +817,18 @@ def prompt(request):
                 survey.save()
                 person.save()
               except DataError as e:
-                print('input data was not valid')
+                log.debug('input data was not valid')
             elif isinstance(Person._meta.get_field(prompt.anchorField), models.ManyToManyField):
-              print('POST on M2M Prompt')
-              print('request.POST=%s' % (request.POST))
+              log.debug('POST on M2M Prompt')
+              log.debug('request.POST=%s' % (request.POST))
               #choices = request.POST.get('multichoice')
               choices =request.POST.getlist('multichoice')
-              print('The choice is %s' % (choices))
+              log.debug('The choice is %s' % (choices))
               for choice in choices:
-                print('choice=%s' % (choice))
+                log.debug('choice=%s' % (choice))
               try:
                 fkRelationship = prompt.responseType # re.sub(r'([_])', r' \1', prompt.anchorField).split()[1][1:]
-                print('fkRelationship=%s' %(fkRelationship))                
+                log.debug('fkRelationship=%s' %(fkRelationship))                
                 getattr(person, attribute).set(choices)
                 # don't think we can save this one  --> survey = PersonSurvey(content_object=choices)
                 survey.connection = connection_instance
@@ -819,12 +837,12 @@ def prompt(request):
                 survey.save()
                 person.save()
               except DataError as e:
-                print('input data was not valid')
+                log.debug('input data was not valid')
             else:
-              print('Unknown Prompt type!')
-            # redirect to a new URL:
+              log.debug('Unknown Prompt type!')
+            log.info('Username %s has responded to the survey prompt.' % (connection_instance.person.aliasname))
         else:
-          print('non-anchored prompt')
+          log.info('Username %s is skipping the survey prompt.' % (connection_instance.person.aliasname))
         
         #temporarily set the following to False during testing
         # isSurveyComplete=True indicates that the Client has been surveyed 
@@ -833,7 +851,7 @@ def prompt(request):
         
         if fastTrack or connection_instance.promptsPresented < int(MAXPROMPTS):
           #keep going until we run out of prompts to ask
-          print('We can queue %s more prompts.' % (MAXPROMPTS - connection_instance.promptsPresented))
+          log.debug('We can queue %s more prompts.' % (MAXPROMPTS - connection_instance.promptsPresented))
           connection_instance.save()
           return HttpResponseRedirect('/ophouse/prompt?connection=%s' % (connection_instance.pk))
         else:
@@ -852,14 +870,14 @@ def prompt(request):
       else:
         survey = None
       if survey == None:
-        print('There are no enabled Prompt objects in the DB!')
+        log.warn('There are no enabled Prompt objects in the DB!')
         return HttpResponseRedirect('/ophouse/thankyou')
       else:
         prompt = str(survey)
         #determine the personField class
         if survey.anchorField and len(survey.anchorField) > 0:
           replString = getattr(connection_instance.person, survey.anchorField)
-          print(replString)
+          log.debug(replString)
           survey.currentValue = replString
         form = SurveyForm(survey=survey, person=connection_instance.person)
         return render(request, 'prompt.html', {'form': form, 'error': error, 'whichQuestion': survey , 'survey': survey.onscreenPrompt, 'response': survey, 'connection': connection_instance.pk})
@@ -882,10 +900,11 @@ def queue(request):
       if form.is_valid():
         #required for cleaned_data
         service = form.cleaned_data['services']        
-        print('Service PK=%s' % (service.pk))
+        log.debug('Service PK=%s' % (service.pk))
         serviceToComplete = service 
         #Service.objects.get(pk=service.pk)
-        print('Service %s is marked for completion.' % (serviceToComplete))
+        log.debug('Service %s is marked for completion.' % (serviceToComplete))
+        log.info('Service %s has been completed for Username %s.' % (serviceToComplete.service.name, serviceToComplete.connection.person.aliasname ))
         serviceToComplete.status = SERVICE_STATUS_COMPLETED
         serviceToComplete.save()
         #now. take care of the PersonSnapshot status
@@ -895,7 +914,8 @@ def queue(request):
         numberOfOtherServicesOnConnectionNotCompleted = PersonServiceRequest.objects.all().filter(**query_attributes).count()
         if numberOfOtherServicesOnConnectionNotCompleted == 0:
           #Close the PersonSnapshot
-          print('Setting SNAPSHOT_STATUS_CLOSED on the PersonSnapshot container')
+          log.info('All requested services have now been completed for Username %s.' % (serviceToComplete.connection.person.aliasname))
+          log.debug('Setting SNAPSHOT_STATUS_CLOSED on the PersonSnapshot container')
           connectionToClose = PersonSnapshot.objects.get(pk=serviceToComplete.connection.pk)
           #Uncomment the following to Archive a snapshot once all of the Services have be dequeued
           #connectionToClose.status = SNAPSHOT_STATUS_CLOSED
@@ -903,7 +923,7 @@ def queue(request):
           connectionToClose.save()
         return HttpResponseRedirect('/ophouse/queue?servicetype=%s' % (servicetype_instance_pk))
       else:
-        print('POST form validation failed - no Client was selected')
+        log.debug('POST form validation failed - no Client was selected')
         return HttpResponseRedirect('/ophouse/queue?servicetype=%s' % (servicetype_instance_pk))
     else:
       query_attributes = {}
@@ -966,10 +986,10 @@ def staffqueue(request):
       if form.is_valid():
         #required for cleaned_data
         service = form.cleaned_data['services']
-        print('Service PK=%s' % (service.pk))
+        log.debug('Service PK=%s' % (service.pk))
         serviceToComplete = service 
         #Service.objects.get(pk=service.pk)
-        print('Service %s is marked for completion.' % (serviceToComplete))
+        log.debug('Service %s is marked for completion.' % (serviceToComplete))
         serviceToComplete.status = SERVICE_STATUS_COMPLETED
         serviceToComplete.save()
         #now. take care of the PersonSnapshot status
@@ -979,7 +999,7 @@ def staffqueue(request):
         numberOfOtherServicesOnConnectionNotCompleted = PersonServiceRequest.objects.all().filter(**query_attributes).count()
         if numberOfOtherServicesOnConnectionNotCompleted == 0:
           #Close the PersonSnapshot
-          print('Setting SNAPSHOT_STATUS_CLOSED on the PersonSnapshot container')
+          log.debug('Setting SNAPSHOT_STATUS_CLOSED on the PersonSnapshot container')
           connectionToClose = PersonSnapshot.objects.get(pk=serviceToComplete.connection.pk)
           #Uncomment the following to Archive a snapshot once all of the Services have be dequeued
           #connectionToClose.status = SNAPSHOT_STATUS_CLOSED
@@ -987,7 +1007,7 @@ def staffqueue(request):
           connectionToClose.save()
         return HttpResponseRedirect('/ophouse/staffqueue?servicetype=%s' % (servicetype_instance_pk))
       else:
-        print('POST form validation failed - no Client was selected')
+        log.debug('POST form validation failed - no Client was selected')
         return HttpResponseRedirect('/ophouse/staffqueue?servicetype=%s' % (servicetype_instance_pk))
     else:
       query_attributes = {}
@@ -1044,15 +1064,15 @@ def note(request):
       form = PersonNoteForm(request.POST)
       if form.is_valid():
         connection_pk = int(request.GET.get('connection', -1))
-        print('connection_pk for note is %s' % (connection_pk))
+        log.debug('connection_pk for note is %s' % (connection_pk))
         snapshot = PersonSnapshot.objects.get(pk=connection_pk)
-        print('processing note form for %s %s.' % (snapshot.person.firstname, snapshot.person.lastname))
+        log.debug('processing note form for %s %s.' % (snapshot.person.firstname, snapshot.person.lastname))
         personNote = PersonNote()
         personNote.connection = snapshot
         personNote.note = form.cleaned_data['note']
         personNote.save()
       else:
-        print('Note form is not valid')
+        log.debug('Note form is not valid')
       return HttpResponseRedirect('/ophouse/staff/')
     else:
       connection_pk = int(request.GET.get("connection", False))

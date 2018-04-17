@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+from django.conf import settings
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -128,3 +129,61 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+    },
+    'handlers': {
+        'logfile': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': settings.BASE_DIR + "/gblog.txt",
+            'maxBytes': 1024*1024*5,
+            'backupCount': 5,
+            'formatter': 'standard',
+        },
+        'wlogfile': {
+            'level':'WARN',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': settings.BASE_DIR + "/gblog_warn.txt",
+            'maxBytes': 1024*1024*5,
+            'backupCount': 5,
+            'formatter': 'standard',
+        },
+        'ilogfile': {
+            'level':'INFO',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': settings.BASE_DIR + "/gblog_info.txt",
+            'maxBytes': 1024*1024*5,
+            'backupCount': 5,
+            'formatter': 'standard',
+        },
+        'console':{
+            'level':'INFO',
+            'class':'logging.StreamHandler',
+            'formatter': 'standard'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers':['console'],
+            'propagate': True,
+            'level':'WARN',
+        },
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'GBLOGGER': {
+            'handlers': ['console', 'wlogfile', 'ilogfile'],
+            'level': 'DEBUG',
+        },
+    }
+}
