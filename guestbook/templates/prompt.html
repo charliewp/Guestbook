@@ -7,7 +7,7 @@
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>    
     <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
 <script type="text/javascript">
-    window.setTimeout("redirectpage();", 120000);    
+    window.setTimeout("redirectpage();", 6000000);    
     function redirectpage(){
     window.top.location.href = '/ophouse/signin';
     }
@@ -37,21 +37,12 @@
     {% endfor %}
 {% endif %}
 <div class="container">
-            <div style="width:100%; padding:10px">                
+            <div style="width:100%; padding:0px">                
                     {% for error in form.non_field_errors %}
                     <div class="form-group has-errors text-danger small">
                         {{error}}
                     </div>
                     {% endfor %}
-                    <!--<div class="divTable">
-                       <div class="divTableBody">
-                         <div class="divTableRow">
-                            <div class="divTableCell">
-                              <button class="btn btn-primary" style="width:100%">Go Back / Regresa</button>
-                            </div>
-                         </div>
-                        </div>
-                    </div>-->
                     <form action="/ophouse/prompt?connection={{connection}}" method="post">
                     {%csrf_token%}
                     {% for error in form.non_field_errors %}
@@ -62,15 +53,24 @@
                     <div class="divTable" style="padding:5px">
                        <div class="divTableBody">
                          <div class="divTableRow">
-                            <div class="divTableCell" style="width:100%">
-                              <button class="btn-primary" style="width:100%" >Skip Survey/Omitir encuesta</button>
-                            </div>
+                            {% if device == 'Touch' %} <!--HP Envy Touch -->
+                              <div class="divTableCell">
+                                <button class="kiosk-touch-primary" style="width:100%">Skip Survey/Omitir encuesta</button>
+                              </div>
+                            {% else %} <!--Desktop -->
+                              <div class="divTableCell">
+                                <button class="btn-primary" style="width:100%">Skip Survey/Omitir encuesta</button>
+                              </div>
+                            {% endif %}
                          </div>
                        </div>
                     </div>
                 </form>
-                <div><c3>Please help us keep our information current / Ayúdenos a mantener nuestra información actualizada...</c3></div>
-                    {%csrf_token%}
+                {% if device == 'Touch' %} <!--HP Envy Touch -->
+                  <div><kiosk-touch-c3>Help us keep our information current / Ayúdenos a mantener nuestra información actualizada...</kiosk-touch-c3></div>
+                {% else %} <!--Desktop -->
+                  <div><c3>Please help us keep our information current / Ayúdenos a mantener nuestra información actualizada...</c3></div>
+                {% endif %}
                     {% for error in form.non_field_errors %}
                     <div class="form-group has-errors text-danger small">
                         {{error}}
@@ -79,9 +79,16 @@
                     <div class="divTable">
                        <div class="divTableBody">
                          <div class="divTableRow">
-                           <div class="divTableCell">
-                              <h2>{{survey}}</h2>
-                           </div>
+                           {% if device == 'Touch' %} <!--HP Envy Touch -->
+                             <div class="divTableCell">
+                               <kiosk-touch-h2>{{survey}}</kiosk-touch-h2>
+                             </div>
+                           {% else %} <!--Desktop -->
+                             <div class="divTableCell">
+                               <h2>{{survey}}</h2>
+                             </div>
+                           {% endif %}
+                           
                          </div>
                        </div>
                     </div>
@@ -91,30 +98,57 @@
                               <!--                                        -->
                               {% if form.replaceText %} 
                                  <form id="choiceForm" name="charField" action="/ophouse/prompt?connection={{connection}}&prompt={{whichQuestion.pk}}" method="post" >
-                                   {%csrf_token%}
-                                   <div class="divTableRow">
-                                         <div class="divTableCell" style="width:100%;padding:10px;">
-                                           {{form.replaceText}}
-                                         </div>
-                                   </div>                                   
+                                   {%csrf_token%}                                   
+                                       {% if device == 'Touch' %}
+                                          <div class="divTableRow">
+                                            <div class="divTableCell">
+                                               <div class="form-group" style="width:43%"><div class="kiosk-touch-form-control">{{form.replaceText}}</div></div>
+                                            </div>
+                                           </div>  
+                                           <div class="divTableRow">
+                                            <div class="divTableCell">
+                                               <button class="kiosk-touch-success" style="width:100%" >Make changes then touch here / Haga los cambios y haga clic aquí</button>
+                                            </div>
+                                           </div>
+                                        {% else %}
+                                          <div class="divTableRow">
+                                             <div class="divTableCell">
+                                               <div class="form-group" style="width:50%">{{form.replaceText}}</div>
+                                             </div>
+                                          <div class="divTableRow">
+                                             <div class="divTableCell">
+                                               <button class="btn-success" style="width:100%" >Make changes then touch here/Haz cambios y toca aquí</button>
+                                             </div>
+                                           </div>
+                                        {% endif %}
+                                   </div>
                                    <!--<div>{{form.fastTrack}} <c3>Keep asking me questions until I uncheck this box.</c3></div>-->
-                                   <button class="btn-success" style="width:100%" >Make changes if necessary then click here / Haga los cambios necesarios y haga clic aquí</button>
-                                 </form>
+                                   </form>
                               {% endif %}
                               <!--                                        -->
                               <!-- ChoiceField Prompts are here           -->
                               <!--                                        -->
                               <!--                                        -->
                               {% if form.choiceField %}
-                                    <div class="row" style="width:100%">
+                                    <div class="row" style="width:100%;align:top">
                                     {% for choice in form.choiceField.field.choices %}
-                                      <div class="cel" style="padding:5px;width=10%">
-                                       <form id="choiceForm" action="/ophouse/prompt?connection={{connection}}&amp;prompt={{whichQuestion.pk}}" method="post">
-                                         {%csrf_token%}
-                                         <input type="radio" name="choiceField" hidden="true" value="{{choice.0}}" checked="checked"/>
-                                         <button class="gbcheckbox-inline" >{{choice.1}}</button>
-                                       </form>
-                                      </div>
+                                      {% if device == 'Touch' %} <!--HP Envy Touch -->
+                                         <div class="cel" style="padding:15px;width=10%">
+                                           <form id="choiceForm" action="/ophouse/prompt?connection={{connection}}&amp;prompt={{whichQuestion.pk}}" method="post">
+                                             {%csrf_token%}
+                                             <input type="radio" name="choiceField" hidden="true" value="{{choice.0}}" checked="checked"/>
+                                             <button class="gbcheckbox-inline" style="font-size:32px;">{{choice.1}}</button>
+                                           </form>
+                                         </div>
+                                      {% else %} <!--Desktop -->
+                                         <div class="cel" style="padding:5px;width=10%">
+                                           <form id="choiceForm" action="/ophouse/prompt?connection={{connection}}&amp;prompt={{whichQuestion.pk}}" method="post">
+                                             {%csrf_token%}
+                                             <input type="radio" name="choiceField" hidden="true" value="{{choice.0}}" checked="checked"/>
+                                             <button class="gbcheckbox-inline" >{{choice.1}}</button>
+                                           </form>
+                                         </div>
+                                      {% endif %}
                                     {% endfor %}
                                     </div>
                               {% endif %}
@@ -130,7 +164,20 @@
                                  <div class="divTable" style="width:100%">
                                    <div class="divTableBody">
                                      <div class="divTableRow">
-                                       <div class="divTableCell" style="width:100%">
+                                      {% if device == 'Touch' %} <!--HP Envy Touch -->
+                                         <div class="divTableCell" style="width:100%">
+                                         <div>
+                                           {% for choice_id, choice_label in form.multiChoice.field.widget.choices %}
+                                              <label for="id_options_{{ choice_id }}" class="checkbox-inline">
+                                                <input  type="checkbox" id="id_options_{{ choice_id }}" value="{{ choice_id }}" name="multichoice" {% if choice_id in form.multiChoice.value  %} checked="checked"{% endif %}/>
+                                                <span class="badge" style="font-size:44px;" >{{choice_label}}</span>
+                                              {{choice}}
+                                              </label>
+                                           {% endfor %}
+                                         </div>
+                                        </div>
+                                      {% else %} <!--Desktop -->
+                                         <div class="divTableCell" style="width:100%">
                                          <div>
                                            {% for choice_id, choice_label in form.multiChoice.field.widget.choices %}
                                               <label for="id_options_{{ choice_id }}" class="checkbox-inline">
@@ -141,11 +188,18 @@
                                            {% endfor %}
                                          </div>
                                         </div>
+                                      {% endif %}
                                      </div>
                                      <div class="divTableRow">
-                                       <div class="divTableCell" style="width:25%">
-                                         <button class="btn btn-primary" style="width:25%" >Next / Siguiente</button>
+                                        {% if device == 'Touch' %} <!--HP Envy Touch -->
+                                         <div class="divTableCell" style="width:25%">
+                                         <button class="kiosk-touch-success" style="width:100%" >Next / Siguiente</button>
                                        </div>
+                                      {% else %} <!--Desktop -->
+                                         <div class="divTableCell" style="width:25%">
+                                         <button class="btn btn-primary" style="width:100%" >Next / Siguiente</button>
+                                       </div>
+                                      {% endif %}                                       
                                      </div>
                                    </div>
                                  </div>

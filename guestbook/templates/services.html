@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> -->
     <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
 <script type="text/javascript">
-    window.setTimeout("redirectpage();", 120000);    
+    window.setTimeout("redirectpage();", 6000000);    
     function redirectpage(){
     window.top.location.href = '/ophouse/signin';
     }
@@ -22,7 +22,7 @@
 <c><small> charliewp/Guestbook uses the GNU GPL v3.0 [v20180416]</small></c>
 </div>
 <div class="container">
-<div style="width:100%; padding:10px">
+<div style="width:100%; padding:0px">
 {% if staffrequest == 1 %}
 <form name="login" action="/ophouse/staff/" method="get">
                     {%csrf_token%}
@@ -34,17 +34,27 @@
                     <div class="divTable">
                        <div class="divTableBody">
                          <div class="divTableRow">
-                            <div class="divTableCell">
-                              <button class="btn-primary" style="width:100%">Go Back / Regresa</button>
-                            </div>
+                            {% if device == 'Touch' %} <!--HP Envy Touch -->
+                              <div class="divTableCell">
+                                <button class="kiosk-touch-primary" style="width:100%">Go Back / Regresa</button>
+                              </div>
+                            {% else %} <!--Desktop -->
+                              <div class="divTableCell">
+                                <button class="btn-primary" style="width:100%">Go Back / Regresa</button>
+                              </div>
+                            {% endif %}
                          </div>
                         </div>
                     </div>
 </form>
 </div>
 {% endif %}
-   <button class="btn-primary" style="width:100%">Select all of the services you require / Seleccione todos los servicios que necesita</button>
-   <div class="form-group badge-checkboxes" style="width:90%">
+   {% if device == 'Touch' %} <!--HP Envy Touch -->
+     <button class="kiosk-touch-primary" style="width:100%">Select all of the services you require / Seleccione todos los servicios que necesita</button>
+   {% else %} <!--Desktop -->
+     <button class="btn-primary" style="width:100%">Select all of the services you require / Seleccione todos los servicios que necesita</button>
+   {% endif %}
+   <div class="form-group badge-checkboxes" style="width:100%;">
       {% if staffrequest %}
         <form action="/ophouse/services?connection={{connection}}&staff=1" method="post">
       {% else %}
@@ -54,12 +64,16 @@
       <div class="divTable" style="width:100%">
                        <div class="divTableBody">
                          <div class="divTableRow">
-                            <div class="divTableCell" style="width:100%">
+                            <div class="divTableCell" style="width:100%;padding:20px">
                                <div>
                                   {% for choice_id, choice_label in form.services.field.widget.choices %}
-                                     <label for="id_options_{{ choice_id }}" class="checkbox-inline">
+                                     <label for="id_options_{{ choice_id }}" class="checkbox-inline" >
                                      <input  type="checkbox" id="id_options_{{ choice_id }}" value="{{ choice_id }}" name="services" {% if choice_label in disabledList %} disabled="true" {% endif %} {% if choice_id in form.services.value  %} checked="checked"{% endif %}}/>
-                                     <span class="badge">{{choice_label}}</span>
+                                       {% if device == 'Touch' %} <!--HP Envy Touch -->
+                                         <span class="badge" style="font-size:48px;">{{choice_label}}</span>
+                                       {% else %} <!--Desktop -->
+                                         <span class="badge">{{choice_label}}</span>
+                                       {% endif %}
                                      {{choice}}
                                      </label>
                                   {% endfor %}
@@ -68,12 +82,18 @@
                          </div>
                        </div>
       </div>
-      <div class="divTable" style="width:100%;padding:10px;" >
+      <div class="divTable" style="width:100%;padding:0px;" >
                        <div class="divTableBody">
                          <div class="divTableRow">
-                            <div class="divTableCell" style="width:100%">
+                            {% if device == 'Touch' %} <!--HP Envy Touch -->
+                              <div class="divTableCell" style="width:100%">
+                               <button class="kiosk-touch-success" style="width:100%" >Next / Siguiente</button>
+                              </div>
+                            {% else %} <!--Desktop -->
+                              <div class="divTableCell" style="width:100%">
                                <button class="btn-success" style="width:100%" >Next / Siguiente</button>
-                            </div>
+                              </div>
+                            {% endif %}
                          </div>
                        </div>
       </div>

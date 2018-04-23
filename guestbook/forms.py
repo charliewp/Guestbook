@@ -44,8 +44,8 @@ class LoginForm(forms.Form):
     #password = forms.CharField(label='Password', validators=[pass_regex], min_length=5, max_length=12, widget=forms.PasswordInput(attrs={'size':'16', 'class':'inputText'}))
     #username = forms.CharField(label='Username', validators=[user_regex], min_length=5, max_length=10, )
     #password = forms.CharField(label='Password')  #widget=PasswordInput())
-    username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Username'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Password'}))
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Username'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':'Password'}))
     def clean_username(self):
         data = self.cleaned_data['username']
         return data
@@ -58,8 +58,8 @@ class SignInForm(forms.Form):
     name_regex = RegexValidator(regex=r'^[a-zA-Z0-9]{3,12}$', message="The Shortname is 3 to 12 letters and numbers only. Try again!")
     #aliasname = forms.CharField(label='Shortname', validators=[name_regex], min_length=3, max_length=8, widget=forms.TextInput(attrs={'size':'8', 'class':'inputText'}))
     #aliaspin  = forms.CharField()
-    aliasname = forms.CharField(validators=[name_regex], max_length=12, widget=forms.TextInput(attrs={'size':'12', 'class':'form-control','placeholder':'Username'}))
-    aliaspin = forms.CharField(validators=[pin_regex], max_length=4, widget=forms.PasswordInput(attrs={'size':'4', 'class':'form-control','placeholder':'PIN'}))
+    aliasname = forms.CharField(validators=[name_regex], max_length=12, widget=forms.TextInput(attrs={'size':'12', 'placeholder':'Username'}))
+    aliaspin = forms.CharField(validators=[pin_regex], max_length=4, widget=forms.PasswordInput(attrs={'size':'4', 'placeholder':'PIN'}))
     wipeHistory = forms.BooleanField(required=False)
     def clean_aliaspin(self):
         data = self.cleaned_data['aliaspin']
@@ -134,7 +134,7 @@ class SurveyForm(forms.Form):
              # 
              personField = Person._meta.get_field(survey.anchorField)
              #self.fields['replaceText'] = forms.CharField(initial=survey.currentValue, max_length=256, widget=forms.TextInput(attrs={'class': 'form-control'}))
-             self.fields['replaceText'] = forms.CharField(initial=getattr(person, survey.anchorField), max_length=256, widget=forms.TextInput(attrs={'class': 'form-control', 'size':64}))
+             self.fields['replaceText'] = forms.CharField(initial=getattr(person, survey.anchorField), max_length=256, widget=forms.TextInput(attrs={'size':24}))
              #print('it is a CharField!')
         else:
             #an unanchored Prompt
@@ -171,14 +171,14 @@ class Meta:
         fields = ['name']
 
 class AliasForm(forms.Form):
-    firstname = forms.CharField(max_length=24,widget=forms.TextInput(attrs={'size':'24', 'class':'form-control','placeholder':'Firstname'}))
-    lastname = forms.CharField(max_length=24,widget=forms.TextInput(attrs={'size':'24', 'class':'form-control','placeholder':'Lastname'}))
+    firstname = forms.CharField(max_length=24,widget=forms.TextInput(attrs={'size':'14', 'placeholder':'Firstname'}))
+    lastname = forms.CharField(max_length=24,widget=forms.TextInput(attrs={'size':'14', 'placeholder':'Lastname'}))
     pin_regex = RegexValidator(regex=r'^\+?1?\d{4,4}$', message="The PIN is a 4 digit number. Try again!")
     name_regex = RegexValidator(regex=r'^[a-zA-Z0-9]{3,12}$', message="The Shortname is 3 to 12 letters and numbers only. Try again!")
     ssn_regex = RegexValidator(regex=r'^\+?1?\d{4,4}$', message="The last 4 digits of your SSN are numeric.. Try again!")
-    aliasname = forms.CharField(validators=[name_regex], max_length=12, widget=forms.TextInput(attrs={'size':'12','class':'form-control','placeholder':'Username'}))
-    aliaspin  = forms.CharField(validators=[pin_regex], max_length=4, widget=forms.TextInput( attrs={'size':'4','class':'form-control','placeholder':'PIN'}))
-    shortssn  = forms.CharField(validators=[ssn_regex], max_length=4, widget=forms.TextInput( attrs={'size':'4','class':'form-control','placeholder':'last 4 SSN'}))
+    aliasname = forms.CharField(validators=[name_regex], max_length=12, widget=forms.TextInput(attrs={'size':'12','placeholder':'Username'}))
+    aliaspin  = forms.CharField(validators=[pin_regex], max_length=4, widget=forms.TextInput( attrs={'size':'4','placeholder':'PIN'}))
+    shortssn  = forms.CharField(validators=[ssn_regex], max_length=4, widget=forms.TextInput( attrs={'size':'4','placeholder':'####'}))
 
 class StaffForm(forms.Form):
     def __init__(self, *args, **kwargs):

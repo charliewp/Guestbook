@@ -20,7 +20,11 @@
    <p style="color: red;padding:10px">
    <div class="container">
       <div style="width:100%; padding:10px">
-        <c3>{{message}}</c3>
+        {% if device == 'Touch' %} <!--HP Envy Touch -->
+          <kiosk-touch-c3>{{message}}</kiosk-touch-c3>
+        {% else %} <!--Desktop -->
+          <c3>{{message}}</c3>
+        {% endif %}        
       </div>
    </div>
    </p>
@@ -41,7 +45,7 @@
 {% endif %}
 <div class="container">
             <div style="width:100%; padding:10px">
-                <form name="signin" action="/ophouse/signin/" method="get">
+                <form name="login" action="/ophouse/signin/" method="get">
                     {%csrf_token%}
                     {% for error in form.non_field_errors %}
                     <div class="form-group has-errors text-danger small">
@@ -51,9 +55,15 @@
                     <div class="divTable">
                        <div class="divTableBody">
                          <div class="divTableRow">
-                            <div class="divTableCell">
-                              <button class="btn-primary" style="width:100%">Go Back / Regresa</button>
-                            </div>
+                            {% if device == 'Touch' %} <!--HP Envy Touch -->
+                              <div class="divTableCell">
+                                <button class="kiosk-touch-primary" style="width:100%">Go Back / Regresa</button>
+                              </div>
+                            {% else %} <!--Desktop -->
+                              <div class="divTableCell">
+                                <button class="btn-primary" style="width:100%">Go Back / Regresa</button>
+                              </div>
+                            {% endif %}
                          </div>
                         </div>
                     </div>
@@ -68,12 +78,21 @@
                     <div class="divTable">
                        <div class="divTableBody">
                          <div class="divTableRow">
-                           <div class="divTableCell">
-                              <div class="form-group" style="width:50%">{{form.firstname}}</div>
-                           </div>
-                           <div class="divTableCell">
-                              <div class="form-group" style="width:50%">{{form.lastname}}</div>
-                           </div>
+                           {% if device == 'Touch' %}
+                              <div class="divTableCell">
+                                <div class="form-group" style="width:44%"><div class="kiosk-touch-form-control">{{form.firstname}}</div></div>
+                              </div>
+                              <div class="divTableCell">
+                                <div class="form-group" style="width:80%"><div class="kiosk-touch-form-control">{{form.lastname}}</div></div>
+                              </div>
+                           {% else %}
+                              <div class="divTableCell">
+                                <div class="form-group" style="width:50%">{{form.firstname}}</div>
+                              </div>
+                              <div class="divTableCell">
+                                <div class="form-group" style="width:50%">{{form.lastname}}</div>
+                              </div>
+                           {% endif %}                           
                          </div>
                        </div>
                        <div class="divTableRow">
@@ -81,12 +100,21 @@
                              <div class="divTable">
                               <div class="divTableBody">
                                  <div class="divTableRow">
-                                    <div class="divTableCell" style="width:30%">
-                                       <div class="form-group" >{{form.aliasname}}</div>
-                                    </div>
-                                    <div class="divTableCell" style="width:70%;align:left;padding:5px;">
-                                       <div class="form-group" ><c3>3-12 character Username</c3></div>
-                                    </div>
+                                          {% if device == 'Touch' %}
+                                            <div class="divTableCell" style="width:26%">
+                                              <div class="form-group" ><div class="kiosk-touch-form-control">{{form.aliasname}}</div></div>
+                                            </div>
+                                            <div class="divTableCell" style="width:70%;align:left;padding:5px;">
+                                              <div class="form-group" ><kiosk-touch-c3>3-12 character Username</kiosk-touch-c3></div>
+                                            </div>
+                                          {% else %}
+                                            <div class="divTableCell" style="width:30%">
+                                              <div class="form-group" >{{form.aliasname}}</div>
+                                            </div>
+                                            <div class="divTableCell" style="width:70%;align:left;padding:5px;">
+                                              <div class="form-group" ><c3>3-12 character Username</c3></div>
+                                            </div>
+                                          {% endif %}
                                  </div>
                               </div>
                              </div>
@@ -95,12 +123,21 @@
                              <div class="divTable">
                               <div class="divTableBody">
                                  <div class="divTableRow">
-                                    <div class="divTableCell" style="width:20%">
+                                   {% if device == 'Touch' %}
+                                     <div class="divTableCell" style="width:16%">
+                                       <div class="form-group" ><div class="kiosk-touch-form-control">{{form.aliaspin}}</div></div>
+                                     </div>
+                                     <div class="divTableCell" style="width:80%;align:left;padding:5px;">
+                                       <div class="form-group" ><kiosk-touch-c3>4 digit PIN</kiosk-touch-c3></div>
+                                     </div>
+                                   {% else %}
+                                     <div class="divTableCell" style="width:20%">
                                        <div class="form-group" >{{form.aliaspin}}</div>
-                                    </div>
-                                    <div class="divTableCell" style="width:80%;align:left;padding:5px;">
+                                     </div>
+                                     <div class="divTableCell" style="width:80%;align:left;padding:5px;">
                                        <div class="form-group" ><c3>4 digit PIN</c3></div>
-                                    </div>
+                                     </div>
+                                   {% endif %}                                    
                                  </div>
                               </div>
                              </div>
@@ -111,12 +148,21 @@
                               <div class="divTable">
                               <div class="divTableBody">
                                  <div class="divTableRow">
-                                    <div class="divTableCell" style="width:30%">
-                                       <div class="form-group" >{{form.shortssn}}</div>
-                                    </div>
-                                    <div class="divTableCell" style="width:70%;align:left;padding:5px;">
-                                       <div class="form-group" ><c3>last 4 digits of your SSN</c3></div>
-                                    </div>
+                                    {% if device == 'Touch' %}
+                                       <div class="divTableCell" style="width:18%">
+                                         <div class="form-group" ><div class="kiosk-touch-form-control">{{form.shortssn}}</div></div>
+                                       </div>
+                                       <div class="divTableCell" style="width:70%;align:left;padding:5px;">
+                                         <div class="form-group" ><kiosk-touch-c3>last 4 digits of your SSN</kiosk-touch-c3></div>
+                                       </div>
+                                    {% else %}
+                                       <div class="divTableCell" style="width:30%">
+                                         <div class="form-group" >{{form.shortssn}}</div>
+                                       </div>
+                                       <div class="divTableCell" style="width:70%;align:left;padding:5px;">
+                                         <div class="form-group" ><c3>last 4 digits of your SSN</c3></div>
+                                       </div>
+                                    {% endif %}                                    
                                  </div>
                               </div>
                              </div>                              
@@ -128,9 +174,15 @@
                     <div class="divTable">
                        <div class="divTableBody">
                          <div class="divTableRow">
-                            <div class="divTableCell" style="width:100%">
-                              <button class="btn-primary" style="width:100%" >Create My Nickname</button>
-                            </div>
+                            {% if device == 'Touch' %} <!--HP Envy Touch -->
+                              <div class="divTableCell" style="width:100%">
+                               <button class="kiosk-touch-success" style="width:100%" >Create My Username</button>
+                              </div>
+                            {% else %} <!--Desktop -->
+                              <div class="divTableCell" style="width:100%">
+                               <button class="btn-primary" style="width:100%" >Create My Username</button>
+                              </div>
+                            {% endif %}
                          </div>
                        </div>
                     </div>

@@ -32,7 +32,27 @@
 <div class="container">
  <div style="width:100%; padding:10px">
             <div style="width:100%">
-                <button class="btn-primary" style="width:100%">Welcome to Opportunity House! / ¡Bienvenido a Opportunity House!</button>
+                <form name="login" action="/ophouse/login/" method="get">
+                    {%csrf_token%}
+                    {% for error in form.non_field_errors %}
+                    <div class="form-group has-errors text-danger small">
+                        {{error}}
+                    </div>
+                    {% endfor %}
+                    <div class="divTable">
+                       <div class="divTableBody">
+                         <div class="divTableRow">
+                            <div class="divTableCell">
+                              {% if device == 'Touch' %}
+                                <button class="kiosk-touch-primary" style="width:100%">Welcome to Opportunity House!</button>
+                              {% else %}
+                                <button class="btn-primary" style="width:100%">Welcome to Opportunity House!</button>
+                              {% endif %}
+                            </div>
+                         </div>
+                        </div>
+                    </div>
+                </form>
                 <form name="login" action="/ophouse/login/" method="post">
                     {%csrf_token%}
                     {% for error in form.non_field_errors %}
@@ -41,16 +61,24 @@
                     </div>
                     {% endfor %}
                     {% for field in form %}
-                    <div class="form-group has-errors text-danger small">
+                      <div class="form-group has-errors text-danger small">
                         {{field.errors}}
-                    </div>
-                    <div class="form-group has-errors text-danger small">
-                    </div>
-                    <div class="form-group">
-                        {{field}}
-                    </div>
+                      </div>
+                      <div class="form-group has-errors text-danger small">
+                      </div>
+                      <div class="form-group">
+                        {% if device == 'Touch' %}
+                                <div class="kiosk-touch-form-control" style="width:37%">{{field}}</div>
+                        {% else %}
+                                <div>{{field}}</div>
+                        {% endif %}
+                      </div>
                     {% endfor %}
-                    <button class="btn-success" style="width:100%">Login</button>
+                    {% if device == 'Touch' %}
+                        <button class="kiosk-touch-success" style="width:100%">Login</button>
+                    {% else %}
+                        <button class="btn-success" style="width:100%">Login</button>
+                    {% endif %}
                 </form>
             </div>
  </div>

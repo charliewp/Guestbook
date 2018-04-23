@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 from django.conf import settings
+#from socket import gethostname, gethostbyname 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,8 +27,9 @@ SECRET_KEY = 'ks4g5u_$xb50+pb&e_4=wa5ku&f_6bot*5qiy-bji8rg&w%#f5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = ['127.0.0.1', '192.168.1.131','localhost']
+#ALLOWED_HOSTS = [127.0.0.1', '192.168.1.128','localhost']
 ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = [ gethostname(), gethostbyname(gethostname()), ] 
 
 
 # Application definition

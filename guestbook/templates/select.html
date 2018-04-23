@@ -38,31 +38,56 @@
             <div style="width:100%">
                 <form name="login" action="/ophouse/signin/" method="get">
                   {%csrf_token%}
-                  <button class="btn-primary" style="width:100%">Start a Client Kiosk </button>
+                  {% if device == 'Touch' %}
+                                <button class="kiosk-touch-primary" style="width:100%">Start a Client Kiosk </button>
+                  {% else %}
+                                <button class="btn-primary" style="width:100%">Start a Client Kiosk </button>
+                  {% endif %}
+                  
                 </form>
             </div>
             <div style="width:100%">
                 <form name="login" action="/ophouse/queue?servicetype=1" method="get">
                   {%csrf_token%}
-                  <button class="btn-primary" style="width:100%">Start a Volunteer Workstation</button>
+                  {% if device == 'Touch' %}
+                                <button class="kiosk-touch-primary" style="width:100%">Start a Volunteer Workstation</button>
+                  {% else %}
+                                <button class="btn-primary" style="width:100%">Start a Volunteer Workstation</button>
+                  {% endif %}
+                  
                 </form>
             </div>
             <div style="width:100%">
                 <form name="login" action="/ophouse/staffqueue/" method="get">
                   {%csrf_token%}
-                  <button class="btn-primary" style="width:100%">View all Service Queues</button>
+                  {% if device == 'Touch' %}
+                                <button class="kiosk-touch-primary" style="width:100%">View all Service Queues</button>
+                  {% else %}
+                                <button class="btn-primary" style="width:100%">View all Service Queues</button>
+                  {% endif %}
+                  
                 </form>
             </div>
             <div style="width:100%">
                 <form name="login" action="/ophouse/staff/" method="get">
                   {%csrf_token%}
-                  <button class="btn-primary" style="width:100%">Start a Staff Portal</button>
+                  {% if device == 'Touch' %}
+                                <button class="kiosk-touch-primary" style="width:100%">Start a Staff Portal</button>
+                  {% else %}
+                                <button class="btn-primary" style="width:100%">Start a Staff Portal</button>
+                  {% endif %}
+                  
                 </form>
             </div>
             <div style="width:100%">
                 <form name="login" action="/ophouse/reporter/" method="get">
                   {%csrf_token%}
-                  <button class="btn-primary" style="width:100%">Data Visualizer</button>
+                  {% if device == 'Touch' %}
+                                <button class="kiosk-touch-primary" style="width:100%">Data Visualizer</button>
+                  {% else %}
+                                <button class="btn-primary" style="width:100%">Data Visualizer</button>
+                  {% endif %}
+                  
                 </form>
             </div>
 </body>

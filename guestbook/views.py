@@ -151,10 +151,24 @@ def checksession(request):
     else:
       log.debug('session-cookie not found')
       return False
+      
+def mobile(request):
+    #Return True if the request comes from a mobile device."""
+    print(request.META['HTTP_USER_AGENT'])
+    MOBILE_AGENT_RE=re.compile(r".*(Trident/7.0)",re.IGNORECASE)
+
+    if MOBILE_AGENT_RE.match(request.META['HTTP_USER_AGENT']):
+        return True
+    else:
+        return False
 
 def login(request):
     error = False
     message = ''
+    if mobile(request):
+      device='Touch'
+    else:
+      device='Laptop'
     if request.method == 'POST':
         log.debug("post to login page")
         # create a form instance and populate it with data from the request:
@@ -189,7 +203,7 @@ def login(request):
           return HttpResponseRedirect('/ophouse/login/')
     else:
         form = LoginForm()
-        return render(request,'login.html', {'form': form, 'error': error, 'message': message,})
+        return render(request,'login.html', {'form': form, 'device': device, 'error': error, 'message': message,})
 
 def staff(request):
     error = False
@@ -246,6 +260,10 @@ def index(request):
     return HttpResponseRedirect('/ophouse/login/')
     
 def select(request):
+    if mobile(request):
+      device='Touch'
+    else:
+      device='Laptop'
     #this is the entry point at the beginning of the day, let's clean-up old snapshots here
     # should we do lifecycle management here?
     snapshots = PersonSnapshot.objects.all().filter(status=SNAPSHOT_STATUS_ACTIVE)
@@ -253,9 +271,13 @@ def select(request):
       #this call will archive old snapshots
       snapshot_lifecycle(snapshot.person, False)
         
-    return render(request, 'select.html')
+    return render(request, 'select.html', {'device': device})
 
 def sign_in(request):
+    if mobile(request):
+      device='Touch'
+    else:
+      device='Laptop'
     #Security
     if not checksession(request):
        return HttpResponseRedirect('/ophouse/login/')
@@ -331,16 +353,16 @@ def sign_in(request):
               message = 'Don\'t know that one, try again!'
               form = SignInForm()
               #return HttpResponseRedirect('/ophouse/signin/')
-              return render(request, 'sign_in.html', {'form': form, 'error': error, 'message': message, 'date': formattedDate})
+              return render(request, 'sign_in.html', {'form': form, 'error': error, 'message': message, 'device': device, 'date': formattedDate})
         else:
           log.debug('sign_in POST form is NOT valid')
           error = True
           message = 'Don\'t know that one, try again!'
           form = SignInForm()
-          return render(request, 'sign_in.html', {'form': form, 'error': error, 'message': message, 'date': formattedDate})
+          return render(request, 'sign_in.html', {'form': form, 'error': error, 'message': message, 'device': device, 'date': formattedDate})
     else:
       form = SignInForm()
-      return render(request, 'sign_in.html', {'form': form})
+      return render(request, 'sign_in.html', {'form': form, 'device': device})
 
 def createalias(request):
     #Security
@@ -349,6 +371,10 @@ def createalias(request):
     else:
        username = request.session['username']
     #End-Security
+    if mobile(request):
+      device='Touch'
+    else:
+      device='Laptop'
     person_instance_pk = int(request.GET.get("person", 0))
     requestType = request.GET.get("fn", 0)
     log.debug('requestType=%s' % (requestType))
@@ -378,7 +404,7 @@ def createalias(request):
                  person.save()
                  log.info('%s %s has created Username=%s from the Client Kiosk.' % (person.firstname, person.lastname, person.aliasname))
                  message = 'Welcome ' + aliasname + ', your PIN is ' + aliaspin + " Go Back and sign-In now!"
-                 return render(request, 'createalias.html', {'form': form, 'message': message, 'person': person.pk})
+                 return render(request, 'createalias.html', {'form': form, 'device': device, 'message': message, 'person': person.pk})
                else:
                  #firstname, lastname, and ssn are already in the DB - ResetUsername should be used
                  log.debug('CreateAlias - %s %s / SSN=%s already exist in the DB. Use Reset Username function.' % (firstname, lastname, shortssn))
@@ -389,14 +415,14 @@ def createalias(request):
                log.debug('CreateAlias - the aliasname %s already exists, try something else.' % (aliasname))
                message = 'The username ' + aliasname + ' already exists, try something else.'
                error = 'Try another username'
-           return render(request, 'createalias.html', {'form': form, 'message': message, 'error': error})
+           return render(request, 'createalias.html', {'form': form, 'device': device, 'message': message, 'error': error})
          else:
            return render(request, 'createalias.html', {'form': form})
          return HttpResponseRedirect('/ophouse/services?person=%s' % (person_instance_pk))     
     else:
       # GET REQUEST      
       form = AliasForm()
-      return render(request, 'createalias.html', {'form': form})
+      return render(request, 'createalias.html', {'form': form, 'device': device})
       
 def resetalias(request):
     #Security
@@ -405,6 +431,10 @@ def resetalias(request):
     else:
        username = request.session['username']
     #End-Security
+    if mobile(request):
+      device='Touch'
+    else:
+      device='Laptop'
     person_instance_pk = int(request.GET.get("person", 0))
     requestType = request.GET.get("fn", 0)
     log.debug('requestType=%s' % (requestType))
@@ -444,7 +474,7 @@ def resetalias(request):
          return HttpResponseRedirect('/ophouse/services?person=%s' % (person_instance_pk))
     else:
       form = AliasForm()
-      return render(request, 'resetalias.html', {'form': form })
+      return render(request, 'resetalias.html', {'form': form , 'device': device})
 
 def snapshot_lifecycle(person, autoCreate):
     # ############################################
@@ -508,6 +538,10 @@ def services(request):
     else:
        username = request.session['username']
     #End-Security
+    if mobile(request):
+      device='Touch'
+    else:
+      device='Laptop'
     error = False
     today = datetime.today().weekday()
     if request.method == 'POST':
@@ -626,7 +660,7 @@ def services(request):
         if serviceTypes.count() == 0:
           return HttpResponseRedirect('/ophouse/prompt?connection=%s' % (connection_instance.pk))
         else:
-          return render(request, 'services.html', {'form': form, 'error': error, 'connection': connection_instance.pk, 'staffrequest': staffrequest, 'disabledList': disabledList})
+          return render(request, 'services.html', {'form': form, 'error': error, 'device': device, 'connection': connection_instance.pk, 'staffrequest': staffrequest, 'disabledList': disabledList})
 
 def inference_engine(person, snapshotTimestamp):
     preference = Preference.objects.all().filter(name=_ENV).first()
@@ -743,6 +777,10 @@ def prompt(request):
     else:
        username = request.session['username']
     #End-Security
+    if mobile(request):
+      device='Touch'
+    else:
+      device='Laptop'
     error = False
     connection_instance_pk = int(request.GET.get("connection", False))
     connection_instance = PersonSnapshot.objects.get(pk=connection_instance_pk)
@@ -879,7 +917,7 @@ def prompt(request):
           log.debug(replString)
           survey.currentValue = replString
         form = SurveyForm(survey=survey, person=connection_instance.person)
-        return render(request, 'prompt.html', {'form': form, 'error': error, 'whichQuestion': survey , 'survey': survey.onscreenPrompt, 'response': survey, 'connection': connection_instance.pk})
+        return render(request, 'prompt.html', {'form': form, 'error': error, 'device': device, 'whichQuestion': survey , 'survey': survey.onscreenPrompt, 'response': survey, 'connection': connection_instance.pk})
 
 def queue(request):
     #Security
@@ -1091,4 +1129,8 @@ def thankyou(request):
     else:
        username = request.session['username']
     #End-Security
-    return render(request, 'thankyou.html')
+    if mobile(request):
+      device='Touch'
+    else:
+      device='Laptop'
+    return render(request, 'thankyou.html', {'device': device})
