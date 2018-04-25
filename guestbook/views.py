@@ -130,7 +130,7 @@ def reporter(request):
           log.debug('response=%s %s' % (response[0], response[1]))
           labels.append(response[0])
           values.append(response[1])
-        #let's show the possible responses
+        #let's show the possible responses to the selected prompt in the graph legend
         promptResponses = apps.get_model(app_label='guestbook', model_name=fkResponseModel).objects.all().filter(language=prompt.language)
         chartKeys = []
         for promptResponse in promptResponses:
@@ -160,7 +160,7 @@ def mobile(request):
     if MOBILE_AGENT_RE.match(request.META['HTTP_USER_AGENT']):
         return True
     else:
-        return True
+        return False
 
 def login(request):
     error = False
@@ -190,17 +190,19 @@ def login(request):
           else:
             log.warn('userid %s  is not-an authorized.Guestbook Admin.' % (username))
             error = True
-            message = 'user ' + username + ' / password are not authorized.'
+            message = 'userid %s  is not-an authorized Guestbook Admin.' % (username)
             request.session['username'] = None
             form = LoginForm()
-            return HttpResponseRedirect('/ophouse/login/')
+            #return HttpResponseRedirect('/ophouse/login/')
+            return render(request,'login.html', {'form': form, 'device': device, 'error': error, 'message': message,})
         else:
           error = True
           message = 'Check your input and try again!'
           log.debug('problem with the login form')
           request.session['username'] = None
           form = LoginForm()
-          return HttpResponseRedirect('/ophouse/login/')
+          #return HttpResponseRedirect('/ophouse/login/')
+          return render(request,'login.html', {'form': form, 'device': device, 'error': error, 'message': message,})
     else:
         form = LoginForm()
         return render(request,'login.html', {'form': form, 'device': device, 'error': error, 'message': message,})
@@ -461,7 +463,7 @@ def resetalias(request):
              person.save()
              message = 'Got it!  ' +  aliasname + '  - your PIN is ' + aliaspin
              log.info('%s %s has reset a Username=%s from the Client Kiosk.' % (person.firstname, person.lastname, person.aliasname))
-             return render(request, 'resetalias.html', {'form': form, 'message': message, 'person': person.pk})
+             return render(request, 'resetalias.html', {'form': form, 'device': device, 'message': message, 'person': person.pk})
            else:
              log.debug('Name and SSN are not in the DB')
              message = 'Hmm, You need to Create a shortname'
@@ -644,9 +646,9 @@ def services(request):
           currentSnapshots = PersonSnapshot.objects.all().filter(status=SNAPSHOT_STATUS_ACTIVE)
           for currentSnapshot in currentSnapshots:
             unitsUsed += PersonServiceRequest.objects.all().filter(connection=currentSnapshot).filter(service=constrainedService).count()
-          #if limit is reached we want to disable this selection, however not when the client has already selected this service
+          #if limit is reached we want to disable this selection, however not when the client has already selected this service, and it is still queued
           #in this way the client is able to uncheck the service and return it to the pool for use by someone else
-          if unitsUsed == unitsAvailable and  PersonServiceRequest.objects.all().filter(connection=connection_instance).filter(service=constrainedService).count()==0:
+          if unitsUsed == unitsAvailable and  PersonServiceRequest.objects.all().filter(connection=connection_instance).filter(service=constrainedService).filter(status=SERVICE_STATUS_QUEUED).count()==0:
             disabledList.append(constrainedService.name)
          
         servicelist = [] 
@@ -926,6 +928,10 @@ def queue(request):
     else:
        username = request.session['username']
     #End-Security
+    if mobile(request):
+      device='Touch'
+    else:
+      device='Laptop'
     error = False
     myDate = datetime.now()
     # Give a format to the date
@@ -1003,7 +1009,7 @@ def queue(request):
         queuemessage = 'There is 1 client on the queue:'
       else:
         queuemessage = 'The queue is empty.'
-    return render(request, 'queue.html', {'form': form, 'error': error, 'queuesize': queuesize, 'queuemessage': queuemessage, 'servicetype': servicetype_instance_pk, 'queuename': queuename, 'servicelinks': serviceLinks, 'date': formattedDate})
+    return render(request, 'queue.html', {'form': form, 'device': device, 'error': error, 'queuesize': queuesize, 'queuemessage': queuemessage, 'servicetype': servicetype_instance_pk, 'queuename': queuename, 'servicelinks': serviceLinks, 'date': formattedDate})
     
 def staffqueue(request):
     #Security
@@ -1012,6 +1018,10 @@ def staffqueue(request):
     else:
        username = request.session['username']
     #End-Security
+    if mobile(request):
+      device='Touch'
+    else:
+      device='Laptop'
     error = False
     myDate = datetime.now()
     # Give a format to the date
@@ -1083,7 +1093,7 @@ def staffqueue(request):
       else:
         queuemessage = 'The queue is empty.'
       form.fields["services"].queryset = PersonServiceRequest.objects.all().filter(**query_attributes)
-    return render(request, 'staffqueue.html', {'form': form, 'error': error, 'queuesize': queuesize, 'queuemessage': queuemessage, 'servicetype': servicetype_instance_pk, 'queuename': queuename, 'servicelinks': serviceLinks, 'date': formattedDate})
+    return render(request, 'staffqueue.html', {'form': form, 'device': device, 'error': error, 'queuesize': queuesize, 'queuemessage': queuemessage, 'servicetype': servicetype_instance_pk, 'queuename': queuename, 'servicelinks': serviceLinks, 'date': formattedDate})
  
 def note(request):
     #Security

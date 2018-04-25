@@ -35,24 +35,41 @@
                     <div class="divTable">
                        <div class="divTableBody">
                          <div class="divTableRow">
+                            {% if device == 'Touch' %} <!--HP Envy Touch -->
                             <div class="divTableCell">
-                              <button class="btn-primary" style="width:100%">Go Back / Regresa</button>
+                              <button class="kiosk-touch-primary" style="width:100%">Go Back / Regresa</button>
                             </div>
+                            {% else %}
+                            <div class="divTableCell">
+                              <button class="desktop-primary" style="width:100%">Go Back / Regresa</button>
+                            </div>  
+                            {% endif %}
                          </div>
                         </div>
                     </div>
 </form>
 </div>
-<c3>{{message}}</c3>
+{% if device == 'Touch' %} <!--HP Envy Touch -->
+<touch-c3>{{message}}</touch-c3>
+{%else %}
+<desktop-c3>{{message}}</desktop-c3>
+{% endif %}
 <div class="divTable" style="width:100%">
     <div class="divTableBody">
                          <div class="divTableRow">
                          {% for tup in snapshotLinks %}
                          <!--<div class="divTableRow">-->
+                            {% if device == 'Touch' %} <!--HP Envy Touch -->
                             <div class="divTableCell" >
-                                <a href="/ophouse/services?person={{ tup.1 }}&staff=1"><button class="gbcheckbox-inline">{{tup.2}}</button></a>
-                                <a href="/ophouse/note?connection={{ tup.0 }}&staff=1"><button class="gbcheckbox-inline">Add Note</button></a>
+                                <a href="/ophouse/services?person={{ tup.1 }}&staff=1"><button class="gbcheckbox-inline" style="font-size:32px;">{{tup.2}}</button></a>
+                                <a href="/ophouse/note?connection={{ tup.0 }}&staff=1"><button class="gbcheckbox-inline" style="font-size:32px;">Add Note</button></a>
                             </div>
+                            {% else %}
+                            <div class="divTableCell" >
+                                <a href="/ophouse/services?person={{ tup.1 }}&staff=1"><button class="gbcheckbox-inline" style="font-size:32px;">{{tup.2}}</button></a>
+                                <a href="/ophouse/note?connection={{ tup.0 }}&staff=1"><button class="gbcheckbox-inline" style="font-size:32px;">Add Note</button></a>
+                            </div>
+                            {% endif %}
                          <!--</div>-->
                          {% endfor %}
                          </div>

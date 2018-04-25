@@ -33,7 +33,7 @@
                               {% if device == 'Touch' %}
                                 <button class="kiosk-touch-primary" style="width:100%">Welcome to Opportunity House!</button>
                               {% else %}
-                                <button class="btn-primary" style="width:100%">Welcome to Opportunity House!</button>
+                                <button class="desktop-primary" style="width:100%">Welcome to Opportunity House!</button>
                               {% endif %}
                             </div>
                          </div>
@@ -52,11 +52,11 @@
                          </div>
                        </div>
                 {% else %} <!--Desktop -->
-                  <h3>Thank you! Someone will be with you shortly.</h3>
+                  <kiosk-touch-c3>Thank you! Someone will be with you shortly.</kiosk-touch-c3>
                        <div class="divTableBody">
                          <div class="divTableRow">
                             <div class="divTableCell">
-                               <img src="{% static 'images/ophouse_400x226.png' %}" alt="Opportunity House">
+                               <img src="{% static 'images/ophouse_800x452.png' %}" alt="Opportunity House">
                             </div>
                          </div>
                        </div>

@@ -11,9 +11,11 @@
 <c><small> charliewp/Guestbook uses the GNU GPL v3.0 [v20180416]</small></c>
 </div>
 {% if message %}
+<div class="container">
    <p style="color: red;">
    <h2>{{message}}</h2>
    </p>
+/div>
 {% endif %}
 {% if form.errors %}
     {% for field in form %}
@@ -44,9 +46,9 @@
                          <div class="divTableRow">
                             <div class="divTableCell">
                               {% if device == 'Touch' %}
-                                <button class="kiosk-touch-primary" style="width:100%">Welcome to Opportunity House!</button>
+                                <button class="kiosk-touch-primary" style="width:100%">Guestbook Login</button>
                               {% else %}
-                                <button class="btn-primary" style="width:100%">Welcome to Opportunity House!</button>
+                                <button class="desktop-primary" style="width:100%">Guestbook Login</button>
                               {% endif %}
                             </div>
                          </div>
@@ -70,14 +72,14 @@
                         {% if device == 'Touch' %}
                                 <div class="kiosk-touch-form-control" style="width:37%">{{field}}</div>
                         {% else %}
-                                <div>{{field}}</div>
+                                <div class="desktop-form-control" style="width:37%">{{field}}</div>
                         {% endif %}
                       </div>
                     {% endfor %}
                     {% if device == 'Touch' %}
-                        <button class="kiosk-touch-success" style="width:100%">Login</button>
+                        <button class="kiosk-touch-success" style="width:100%">Admin Login</button>
                     {% else %}
-                        <button class="btn-success" style="width:100%">Login</button>
+                        <button class="desktop-success" style="width:100%">Admin Login</button>
                     {% endif %}
                 </form>
             </div>

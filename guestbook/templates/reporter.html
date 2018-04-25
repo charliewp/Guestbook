@@ -113,9 +113,15 @@ var myChart = new Chart(ctx, {
                     <div class="divTable">
                        <div class="divTableBody">
                          <div class="divTableRow">
+                            {% if device == 'Touch' %} <!--HP Envy Touch -->
                             <div class="divTableCell">
-                              <button class="btn-primary" style="width:100%">Go Back / Regresa</button>
+                              <button class="kiosk-touch-primary" style="width:100%">Go Back / Regresa</button>
                             </div>
+                            {% else %}
+                            <div class="divTableCell">
+                              <button class="desktop-primary" style="width:100%">Go Back / Regresa</button>
+                            </div>
+                            {% endif %}
                          </div>
                         </div>
                     </div>
@@ -127,16 +133,21 @@ var myChart = new Chart(ctx, {
         <div class="divTable" style="width:100%;padding:2px">
           <div class="divTableBody">
              <div class="divTableRow">
-               <div class="divTableCell" style="width:25">
-                 {{ form.persons }}
-               </div>
-               <div class="divTableCell" style="width:50%">
-                 {{ form.prompts }}
-               </div>
+               {% if device == 'Touch' %} <!--HP Envy Touch -->
+               <div class="divTableCell" style="width:25%;font-size:32px;">{{ form.persons }}</div>
+               <div class="divTableCell" style="width:50%;font-size:32px;">{{ form.prompts }}</div>
+               {% else %}
+               <div class="divTableCell" style="width:25%;font-size:24px;">{{ form.persons }}</div>
+               <div class="divTableCell" style="width:50%;font-size:24px;">{{ form.prompts }}</div>
+               {% endif %}
              </div>
           </div>
         </div>
-        <button class="btn-success" style="width:100%;padding:5px;">Graph It!</button>
+        {% if device == 'Touch' %} <!--HP Envy Touch -->
+          <button class="kiosk-touch-success" style="width:100%;padding:5px;">Graph It!</button>
+        {% else %}
+          <button class="desktop-success" style="width:100%;padding:5px;">Graph It!</button>
+        {% endif %}
       </form>
     </div>    
 </div>
@@ -145,9 +156,11 @@ var myChart = new Chart(ctx, {
       <div class="divTableBody">        
         <div class="divTableRow">
         {% for key in chartkeys %}
-          <div class="divTableCell">
-             <small>{{key.0}}~</small><small>{{key.1}}</small>
-          </div>
+          {% if device == 'Touch' %} <!--HP Envy Touch -->
+            <div class="divTableCell"><touch-graphlegend>{{key.0}}~{{key.1}}</touch-graphlegend></div>
+          {% else %}
+            <div class="divTableCell"><desktop-graphlegend>{{key.0}}~{{key.1}}</desktop-graphlegend></div>
+          {% endif %}
         {% endfor %}
         </div>
       </div>

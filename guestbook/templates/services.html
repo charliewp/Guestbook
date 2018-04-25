@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> -->
     <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
 <script type="text/javascript">
-    window.setTimeout("redirectpage();", 6000000);    
+    window.setTimeout("redirectpage();", 120000);    
     function redirectpage(){
     window.top.location.href = '/ophouse/signin';
     }
@@ -40,7 +40,7 @@
                               </div>
                             {% else %} <!--Desktop -->
                               <div class="divTableCell">
-                                <button class="btn-primary" style="width:100%">Go Back / Regresa</button>
+                                <button class="desktop-primary" style="width:100%">Go Back / Regresa</button>
                               </div>
                             {% endif %}
                          </div>
@@ -52,7 +52,7 @@
    {% if device == 'Touch' %} <!--HP Envy Touch -->
      <button class="kiosk-touch-primary" style="width:100%">Select all of the services you require / Seleccione todos los servicios que necesita</button>
    {% else %} <!--Desktop -->
-     <button class="btn-primary" style="width:100%">Select all of the services you require / Seleccione todos los servicios que necesita</button>
+     <button class="desktop-primary" style="width:100%">Select all of the services you require / Seleccione todos los servicios que necesita</button>
    {% endif %}
    <div class="form-group badge-checkboxes" style="width:100%;">
       {% if staffrequest %}
@@ -72,7 +72,7 @@
                                        {% if device == 'Touch' %} <!--HP Envy Touch -->
                                          <span class="badge" style="font-size:48px;">{{choice_label}}</span>
                                        {% else %} <!--Desktop -->
-                                         <span class="badge">{{choice_label}}</span>
+                                         <span class="badge" style="font-size:48px;">{{choice_label}}</span>
                                        {% endif %}
                                      {{choice}}
                                      </label>
@@ -91,7 +91,7 @@
                               </div>
                             {% else %} <!--Desktop -->
                               <div class="divTableCell" style="width:100%">
-                               <button class="btn-success" style="width:100%" >Next / Siguiente</button>
+                               <button class="desktop-success" style="width:100%" >Next / Siguiente</button>
                               </div>
                             {% endif %}
                          </div>

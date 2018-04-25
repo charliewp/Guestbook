@@ -61,7 +61,7 @@
                               </div>
                             {% else %} <!--Desktop -->
                               <div class="divTableCell">
-                                <button class="btn-primary" style="width:100%">Go Back / Regresa</button>
+                                <button class="desktop-primary" style="width:100%">Go Back / Regresa</button>
                               </div>
                             {% endif %}
                          </div>
@@ -87,10 +87,10 @@
                               </div>
                            {% else %}
                               <div class="divTableCell">
-                                <div class="form-group" style="width:50%">{{form.firstname}}</div>
+                                <div class="form-group" style="width:50%"><div class="desktop-form-control">{{form.firstname}}</div></div>
                               </div>
                               <div class="divTableCell">
-                                <div class="form-group" style="width:50%">{{form.lastname}}</div>
+                                <div class="form-group" style="width:77%"><div class="desktop-form-control">{{form.lastname}}</div></div>
                               </div>
                            {% endif %}                           
                          </div>
@@ -105,14 +105,14 @@
                                               <div class="form-group" ><div class="kiosk-touch-form-control">{{form.aliasname}}</div></div>
                                             </div>
                                             <div class="divTableCell" style="width:70%;align:left;padding:5px;">
-                                              <div class="form-group" ><kiosk-touch-c3>3-12 character Username</kiosk-touch-c3></div>
+                                              <div class="form-group" ><kiosk-touch-c3>3-12 characters</kiosk-touch-c3></div>
                                             </div>
                                           {% else %}
-                                            <div class="divTableCell" style="width:30%">
-                                              <div class="form-group" >{{form.aliasname}}</div>
+                                            <div class="divTableCell">
+                                              <div class="form-group" style="width:77%" ><div class="desktop-form-control">{{form.aliasname}}</div></div>
                                             </div>
-                                            <div class="divTableCell" style="width:70%;align:left;padding:5px;">
-                                              <div class="form-group" ><c3>3-12 character Username</c3></div>
+                                            <div class="divTableCell" >
+                                              <div class="form-group" style="width:70%"><desktop-c3>3-12 characters</desktop-c3></div>
                                             </div>
                                           {% endif %}
                                  </div>
@@ -132,10 +132,10 @@
                                      </div>
                                    {% else %}
                                      <div class="divTableCell" style="width:20%">
-                                       <div class="form-group" >{{form.aliaspin}}</div>
+                                       <div class="form-group" ><div class="desktop-form-control">{{form.aliaspin}}</div></div>
                                      </div>
                                      <div class="divTableCell" style="width:80%;align:left;padding:5px;">
-                                       <div class="form-group" ><c3>4 digit PIN</c3></div>
+                                       <div class="form-group" ><desktop-c3>4 digit PIN</desktop-c3></div>
                                      </div>
                                    {% endif %}                                    
                                  </div>
@@ -156,11 +156,11 @@
                                          <div class="form-group" ><kiosk-touch-c3>last 4 digits of your SSN</kiosk-touch-c3></div>
                                        </div>
                                     {% else %}
-                                       <div class="divTableCell" style="width:30%">
-                                         <div class="form-group" >{{form.shortssn}}</div>
+                                       <div class="divTableCell" >
+                                         <div class="form-group"style="width:82%" ><div class="desktop-form-control">{{form.shortssn}}</div></div>
                                        </div>
                                        <div class="divTableCell" style="width:70%;align:left;padding:5px;">
-                                         <div class="form-group" ><c3>last 4 digits of your SSN</c3></div>
+                                         <div class="form-group" ><desktop-c3>last 4 digits of your SSN</desktop-c3></div>
                                        </div>
                                     {% endif %}                                    
                                  </div>
@@ -180,7 +180,7 @@
                               </div>
                             {% else %} <!--Desktop -->
                               <div class="divTableCell" style="width:100%">
-                               <button class="btn-primary" style="width:100%" >Create My Username</button>
+                               <button class="desktop-primary" style="width:100%" >Create My Username</button>
                               </div>
                             {% endif %}
                          </div>

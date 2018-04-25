@@ -5,6 +5,12 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
+<script type="text/javascript">
+    window.setTimeout("redirectpage();", 120000);    
+    function redirectpage(){
+    window.top.location.href = '/ophouse/signin';
+    }
+</script>
 </head>
 <body>
 <div class="container">
@@ -43,7 +49,7 @@
                               {% if device == 'Touch' %}
                                 <button class="kiosk-touch-primary" style="width:100%">Welcome to Opportunity House!</button>
                               {% else %}
-                                <button class="btn-primary" style="width:100%">Welcome to Opportunity House!</button>
+                                <button class="desktop-primary" style="width:100%">Welcome to Opportunity House!</button>
                               {% endif %}
                             </div>
                          </div>
@@ -73,10 +79,10 @@
                                             </div>
                                           {% else %}
                                             <div class="divTableCell">
-                                              <div class="form-group" style="width:60%"><div class="form-control">{{form.aliasname}}</div></div>
+                                              <div class="form-group" style="width:52%"><div class="desktop-form-control">{{form.aliasname}}</div></div>
                                             </div>
                                             <div class="divTableCell">
-                                              <div class="form-group" style="width:40%"><div class="form-control">{{form.aliaspin}}</div></div>
+                                              <div class="form-group" style="width:52%"><div class="desktop-form-control">{{form.aliaspin}}</div></div>
                                             </div>
                                           {% endif %}
                                     </div>
@@ -93,7 +99,7 @@
                               {% if device == 'Touch' %}
                                 <button class="kiosk-touch-success" style="width:100%" >Sign In / Registrarse</button>
                               {% else %}
-                                <button class="btn-success" style="width:100%" >Sign In / Registrarse</button>
+                                <button class="desktop-success" style="width:100%" >Sign In / Registrarse</button>
                               {% endif %}
                             </div>
                          </div>
@@ -114,13 +120,13 @@
                                          </div>
                                         {% else %} <!--Desktop -->
                                          <div class="divTableCell">
-                                          <div style="width:100%;align:left;">
-                                             <a href="/ophouse/createalias/"><c3>Create Username / Crear nombre de usuario</c3></a>
+                                          <div style="width:100%;align:left;padding:25px">
+                                             <a href="/ophouse/createalias/"><desktop-c3>Create Username / Crear nombre de usuario</desktop-c3></a>
                                           </div>
                                          </div>
                                          <div class="divTableCell" >
                                           <div style="width:100%;align:left;">
-                                             <a href="/ophouse/resetalias/"><c3>Reset Username / Restablecer nombre de usuario</c3></a>
+                                             <a href="/ophouse/resetalias/"><desktop-c3>Reset Username / Restablecer nombre de usuario</desktop-c3></a>
                                           </div>
                                          </div>
                                         {% endif %}

@@ -4,6 +4,10 @@
 */
 {% load staticfiles %}
 
+/*
+ * Kiosk Formatting
+*/
+
 .kiosk-touch-form-control {
   display: block;
   width: 100%;
@@ -87,6 +91,164 @@
 .show > .kiosk-touch-success.dropdown-toggle:focus {
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
 }
+
+kiosk-touch-c3 {
+    /*color: #000000;*/
+    color: #ffff99;
+    font-family: "Arial";
+    font-size: 24px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+h2 {
+    /* color: #FCA205; */
+    color: #ffff99;
+    font-family: "Arial";
+    font-size: 24
+}
+
+kiosk-touch-h2 {
+    /* color: #FCA205; */
+    color: #ffff99;
+    font-family: "Arial";
+    font-size: 48
+}
+
+kiosk-graphlegend {
+    /*color: #000000;*/
+    color: #ffff99;
+    font-family: "Arial";
+    font-size: 24;
+    font-weight: bold;
+    font-style: italic;
+}
+
+c3 {
+    /*color: #000000;*/
+    color: #ffff99;
+    font-family: "Arial";
+    font-size: 12;
+    font-weight: bold;
+    font-style: italic;
+}
+
+/*
+ * Desktop Formatting
+*/
+
+.desktop-form-control {
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 32px;
+  line-height: 1.0;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.desktop-primary {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+  font-size:48px
+}
+
+.desktop-primary:hover {
+  color: #fff;
+  background-color: #0069d9;
+  border-color: #0062cc;
+}
+
+.desktop-primary:focus, .desktop-primary.focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+}
+
+.desktop-primary.disabled, .desktop-primary:disabled {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.desktop-primary:not(:disabled):not(.disabled):active, .desktop-primary:not(:disabled):not(.disabled).active,
+.show > .desktop-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #0062cc;
+  border-color: #005cbf;
+}
+
+.desktop-primary:not(:disabled):not(.disabled):active:focus, .desktop-primary:not(:disabled):not(.disabled).active:focus,
+.show > .desktop-primary.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+}
+
+.desktop-success {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+  font-size:48px
+}
+
+.desktop-success:hover {
+  color: #fff;
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+.desktop-success:focus, .desktop-success.focus {
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
+}
+
+.desktop-success.disabled, .desktop-success:disabled {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.desktop-success:not(:disabled):not(.disabled):active, .desktop-success:not(:disabled):not(.disabled).active,
+.show > .desktop-success.dropdown-toggle {
+  color: #fff;
+  background-color: #1e7e34;
+  border-color: #1c7430;
+}
+
+.desktop-success:not(:disabled):not(.disabled):active:focus, .desktop-success:not(:disabled):not(.disabled).active:focus,
+.show > .desktop-success.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
+}
+
+desktop-c3 {
+    /*color: #000000;*/
+    color: #ffff99;
+    font-family: "Arial";
+    font-size: 24;
+    font-weight: bold;
+    font-style: italic;
+}
+
+desktop-h2 {
+    /* color: #FCA205; */
+    color: #ffff99;
+    font-family: "Arial";
+    font-size: 48
+}
+
+desktop-graphlegend {
+    /*color: #000000;*/
+    color: #ffff99;
+    font-family: "Arial";
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+
+
+
 
 .gbbadge {
     display: inline-block;
@@ -199,19 +361,7 @@ h3 {
     font-size: 20
 }
 
-h2 {
-    /* color: #FCA205; */
-    color: #ffff99;
-    font-family: "Arial";
-    font-size: 24
-}
 
-kiosk-touch-h2 {
-    /* color: #FCA205; */
-    color: #ffff99;
-    font-family: "Arial";
-    font-size: 48
-}
 
 h1 {
     /* color: #FCA205; */
@@ -271,23 +421,7 @@ cb {
     font-weight: bold;
 }
 
-kiosk-touch-c3 {
-    /*color: #000000;*/
-    color: #ffff99;
-    font-family: "Arial";
-    font-size: 24px;
-    font-weight: bold;
-    font-style: italic;
-}
 
-c3 {
-    /*color: #000000;*/
-    color: #ffff99;
-    font-family: "Arial";
-    font-size: 12;
-    font-weight: bold;
-    font-style: italic;
-}
 
 
 td a {

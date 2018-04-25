@@ -7,7 +7,7 @@
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>    
     <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
 <script type="text/javascript">
-    window.setTimeout("redirectpage();", 6000000);    
+    window.setTimeout("redirectpage();", 120000);    
     function redirectpage(){
     window.top.location.href = '/ophouse/signin';
     }
@@ -59,7 +59,7 @@
                               </div>
                             {% else %} <!--Desktop -->
                               <div class="divTableCell">
-                                <button class="btn-primary" style="width:100%">Skip Survey/Omitir encuesta</button>
+                                <button class="desktop-primary" style="width:100%">Skip Survey/Omitir encuesta</button>
                               </div>
                             {% endif %}
                          </div>
@@ -69,7 +69,7 @@
                 {% if device == 'Touch' %} <!--HP Envy Touch -->
                   <div><kiosk-touch-c3>Help us keep our information current / Ayúdenos a mantener nuestra información actualizada...</kiosk-touch-c3></div>
                 {% else %} <!--Desktop -->
-                  <div><c3>Please help us keep our information current / Ayúdenos a mantener nuestra información actualizada...</c3></div>
+                  <div><desktop-c3>Please help us keep our information current / Ayúdenos a mantener nuestra información actualizada...</desktop-c3></div>
                 {% endif %}
                     {% for error in form.non_field_errors %}
                     <div class="form-group has-errors text-danger small">
@@ -85,7 +85,7 @@
                              </div>
                            {% else %} <!--Desktop -->
                              <div class="divTableCell">
-                               <h2>{{survey}}</h2>
+                               <desktop-h2>{{survey}}</desktop-h2>
                              </div>
                            {% endif %}
                            
@@ -113,13 +113,14 @@
                                         {% else %}
                                           <div class="divTableRow">
                                              <div class="divTableCell">
-                                               <div class="form-group" style="width:50%">{{form.replaceText}}</div>
+                                               <div class="form-group" style="width:50%"><div class="desktop-form-control">{{form.replaceText}}</div></div>
                                              </div>
+                                          </div>
                                           <div class="divTableRow">
                                              <div class="divTableCell">
-                                               <button class="btn-success" style="width:100%" >Make changes then touch here/Haz cambios y toca aquí</button>
+                                               <button class="desktop-success" style="width:100%" >Make changes then touch here/Haz cambios y toca aquí</button>
                                              </div>
-                                           </div>
+                                          </div>
                                         {% endif %}
                                    </div>
                                    <!--<div>{{form.fastTrack}} <c3>Keep asking me questions until I uncheck this box.</c3></div>-->
@@ -145,7 +146,7 @@
                                            <form id="choiceForm" action="/ophouse/prompt?connection={{connection}}&amp;prompt={{whichQuestion.pk}}" method="post">
                                              {%csrf_token%}
                                              <input type="radio" name="choiceField" hidden="true" value="{{choice.0}}" checked="checked"/>
-                                             <button class="gbcheckbox-inline" >{{choice.1}}</button>
+                                             <button class="gbcheckbox-inline" style="font-size:32px;">{{choice.1}}</button>
                                            </form>
                                          </div>
                                       {% endif %}

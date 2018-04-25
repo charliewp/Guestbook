@@ -36,22 +36,36 @@
                     <div class="divTable">
                        <div class="divTableBody">
                          <div class="divTableRow">
+                            {% if device == 'Touch' %} <!--HP Envy Touch -->
                             <div class="divTableCell">
-                              <button class="btn-primary" style="width:100%">Go Back / Regresa</button>
+                              <button class="kiosk-touch-primary" style="width:100%">Go Back / Regresa</button>
                             </div>
+                            {% else %}
+                            <div class="divTableCell">
+                              <button class="desktop-primary" style="width:100%">Go Back / Regresa</button>
+                            </div>
+                            {% endif %}
                          </div>
                         </div>
                     </div>
 </form>
 </div>
             <div style="width:100%">
-                <c3>Note / {{displayname}} / {{timestamp}}:</c3>
+                 {% if device == 'Touch' %} <!--HP Envy Touch -->
+                    <touch-c3>Note / {{displayname}} / {{timestamp}}:</touch-c3>
+                {%else %}
+                    <desktop-c3>Note / {{displayname}} / {{timestamp}}:</desktop-c3>
+                {% endif %}                               
                 <form name="login" action="/ophouse/note?connection={{connection}}" method="post">
                   {%csrf_token%}
                   {{form.note}}
                   <div style="padding:5px">
                   </div>
-                  <button class="btn-success" style="width:100%;border:5px;">Save Note / Guardar la nota</button>
+                   {% if device == 'Touch' %} <!--HP Envy Touch -->
+                     <button class="kiosk-touch-success" style="width:100%;border:5px;">Save Note / Guardar la nota</button>
+                   {% else %}
+                     <button class="desktop-success" style="width:100%;border:5px;">Save Note / Guardar la nota</button>
+                   {% endif %}
                 </form>
             </div>
 </div>

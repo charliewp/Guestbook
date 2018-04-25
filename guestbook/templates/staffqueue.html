@@ -44,9 +44,15 @@
                     <div class="divTable">
                        <div class="divTableBody">
                          <div class="divTableRow">
+                            {% if device == 'Touch' %} <!--HP Envy Touch -->
                             <div class="divTableCell">
-                              <button class="btn-primary" style="width:100%">Go Back / Regresa</button>
+                              <button class="kiosk-touch-primary" style="width:100%">Go Back / Regresa</button>
                             </div>
+                            {% else %}
+                            <div class="divTableCell">
+                              <button class="desktop-primary" style="width:100%">Go Back / Regresa</button>
+                            </div>
+                            {% endif %}
                          </div>
                         </div>
                     </div>
@@ -54,29 +60,56 @@
   <div class="divTable" style="width:100%">
     <div class="divTableBody">
                          <div class="divTableRow">
-                            <div class="divTableCell" style="padding:2px">
-                               <c3>Select a queue to watch / Selecciona una cola para mirar</c3>
-                            </div>
+                            {% if device == 'Touch' %} <!--HP Envy Touch -->
+                                  <div class="divTableCell" style="width:100%;padding:10px">
+                                     <touch-c3>Select a queue to watch / Selecciona una cola para mirar</touch-c3>
+                                  </div>
+                            {% else %}
+                                  <div class="divTableCell" style="width:100%;padding:10px">
+                                     <desktop-c3>Select a queue to watch / Selecciona una cola para mirar</desktop-c3>
+                                  </div>
+                            {% endif %}
                          </div>
                          <div class="divTableRow">
+                           {% if device == 'Touch' %} <!--HP Envy Touch -->
                             <div class="divTableCell" style="width:10%">
                                   {% for tup in servicelinks %}
                                     {% if tup.2 == 0 %}
                                       {% if tup.0 == servicetype %}
-                                         <a class="btn:hover" href="/ophouse/staffqueue?servicetype={{tup.0}}"><button class="gbcheckbox-watching">{{tup.1}}{{ tup.3 }}</button></a>
+                                         <a class="btn:hover" href="/ophouse/staffqueue?servicetype={{tup.0}}"><button class="gbcheckbox-watching" style="font-size:32px;">{{tup.1}}{{ tup.3 }}</button></a>
                                       {% else %}
-                                         <a class="btn:hover" href="/ophouse/staffqueue?servicetype={{tup.0}}"><button class="gbcheckbox-inline">{{tup.1}}{{ tup.3 }}</button></a>                                       
+                                         <a class="btn:hover" href="/ophouse/staffqueue?servicetype={{tup.0}}"><button class="gbcheckbox-inline" style="font-size:32px;">{{tup.1}}{{ tup.3 }}</button></a>                                       
                                       {% endif %}   
                                     {% endif %}
                                     {% if tup.2 == 1 %}
                                       {% if tup.0 == servicetype %}
-                                        <a class="btn:hover" href="/ophouse/staffqueue?servicetype={{tup.0}}"><button class="gbcheckbox-watching">{{tup.1}}{{ tup.3 }}</button></a>
+                                        <a class="btn:hover" href="/ophouse/staffqueue?servicetype={{tup.0}}"><button class="gbcheckbox-watching" style="font-size:32px;">{{tup.1}}{{ tup.3 }}</button></a>
                                       {% else %}
-                                        <a class="btn:hover" href="/ophouse/staffqueue?servicetype={{tup.0}}"><button class="gbcheckbox-inline-highlight">{{tup.1}}{{ tup.3 }}</button></a>                                    
+                                        <a class="btn:hover" href="/ophouse/staffqueue?servicetype={{tup.0}}"><button class="gbcheckbox-inline-highlight" style="font-size:32px;">{{tup.1}}{{ tup.3 }}</button></a>                                    
                                       {% endif %}  
                                     {% endif %}    
                                   {% endfor %}
                             </div>
+                            {% else %}
+                            <div class="divTableCell" style="width:10%">
+                                  {% for tup in servicelinks %}
+                                    {% if tup.2 == 0 %}
+                                      {% if tup.0 == servicetype %}
+                                         <a class="btn:hover" href="/ophouse/staffqueue?servicetype={{tup.0}}"><button class="gbcheckbox-watching" style="font-size:24px;">{{tup.1}}{{ tup.3 }}</button></a>
+                                      {% else %}
+                                         <a class="btn:hover" href="/ophouse/staffqueue?servicetype={{tup.0}}"><button class="gbcheckbox-inline" style="font-size:24px;">{{tup.1}}{{ tup.3 }}</button></a>                                       
+                                      {% endif %}   
+                                    {% endif %}
+                                    {% if tup.2 == 1 %}
+                                      {% if tup.0 == servicetype %}
+                                        <a class="btn:hover" href="/ophouse/staffqueue?servicetype={{tup.0}}"><button class="gbcheckbox-watching" style="font-size:24px;">{{tup.1}}{{ tup.3 }}</button></a>
+                                      {% else %}
+                                        <a class="btn:hover" href="/ophouse/staffqueue?servicetype={{tup.0}}"><button class="gbcheckbox-inline-highlight" style="font-size:24px;">{{tup.1}}{{ tup.3 }}</button></a>                                    
+                                      {% endif %}  
+                                    {% endif %}    
+                                  {% endfor %}
+                            </div>
+                            {% endif %}
                          </div>
     </div>                     
   </div>
@@ -89,12 +122,19 @@
                             <div class="divTableBody">
                                {% if queuesize > 0 %}
                                <div class="divTableRow">
+                                 {% if device == 'Touch' %} <!--HP Envy Touch -->
                                   <div class="divTableCell" style="width:100%;padding:10px">
-                                     <c3>{{ queuemessage }} Select client to complete service</c3>
+                                     <touch-c3>{{ queuemessage }} Select client to complete service</touch-c3>
                                   </div>
+                                 {% else %}
+                                  <div class="divTableCell" style="width:100%;padding:10px">
+                                     <desktop-c3>{{ queuemessage }} Select client to complete service</desktop-c3>
+                                  </div>
+                                 {% endif %}
                                </div>
                                {% endif %}
                                <div class="divTableRow">
+                               {% if device == 'Touch' %} <!--HP Envy Touch -->
                                  <div class="divTableCell" style="width:100%">
                                    <div>                                    
                                       {% for choice in form.services.field.choices %}
@@ -103,10 +143,10 @@
                                                {%csrf_token%}
                                                {% if forloop.counter == 1 %}
                                                  <input type="radio" name="services" hidden="true" value="{{choice.0}}" checked="checked"/>
-                                                 <button class="gbcheckbox-inline-nextup" >{{choice.1}}</button>
+                                                 <button class="gbcheckbox-inline-nextup" style="font-size:32px;">{{choice.1}}</button>
                                                {% else %}
                                                  <input type="radio" name="services" hidden="true" value="{{choice.0}}" checked="checked"/>
-                                                 <button class="gbcheckbox-inline" >{{choice.1}}</button>
+                                                 <button class="gbcheckbox-inline" style="font-size:32px;">{{choice.1}}</button>
                                                {% endif %}
                                              </form>
                                            </div>
@@ -114,6 +154,27 @@
                                     
                                    </div>
                                  </div>
+                                 {% else %}
+                                 <div class="divTableCell" style="width:100%">
+                                   <div>                                    
+                                      {% for choice in form.services.field.choices %}
+                                           <div class="cel" style="padding:5px;width=10%">
+                                             <form method="post" action="/ophouse/staffqueue?servicetype={{servicetype}}" onsubmit="return clicked();">
+                                               {%csrf_token%}
+                                               {% if forloop.counter == 1 %}
+                                                 <input type="radio" name="services" hidden="true" value="{{choice.0}}" checked="checked"/>
+                                                 <button class="gbcheckbox-inline-nextup" style="font-size:24px;">{{choice.1}}</button>
+                                               {% else %}
+                                                 <input type="radio" name="services" hidden="true" value="{{choice.0}}" checked="checked"/>
+                                                 <button class="gbcheckbox-inline" style="font-size:24px;">{{choice.1}}</button>
+                                               {% endif %}
+                                             </form>
+                                           </div>
+                                       {% endfor %}
+                                    
+                                   </div>
+                                 </div>
+                                 {% endif %}
                                </div>
                             </div>
 </div>
