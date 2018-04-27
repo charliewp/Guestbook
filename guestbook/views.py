@@ -155,7 +155,8 @@ def checksession(request):
 def mobile(request):
     #Return True if the request comes from a mobile device."""
     log.info('HTTP_USER_AGENT=%s' % (request.META['HTTP_USER_AGENT']))
-    MOBILE_AGENT_RE=re.compile(r".*(Trident/7.0)",re.IGNORECASE)
+    #log.info('DEVICE=%s' % (request.META['DEVICE_TYPE']))
+    MOBILE_AGENT_RE=re.compile(r".*(HpEnvy2.0)",re.IGNORECASE)
 
     if MOBILE_AGENT_RE.match(request.META['HTTP_USER_AGENT']):
         log.debug('Touch')
@@ -278,16 +279,16 @@ def select(request):
     return render(request, 'select.html', {'device': device})
 
 def sign_in(request):
-    if mobile(request):
-      device='Touch'
-    else:
-      device='Laptop'
     #Security
     if not checksession(request):
        return HttpResponseRedirect('/ophouse/login/')
     else:
        username = request.session['username']
     #End-Security
+    if mobile(request):
+      device='Touch'
+    else:
+      device='Laptop'
     try:
       del request.session['aliasname']
       del request.session['aliaspin']
