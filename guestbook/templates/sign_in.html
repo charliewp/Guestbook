@@ -107,29 +107,30 @@
                     </div>
                 </form>
                 <div class="divTableRow">
-                                       {% if device == 'Touch' %} <!--HP Envy Touch -->
                                          <div class="divTableCell">
-                                          <div style="width:100%;align:left;padding:25px;"">
-                                             <a href="/ophouse/createalias/"><kiosk-touch-c3>Create Username / Crear nombre de usuario</kiosk-touch-c3></a>
-                                          </div>
+                                          <div style="width:100%;padding:10px;">
+                                             <form name="login" action="/ophouse/createalias/" method="get">
+                                             {%csrf_token%}
+                                             {% if device == 'Touch' %}
+                                                 <button class="kiosk-touch-primary-small" style="width:100%">Create Username / Crear nombre de usuario</button>
+                                             {% else %}
+                                                 <button class="desktop-primary-small" style="width:100%">Create Username / Crear nombre de usuario</button>
+                                             {% endif %}
+                                             </form>
+            <                             </div>
                                          </div>
                                          <div class="divTableCell" >
-                                          <div style="width:100%;align:left;">
-                                             <a href="/ophouse/resetalias/"><kiosk-touch-c3>Reset Username / Restablecer nombre de usuario</kiosk-touch-c3></a>
-                                          </div>
+                                          <div style="width:100%;padding:10px;">
+                                             <form name="login" action="/ophouse/resetalias/" method="get">
+                                             {%csrf_token%}
+                                             {% if device == 'Touch' %}
+                                                 <button class="kiosk-touch-primary-small" style="width:100%">Reset Username / Restablecer nombre de usuario</button>
+                                             {% else %}
+                                                 <button class="desktop-primary-small" style="width:100%">Reset Username / Restablecer nombre de usuario</button>
+                                             {% endif %}
+                                             </form>
+            <                             </div>
                                          </div>
-                                        {% else %} <!--Desktop -->
-                                         <div class="divTableCell">
-                                          <div style="width:100%;align:left;padding:25px">
-                                             <a href="/ophouse/createalias/"><desktop-c3>Create Username / Crear nombre de usuario</desktop-c3></a>
-                                          </div>
-                                         </div>
-                                         <div class="divTableCell" >
-                                          <div style="width:100%;align:left;">
-                                             <a href="/ophouse/resetalias/"><desktop-c3>Reset Username / Restablecer nombre de usuario</desktop-c3></a>
-                                          </div>
-                                         </div>
-                                        {% endif %}
                 </div>
             </div>
 </div>

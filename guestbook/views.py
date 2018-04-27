@@ -158,10 +158,10 @@ def mobile(request):
     MOBILE_AGENT_RE=re.compile(r".*(Trident/7.0)",re.IGNORECASE)
 
     if MOBILE_AGENT_RE.match(request.META['HTTP_USER_AGENT']):
-        log.info('Touch')
+        log.debug('Touch')
         return True
     else:
-        log.info('Desktop')
+        log.debug('Desktop')
         return False
 
 def login(request):

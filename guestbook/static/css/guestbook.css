@@ -29,6 +29,13 @@
   font-size:48px
 }
 
+.kiosk-touch-primary-small {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+  font-size:24px
+}
+
 .kiosk-touch-primary:hover {
   color: #fff;
   background-color: #0069d9;
@@ -156,6 +163,13 @@ c3 {
   background-color: #007bff;
   border-color: #007bff;
   font-size:48px
+}
+
+.desktop-primary-small {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+  font-size:24px
 }
 
 .desktop-primary:hover {
