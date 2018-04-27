@@ -172,6 +172,9 @@ def login(request):
       device='Touch'
     else:
       device='Laptop'
+    #key_variable = request.session.pop('username')  
+    #if key_variable:
+    #  del key_variable
     if request.method == 'POST':
         log.debug("post to login page")
         # create a form instance and populate it with data from the request:

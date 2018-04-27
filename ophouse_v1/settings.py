@@ -184,7 +184,7 @@ LOGGING = {
             'propagate': False,
         },
         'GBLOGGER': {
-            'handlers': ['console', 'wlogfile', 'ilogfile'],
+            'handlers': ['console', 'wlogfile', 'ilogfile', 'dlogfile'],
             'level': 'DEBUG',
         },
     }
