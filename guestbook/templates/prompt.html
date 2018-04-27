@@ -116,7 +116,7 @@
                                         {% else %}
                                           <div class="divTableRow">
                                              <div class="divTableCell">
-                                               <div class="form-group" style="width:100%"><div class="desktop-form-control">{{form.replaceText}}</div></div>
+                                               <div class="form-group" style="width:47%"><div class="desktop-form-control">{{form.replaceText}}</div></div>
                                              </div>
                                           </div>
                                           <div class="divTableRow">
@@ -174,7 +174,7 @@
                                            {% for choice_id, choice_label in form.multiChoice.field.widget.choices %}
                                               <label for="id_options_{{ choice_id }}" class="checkbox-inline">
                                                 <input  type="checkbox" id="id_options_{{ choice_id }}" value="{{ choice_id }}" name="multichoice" {% if choice_id in form.multiChoice.value  %} checked="checked"{% endif %}/>
-                                                <span class="badge" style="font-size:44px;" >{{choice_label}}</span>
+                                                <span class="badge" style="font-size:44px;">{{choice_label}}</span>
                                               {{choice}}
                                               </label>
                                            {% endfor %}
@@ -186,7 +186,7 @@
                                            {% for choice_id, choice_label in form.multiChoice.field.widget.choices %}
                                               <label for="id_options_{{ choice_id }}" class="checkbox-inline">
                                                 <input  type="checkbox" id="id_options_{{ choice_id }}" value="{{ choice_id }}" name="multichoice" {% if choice_id in form.multiChoice.value  %} checked="checked"{% endif %}/>
-                                                <span class="badge">{{choice_label}}</span>
+                                                <span class="badge" style="font-size:44px;">{{choice_label}}</span>
                                               {{choice}}
                                               </label>
                                            {% endfor %}
@@ -201,7 +201,7 @@
                                        </div>
                                       {% else %} <!--Desktop -->
                                          <div class="divTableCell" style="width:25%">
-                                         <button class="btn btn-primary" style="width:100%" >Next / Siguiente</button>
+                                         <button class="desktop-success" style="width:100%" >Next / Siguiente</button>
                                        </div>
                                       {% endif %}                                       
                                      </div>
