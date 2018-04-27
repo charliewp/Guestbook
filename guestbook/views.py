@@ -154,7 +154,7 @@ def checksession(request):
       
 def mobile(request):
     #Return True if the request comes from a mobile device."""
-    print(request.META['HTTP_USER_AGENT'])
+    log.info('HTTP_USER_AGENT=%s' % (request.META['HTTP_USER_AGENT']))
     MOBILE_AGENT_RE=re.compile(r".*(Trident/7.0)",re.IGNORECASE)
 
     if MOBILE_AGENT_RE.match(request.META['HTTP_USER_AGENT']):
