@@ -134,7 +134,7 @@ class SurveyForm(forms.Form):
              # 
              personField = Person._meta.get_field(survey.anchorField)
              #self.fields['replaceText'] = forms.CharField(initial=survey.currentValue, max_length=256, widget=forms.TextInput(attrs={'class': 'form-control'}))
-             self.fields['replaceText'] = forms.CharField(initial=getattr(person, survey.anchorField), max_length=256, widget=forms.TextInput(attrs={'size':24}))
+             self.fields['replaceText'] = forms.CharField(initial=getattr(person, survey.anchorField), max_length=256, widget=forms.TextInput(attrs={'size':32}))
              #print('it is a CharField!')
         else:
             #an unanchored Prompt

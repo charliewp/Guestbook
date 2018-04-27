@@ -72,7 +72,7 @@
                                     <div class="divTableRow">                                       
                                           {% if device == 'Touch' %}
                                             <div class="divTableCell">
-                                              <div class="form-group" style="width:41%"><div class="kiosk-touch-form-control">{{form.aliasname}}</div></div>
+                                              <div class="form-group" style="width:40%"><div class="kiosk-touch-form-control">{{form.aliasname}}</div></div>
                                             </div>
                                             <div class="divTableCell">
                                               <div class="form-group" style="width:40%"><div class="kiosk-touch-form-control">{{form.aliaspin}}</div></div>
@@ -106,33 +106,39 @@
                        </div>
                     </div>
                 </form>
-                <div class="divTableRow">
+            </div>
+</div>
+<div class="container">
+  <div class="divTable" style="width:100%">
+         <div class="divTableBody" name="aliasInfo">
+                <div class="divTableRow" style="width:100%;">
                                          <div class="divTableCell">
                                           <div style="width:100%;padding:10px;">
                                              <form name="login" action="/ophouse/createalias/" method="get">
                                              {%csrf_token%}
                                              {% if device == 'Touch' %}
-                                                 <button class="kiosk-touch-primary-small" style="width:100%">Create Username / Crear nombre de usuario</button>
+                                                 <button class="kiosk-touch-primary-small" style="width:100%">Create Username <br/> Crear nombre de usuario</button>
                                              {% else %}
-                                                 <button class="desktop-primary-small" style="width:100%">Create Username / Crear nombre de usuario</button>
+                                                 <button class="desktop-primary-small" style="width:100%">Create Username <br/>  Crear nombre de usuario</button>
                                              {% endif %}
                                              </form>
-                                         </div>
-                                         </div>
+                                          </div>
+                                         </div> 
                                          <div class="divTableCell" >
                                           <div style="width:100%;padding:10px;">
                                              <form name="login" action="/ophouse/resetalias/" method="get">
                                              {%csrf_token%}
                                              {% if device == 'Touch' %}
-                                                 <button class="kiosk-touch-primary-small" style="width:100%">Reset Username / Restablecer nombre de usuario</button>
+                                                 <button class="kiosk-touch-primary-small" style="width:100%;align:right">Reset Username <br/>  Restablecer nombre de usuario</button>
                                              {% else %}
-                                                 <button class="desktop-primary-small" style="width:100%">Reset Username / Restablecer nombre de usuario</button>
+                                                 <button class="desktop-primary-small" style="width:100%">Reset Username <br/>  Restablecer nombre de usuario</button>
                                              {% endif %}
                                              </form>
                                          </div>
                                          </div>
                 </div>
-            </div>
+         </div>
+  </div>
 </div>
 </body>
 </html>

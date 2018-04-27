@@ -92,38 +92,41 @@
                          </div>
                        </div>
                     </div>
+                    
                               <!--                                        -->
                               <!-- CharField replacement Prompts are here -->
                               <!--                                        -->
                               <!--                                        -->
                               {% if form.replaceText %} 
                                  <form id="choiceForm" name="charField" action="/ophouse/prompt?connection={{connection}}&prompt={{whichQuestion.pk}}" method="post" >
-                                   {%csrf_token%}                                   
+                                   {%csrf_token%}
+                                       <div class="divTable">
+                                       <div class="divTableBody">                                   
                                        {% if device == 'Touch' %}
                                           <div class="divTableRow">
                                             <div class="divTableCell">
-                                               <div class="form-group" style="width:43%"><div class="kiosk-touch-form-control">{{form.replaceText}}</div></div>
+                                               <div class="form-group" style="width:53%"><div class="kiosk-touch-form-control">{{form.replaceText}}</div></div>
                                             </div>
                                            </div>  
                                            <div class="divTableRow">
                                             <div class="divTableCell">
-                                               <button class="kiosk-touch-success" style="width:100%" >Make changes then touch here / Haga los cambios y haga clic aquí</button>
+                                               <button class="kiosk-touch-success" style="width:100%" >Make changes then touch here <br/> Haga los cambios y haga clic aquí</button>
                                             </div>
                                            </div>
                                         {% else %}
                                           <div class="divTableRow">
                                              <div class="divTableCell">
-                                               <div class="form-group" style="width:50%"><div class="desktop-form-control">{{form.replaceText}}</div></div>
+                                               <div class="form-group" style="width:100%"><div class="desktop-form-control">{{form.replaceText}}</div></div>
                                              </div>
                                           </div>
                                           <div class="divTableRow">
                                              <div class="divTableCell">
-                                               <button class="desktop-success" style="width:100%" >Make changes then touch here/Haz cambios y toca aquí</button>
+                                               <button class="desktop-success" style="width:100%" >Make changes then touch here <br/> Haz cambios y toca aquí</button>
                                              </div>
                                           </div>
                                         {% endif %}
-                                   </div>
-                                   <!--<div>{{form.fastTrack}} <c3>Keep asking me questions until I uncheck this box.</c3></div>-->
+                                        </div>
+                                        </div>
                                    </form>
                               {% endif %}
                               <!--                                        -->
@@ -206,26 +209,7 @@
                                  </div>
                                  </form>
                                  </div>
-                              {% endif %}                                                         
-                    </div>                  
-                
-                <!--<form action="/ophouse/prompt?connection={{connection}}" method="post">
-                    {%csrf_token%}
-                    {% for error in form.non_field_errors %}
-                    <div class="form-group has-errors text-danger small">
-                        {{error}}
-                    </div>
-                    {% endfor %}                    
-                    <div class="divTable" style="padding:5px">
-                       <div class="divTableBody">
-                         <div class="divTableRow">
-                            <div class="divTableCell" style="width:25%">
-                              <button class="btn warning" style="width:25%" >Skip Survey/Omitir encuesta</button>
-                            </div>
-                         </div>
-                       </div>
-                    </div>
-                </form>-->
+                              {% endif %}
             </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
