@@ -698,83 +698,85 @@ def inference_engine(person, snapshotTimestamp):
     unfencedPrompts = Prompt.objects.all().filter(isEnabled=True).filter(fencingPrompt_id__isnull=True).filter(targetRole__in=promptRoles).filter(language__in=languages)
     #log.debug('unfencedPrompt count=%s' % (unfencedPrompts.count()))
     #sorted by highest priority first
-    log.debug('The highest priority prompt is %s' % (unfencedPrompts.first().onscreenPrompt))
-    #get the most recent PersonSurvey for each of these prompts
-    for prompt in unfencedPrompts:
-        promptSurveys = []
-        #next, we'll iterate over the most recent snapshots to determine if it is time for this prompt to be presented again
-        log.debug('The prompt is: %s' % (prompt.onscreenPrompt))
-        for snapshot in snapshots:
-          #there should one instance, at most, of this prompt on any Snapshot
-          query_attributes = {}
-          query_attributes['connection'] = snapshot.pk
-          query_attributes['prompt'] = prompt.pk
-          survey = PersonSurvey.objects.all().filter(**query_attributes).first()
-          if survey:
-            #we've found a response to this prompt in the snapshot, nominalize the snapshot date to 00:00:00 
-            #in this way we are not bound to a strict 24hours=1day 
-            surveyTuple = (survey, snapshot.timestamp.replace(hour=0, minute=0, second=0))
-            promptSurveys.append(surveyTuple)
-        if len(promptSurveys)>0:
-          #we now have all of the Surveys for this Prompt, sort according to the timestamp  reverse=True is descending order, most recent is first
-          promptSurveys.sort(key = operator.itemgetter(1), reverse = True)
-          #most recent promptSurvey is in the first position
-          latestPromptSurvey = promptSurveys[0]
-          log.debug('The most recent survey for this prompt is %s' % (latestPromptSurvey[0].connection.timestamp))
-          if prompt.intervalDays>0:
-            #is the latestPromptSurvey older than the intervalDays of the Prompt?
-            #for the daily prompts we have to do some time arithmetic, rounding the times to days
-            notBeforeTime = snapshotTimestamp - timedelta(minutes=prompt.intervalDays*24*60/TIMEWARP_FACTOR)
-            if latestPromptSurvey[1] < notBeforeTime:
-              log.debug('...the most recent response is stale, %s on %s' % (latestPromptSurvey[0].content_object, latestPromptSurvey[1]))
-              #this is the prompt we're going to use!
-              log.info('Username %s is asked -- %s' % (person.aliasname, prompt.onscreenPrompt))
-              return prompt.pk
-          #else:
-            #this is a one-time prompt (intervaldays=0)
-            #log.debug("One-time prompts are never reused!")
-        else:
-          log.info('Username %s is asked -- %s' % (person.aliasname, prompt.onscreenPrompt))
-          return prompt.pk
-          
-    fencedPrompts = Prompt.objects.all().filter(isEnabled=True).filter(fencingPrompt_id__isnull=False).filter(targetRole__in=promptRoles).filter(language__in=languages)
-    #log.debug('fencedPrompt count=%s' % (fencedPrompts.count()))
-    #get the most recent PersonSurvey for this prompt
-    for prompt in fencedPrompts:
-        #first, determine if the fence for this prompt has been satisfied
-        fencePrompt = prompt.fencingPrompt
-        personField = fencePrompt.anchorField
-        #log.debug('Fence prompt=%s references Person field=%s key=%s' % (fencePrompt, personField, prompt.fencingResponse))
-        if getattr(person, personField).name == prompt.fencingResponse:
-          #log.debug('the fence %s is unlocked' % (prompt.onscreenPrompt))
+    if unfencedPrompts:
+      log.debug('The highest priority prompt is %s' % (unfencedPrompts.first().onscreenPrompt))
+      #get the most recent PersonSurvey for each of these prompts
+      for prompt in unfencedPrompts:
           promptSurveys = []
+          #next, we'll iterate over the most recent snapshots to determine if it is time for this prompt to be presented again
+          log.debug('The prompt is: %s' % (prompt.onscreenPrompt))
           for snapshot in snapshots:
-            #there should one instance, at most, of this prompt on any connection, so first() will do
-            #survey = PersonSurvey.objects.all().filter(connection=snapshot, prompt=prompt).first()
+            #there should one instance, at most, of this prompt on any Snapshot
             query_attributes = {}
             query_attributes['connection'] = snapshot.pk
             query_attributes['prompt'] = prompt.pk
             survey = PersonSurvey.objects.all().filter(**query_attributes).first()
             if survey:
-              surveyTuple = (survey, snapshot.timestamp)
+              #we've found a response to this prompt in the snapshot, nominalize the snapshot date to 00:00:00 
+              #in this way we are not bound to a strict 24hours=1day 
+              surveyTuple = (survey, snapshot.timestamp.replace(hour=0, minute=0, second=0))
               promptSurveys.append(surveyTuple)
-          #we now have all of the Surveys for this Prompt
-          #log.debug('\n%s' % (prompt.onscreenPrompt))
-          #now sort according to the timestamp        reverse=True is descending order
           if len(promptSurveys)>0:
+            #we now have all of the Surveys for this Prompt, sort according to the timestamp  reverse=True is descending order, most recent is first
             promptSurveys.sort(key = operator.itemgetter(1), reverse = True)
             #most recent promptSurvey is in the first position
             latestPromptSurvey = promptSurveys[0]
-            #is the latestPromptSurvey older than the intervalDays of the Prompt?
-            #notBeforeTime = datetime.today() - timedelta(days=prompt.intervalDays)
-            notBeforeTime = snapshotTimestamp - timedelta(minutes=prompt.intervalDays*5)
-            if latestPromptSurvey[1] < notBeforeTime:
-                log.debug('...Expired - %s on %s' % (latestPromptSurvey[0].content_object, latestPromptSurvey[1]))
+            log.debug('The most recent survey for this prompt is %s' % (latestPromptSurvey[0].connection.timestamp))
+            if prompt.intervalDays>0:
+              #is the latestPromptSurvey older than the intervalDays of the Prompt?
+              #for the daily prompts we have to do some time arithmetic, rounding the times to days
+              notBeforeTime = snapshotTimestamp - timedelta(minutes=prompt.intervalDays*24*60/TIMEWARP_FACTOR)
+              if latestPromptSurvey[1] < notBeforeTime:
+                log.debug('...the most recent response is stale, %s on %s' % (latestPromptSurvey[0].content_object, latestPromptSurvey[1]))
+                #this is the prompt we're going to use!
                 log.info('Username %s is asked -- %s' % (person.aliasname, prompt.onscreenPrompt))
                 return prompt.pk
+            #else:
+              #this is a one-time prompt (intervaldays=0)
+              #log.debug("One-time prompts are never reused!")
           else:
             log.info('Username %s is asked -- %s' % (person.aliasname, prompt.onscreenPrompt))
             return prompt.pk
+          
+    fencedPrompts = Prompt.objects.all().filter(isEnabled=True).filter(fencingPrompt_id__isnull=False).filter(targetRole__in=promptRoles).filter(language__in=languages)
+    if fencedPrompts:
+      #log.debug('fencedPrompt count=%s' % (fencedPrompts.count()))
+      #get the most recent PersonSurvey for this prompt
+      for prompt in fencedPrompts:
+          #first, determine if the fence for this prompt has been satisfied
+          fencePrompt = prompt.fencingPrompt
+          personField = fencePrompt.anchorField
+          #log.debug('Fence prompt=%s references Person field=%s key=%s' % (fencePrompt, personField, prompt.fencingResponse))
+          if getattr(person, personField).name == prompt.fencingResponse:
+            #log.debug('the fence %s is unlocked' % (prompt.onscreenPrompt))
+            promptSurveys = []
+            for snapshot in snapshots:
+              #there should one instance, at most, of this prompt on any connection, so first() will do
+              #survey = PersonSurvey.objects.all().filter(connection=snapshot, prompt=prompt).first()
+              query_attributes = {}
+              query_attributes['connection'] = snapshot.pk
+              query_attributes['prompt'] = prompt.pk
+              survey = PersonSurvey.objects.all().filter(**query_attributes).first()
+              if survey:
+                surveyTuple = (survey, snapshot.timestamp)
+                promptSurveys.append(surveyTuple)
+            #we now have all of the Surveys for this Prompt
+            #log.debug('\n%s' % (prompt.onscreenPrompt))
+            #now sort according to the timestamp        reverse=True is descending order
+            if len(promptSurveys)>0:
+              promptSurveys.sort(key = operator.itemgetter(1), reverse = True)
+              #most recent promptSurvey is in the first position
+              latestPromptSurvey = promptSurveys[0]
+              #is the latestPromptSurvey older than the intervalDays of the Prompt?
+              #notBeforeTime = datetime.today() - timedelta(days=prompt.intervalDays)
+              notBeforeTime = snapshotTimestamp - timedelta(minutes=prompt.intervalDays*5)
+              if latestPromptSurvey[1] < notBeforeTime:
+                  log.debug('...Expired - %s on %s' % (latestPromptSurvey[0].content_object, latestPromptSurvey[1]))
+                  log.info('Username %s is asked -- %s' % (person.aliasname, prompt.onscreenPrompt))
+                  return prompt.pk
+            else:
+              log.info('Username %s is asked -- %s' % (person.aliasname, prompt.onscreenPrompt))
+              return prompt.pk
     #we've looked at all the prompts now
     return 0
 
