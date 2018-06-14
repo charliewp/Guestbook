@@ -1,0 +1,119 @@
+//CONNECT TO THE GUESTBOOKDB
+
+\c guestbookdb postgres 127.0.0.1 2346
+
+//fix integrity problem
+SELECT setval('guestbook_service_idservice_seq', (SELECT MAX(idservice) FROM guestbook_service));
+
+psql --host=localhost --port=2346 --dbname=guestbookdb --username=postgres --password=
+
+
+psql --host=localhost --port=2345 --dbname=guestbookdb --username=gb_readonly --password=C80886521
+
+//show people by the date which they first reqistered  (most recent first)
+SELECT firstname, lastname, aliasname, "timelineStartDate" from guestbook_person order by "timelineStartDate" desc;
+
+//show people by the date which they first reqistered  (most recent last)
+SELECT firstname, lastname, aliasname, "timelineStartDate" from guestbook_person order by "timelineStartDate" asc;
+
+//show how many people are registered
+SELECT COUNT(*) from guestbook_person;
+
+\copy (SELECT COUNT(*) from guestbook_person) TO 'headcount.csv' CSV HEADER
+
+//show current clients (defined as having visited in previous INTERVAL)
+SELECT firstname, lastname, aliasname, COUNT(*) from guestbook_person
+INNER JOIN guestbook_personsnapshot
+ON guestbook_person.idperson = guestbook_personsnapshot.person_id 
+WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '7 days'
+GROUP BY(firstname, lastname, aliasname) ORDER BY COUNT(*) desc;
+
+//show current client count only (defined as having visited in previous INTERVAL)
+SELECT COUNT(DISTINCT person_id) from guestbook_personsnapshot
+WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '7 days';
+
+//show how many meals have been served in the period
+SELECT COUNT(*) from guestbook_personservicerequest
+INNER JOIN guestbook_personsnapshot
+ON guestbook_personservicerequest.connection_id=guestbook_personsnapshot.idsnapshot 
+WHERE guestbook_personservicerequest.service_id=1
+AND guestbook_personsnapshot.timestamp > NOW() - INTERVAL '7 days';
+
+
+//change the service_id to see other services
+
+1  Meals
+2  Shower
+3  Clothing/Ropa
+4  Laundry/Lavandería
+5  Computer
+6  Nurse
+7  Employment Assistance
+8  Housing Assistance
+9  Transportation Assistance
+10  Pastor Consultation
+11  Other Assistanc
+12  Food
+13  Group Class
+14  Referral
+15  Financial Assistance
+16  Rent
+17  Utilities
+18  Gas
+19  Other
+
+//see how many services COMPLETED in the last 7days (COMPLETED means that staff cleared them off of the queues from the browser)
+SELECT COUNT(*) from guestbook_personservicerequest 
+INNER JOIN guestbook_personsnapshot
+ON guestbook_personservicerequest.connection_id = guestbook_personsnapshot.idsnapshot 
+WHERE service_id=1
+AND guestbook_personsnapshot.timestamp > NOW() - INTERVAL '7 days'
+AND guestbook_personservicerequest.status = '501';
+
+These are the three different status codes for a requested service. Queued means a client requested it, Completed means the client was cleared off of the queue, 
+NOTCOMPLETED means either we aren't clearing the queues (Meals) or the day ended and the client was not cleared off of the queue.
+
+SERVICE_STATUS_QUEUED          = 500
+SERVICE_STATUS_COMPLETED       = 501
+SERVICE_STATUS_NOTCOMPLETED    = 502
+
+//who has registered in the past week?
+SELECT firstname, lastname, aliasname from guestbook_person WHERE "timelineStartDate" > NOW() - INTERVAL '7 days';
+
+//who is coming most frequently in the last 7days? (heavy hitters first)
+SELECT firstname, lastname, aliasname, COUNT(*) from guestbook_personsnapshot  
+INNER JOIN guestbook_person
+ON guestbook_personsnapshot.person_id=guestbook_person.idperson
+WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '7 days'
+GROUP BY (firstname, lastname, aliasname) ORDER BY COUNT(*) desc;
+
+//which services have been most heavily used in the past week, here I am adding another join so you see the results with the Service Name (instead of a number)
+SELECT name, COUNT(*) from guestbook_personservicerequest 
+INNER JOIN guestbook_personsnapshot
+ON guestbook_personservicerequest.connection_id = guestbook_personsnapshot.idsnapshot
+INNER JOIN guestbook_service
+ON guestbook_personservicerequest.service_id = guestbook_service.idservice
+WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '7 days'
+GROUP BY (name) ORDER BY COUNT(*) desc;
+
+//what is our busiest day of the week in the past 30days (this counts snapshots - that is # of clients)
+SELECT to_char(timestamp,'dy'), COUNT(*) from guestbook_personsnapshot
+WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '30 days'
+GROUP BY (to_char(timestamp,'dy')) ORDER BY COUNT(*) DESC;
+
+\copy (SELECT to_char(timestamp,'dy'), COUNT(*) from guestbook_personsnapshot WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '30 days' GROUP BY (to_char(timestamp,'dy')) ORDER BY COUNT(*) DESC) TO 'busydays.csv' CSV HEADER 
+
+//what is our busiest day of the week in the past 30days (this counts service requests, better measure of business than simply # of clients)
+SELECT to_char(timestamp,'dy'), COUNT(*) from guestbook_personservicerequest
+INNER JOIN guestbook_personsnapshot
+ON guestbook_personservicerequest.connection_id = guestbook_personsnapshot.idsnapshot
+WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '30 days'
+GROUP BY (to_char(timestamp,'dy')) ORDER BY COUNT(*) DESC;
+
+//how many services delivered in a period
+SELECT COUNT(*) from guestbook_personservicerequest
+INNER JOIN guestbook_personsnapshot
+ON guestbook_personservicerequest.connection_id = guestbook_personsnapshot.idsnapshot
+WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '30 days'
+
+

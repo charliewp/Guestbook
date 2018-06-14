@@ -15,10 +15,10 @@
 </head>
 <body>
 <div class="container">
-<c><small> charliewp/Guestbook uses the GNU GPL v3.0 [v20180416]</small></c>
+<c><small> charliewp/Guestbook v1.01 uses the GNU GPL v3.0 [v20180614]</small></c>
 </div>
-<div class="container>
-<div style="width:100%; padding:10px">
+<div class="container style="padding-left: 75px;">
+<!--<div style="width:100%; padding:10px">-->
 <form name="login" action="/ophouse/signin/" method="get">
                     {%csrf_token%}
                     {% for error in form.non_field_errors %}
@@ -39,8 +39,7 @@
                          </div>
                         </div>
                     </div>
-                </form>
-</div>
+</form>
 <div class="divTable" style="padding-left: 75px;">
                 {% if device == 'Touch' %} <!--HP Envy Touch -->
                   <kiosk-touch-c3>Thank you! Someone will be with you shortly.<kiosk-touch-c3>

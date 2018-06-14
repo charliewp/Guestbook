@@ -144,28 +144,38 @@ class ServicesForm(forms.Form):
     #we will show ONLY the Services that are currently Enabled
     #def __init__(self, service, *args, **kwargs):
     def __init__(self, *args, **kwargs):
-        #self.query_attributes = kwargs.pop('query_attrs')
         self.query_filters = kwargs.pop('query_filters')
         super(ServicesForm, self).__init__(*args, **kwargs)
         #Mon=0, Sun=6
         today = self.query_filters[2]
-        if today==0:
-          self.fields['services'] = forms.ModelMultipleChoiceField(queryset=Service.objects.all().filter(isEnabled=True).filter(isDiscretionary=self.query_filters[0]).filter(targetRole__in=self.query_filters[1]).filter(MON=True), widget=forms.CheckboxSelectMultiple(attrs={'name':'charlie'}))
-        elif today==1:
-          self.fields['services'] = forms.ModelMultipleChoiceField(queryset=Service.objects.all().filter(isEnabled=True).filter(isDiscretionary=self.query_filters[0]).filter(targetRole__in=self.query_filters[1]).filter(TUE=True), widget=forms.CheckboxSelectMultiple(attrs={'name':'charlie'}))
-        elif today==2:
-          self.fields['services'] = forms.ModelMultipleChoiceField(queryset=Service.objects.all().filter(isEnabled=True).filter(isDiscretionary=self.query_filters[0]).filter(targetRole__in=self.query_filters[1]).filter(WED=True), widget=forms.CheckboxSelectMultiple(attrs={'name':'charlie'}))
-        elif today==3:
-          self.fields['services'] = forms.ModelMultipleChoiceField(queryset=Service.objects.all().filter(isEnabled=True).filter(isDiscretionary=self.query_filters[0]).filter(targetRole__in=self.query_filters[1]).filter(THU=True), widget=forms.CheckboxSelectMultiple(attrs={'name':'charlie'}))
-        elif today==4:
-          self.fields['services'] = forms.ModelMultipleChoiceField(queryset=Service.objects.all().filter(isEnabled=True).filter(isDiscretionary=self.query_filters[0]).filter(targetRole__in=self.query_filters[1]).filter(FRI=True), widget=forms.CheckboxSelectMultiple(attrs={'name':'charlie'}))
-        elif today==5:
-          self.fields['services'] = forms.ModelMultipleChoiceField(queryset=Service.objects.all().filter(isEnabled=True).filter(isDiscretionary=self.query_filters[0]).filter(targetRole__in=self.query_filters[1]).filter(SAT=True), widget=forms.CheckboxSelectMultiple(attrs={'name':'charlie'}))
-        else:
-          self.fields['services'] = forms.ModelMultipleChoiceField(queryset=Service.objects.all().filter(isEnabled=True).filter(isDiscretionary=self.query_filters[0]).filter(targetRole__in=self.query_filters[1]).filter(SUN=True), widget=forms.CheckboxSelectMultiple(attrs={'name':'charlie'}))
+        serviceType = self.query_filters[3]
         
-        #self.fields['services'] = forms.ModelMultipleChoiceField(queryset=Service.objects.all().filter(isEnabled=True).filter(isDiscretionary=self.query_filters[0]).filter(targetRole__in=self.query_filters[1]), widget=forms.CheckboxSelectMultiple(attrs={'name':'charlie'}))
-    
+        querySet=Service.objects.all().filter(isEnabled=True).filter(isDiscretionary=self.query_filters[0]).filter(targetRole__in=self.query_filters[1])
+                
+        if today==0:
+          dowQuerySet = querySet.filter(MON=True)
+        elif today==1:
+          dowQuerySet = querySet.filter(TUE=True)
+        elif today==2:
+          dowQuerySet = querySet.filter(WED=True)
+        elif today==3:
+          dowQuerySet = querySet.filter(THU=True)
+        elif today==4:
+          dowQuerySet = querySet.filter(FRI=True)
+        elif today==5:
+          dowQuerySet = querySet.filter(SAT=True)
+        else:
+          dowQuerySet = querySet.filter(SUN=True)
+          
+        if serviceType == 1:
+          serviceTypeQuerySet = dowQuerySet.filter(points__lte = 0)
+        elif serviceType == 2:
+          serviceTypeQuerySet = dowQuerySet.filter(points__gt = 0)
+          
+        services = forms.ModelMultipleChoiceField(queryset=serviceTypeQuerySet, widget=forms.CheckboxSelectMultiple(attrs={'name':'charlie'}))
+         
+        self.fields['services'] = services
+        
 class Meta:
         model = Service
         fields = ['name']

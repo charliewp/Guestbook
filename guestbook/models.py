@@ -248,6 +248,8 @@ class Person(models.Model):
     numberEducAndReligiousEvents = models.IntegerField(default=0)    
     #following field is for volunteers only
     lastHoursWorked = models.ForeignKey( HourRangeResponse, related_name='hrange_lasthoursworked', on_delete=models.PROTECT, null=True, blank=True)
+    #following field is for OpportunityBank function
+    credits = models.IntegerField(default=10)
         
     def save(self, force_insert=False, force_update=False):
         self.firstname = self.firstname.upper()
@@ -295,7 +297,19 @@ class Service(models.Model):
     SAT = models.BooleanField(default=False)
     #for whom is this service intended?
     targetRole = models.ForeignKey(RoleResponse, on_delete=models.PROTECT, blank=True, null=True)
+    #following field is for OpportunityBank function
+    points = models.IntegerField(default=0)
+    #following fields are for Quota
+    # meaning is quotacount in quotadays, if quotacount is non-zero, quotaperiods must be > quotacount
+    quotacount = models.IntegerField(default=0)
+    quotadays  = models.IntegerField(default=0) 
     def __str__(self):
+        #if self.points==0:
+        #  return self.name
+        #elif self.points < 0:
+        #  return self.name + '[' + str(self.points) + ']'
+        #else:
+        #  return self.name + '[+' + str(self.points) + ']'
         return self.name
         
 class PersonSnapshot(models.Model):

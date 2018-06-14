@@ -1,0 +1,88 @@
+********* QUERY **********
+SELECT COUNT(DISTINCT person_id) from guestbook_personsnapshot
+WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '1 days';
+**************************
+
+ count 
+-------
+    23
+(1 row)
+
+********* QUERY **********
+SELECT COUNT(*) from guestbook_personservicerequest
+INNER JOIN guestbook_personsnapshot
+ON guestbook_personservicerequest.connection_id = guestbook_personsnapshot.idsnapshot
+WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '1 days';
+**************************
+
+ count 
+-------
+    33
+(1 row)
+
+********* QUERY **********
+SELECT COUNT(DISTINCT person_id) from guestbook_personsnapshot
+WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '7 days';
+**************************
+
+ count 
+-------
+    83
+(1 row)
+
+********* QUERY **********
+SELECT COUNT(*) from guestbook_personservicerequest
+INNER JOIN guestbook_personsnapshot
+ON guestbook_personservicerequest.connection_id = guestbook_personsnapshot.idsnapshot
+WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '7 days';
+**************************
+
+ count 
+-------
+   209
+(1 row)
+
+********* QUERY **********
+SELECT COUNT(DISTINCT person_id) from guestbook_personsnapshot
+WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '30 days';
+**************************
+
+ count 
+-------
+   153
+(1 row)
+
+********* QUERY **********
+SELECT COUNT(*) from guestbook_personservicerequest
+INNER JOIN guestbook_personsnapshot
+ON guestbook_personservicerequest.connection_id = guestbook_personsnapshot.idsnapshot
+WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '30 days';
+**************************
+
+ count 
+-------
+   550
+(1 row)
+
+********* QUERY **********
+SELECT COUNT(DISTINCT person_id) from guestbook_personsnapshot
+WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '90 days';
+**************************
+
+ count 
+-------
+   153
+(1 row)
+
+********* QUERY **********
+SELECT COUNT(*) from guestbook_personservicerequest
+INNER JOIN guestbook_personsnapshot
+ON guestbook_personservicerequest.connection_id = guestbook_personsnapshot.idsnapshot
+WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '90 days';
+**************************
+
+ count 
+-------
+   550
+(1 row)
+

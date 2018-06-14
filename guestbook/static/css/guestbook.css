@@ -4,6 +4,88 @@
 */
 {% load staticfiles %}
 
+
+.transparent_btn {
+	display: inline-block;
+	padding: 10px 14px;
+	color: #FFF;
+	border: 1px solid #FFF;
+	text-decoration: none;
+	font-size: 14px;
+	line-height: 120%;
+	background-color: rgba(255,255,255, 0);
+	-webkit-border-radius: 16px;
+	-moz-border-radius: 16px;
+	border-radius: 16px;
+	-webkit-transition: background-color 300ms ease;
+	-moz-transition: background-color 300ms ease;
+	transition: background-color 300ms ease;
+	cursor: pointer;
+}
+.transparent_btn:hover {
+	background-color: rgba(255,255,255, 0.3);
+	color: #FFF;
+}
+
+/* Orange Button */
+.transparent_btn.orange {
+	color: #00ff5d;
+	border-color: #ffc65d;
+}
+.transparent_btn.orange:hover {
+	background-color: rgba(255,255, 255, 0.0);
+}
+
+/* Orange Button */
+.transparent_btn.green {
+	color: #28a745
+	border-color: #28a745
+}
+.transparent_btn.green:hover {
+	background-color: rgba(40, 167, 69, 0.5);
+}
+
+.transparent_btn.green.checked {
+	background-color: rgba(40, 167, 69, 0.9);
+}
+
+/* Blue Button */
+.transparent_btn.blue {
+	color: #aeddf5;
+	border-color: #aeddf5;
+}
+.transparent_btn.blue:hover {
+	background-color: rgba(174, 221, 245, 0.3);
+}
+
+.transparent_btn.green .checkbox input[type=checkbox]:checked {
+  color: #f00;
+  font-style: normal;
+}
+
+.checkbox-inline input[type=checkbox]:checked {
+  color: #f00;
+  font-style: normal;
+}
+
+.checkbox-inline.enabled {
+  color: #006600;
+  font-style: normal;
+}
+
+.checkbox-inline:hover {
+	background-color: rgba(40, 167, 69, 0.9);
+    -webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+} 
+
+.checkbox-inline.disabled:hover {
+    color: #000000;
+	background-color: rgba(40, 167, 69, 0.0);
+} 
+
+
 /*
  * Kiosk Formatting
 */
@@ -366,6 +448,12 @@ desktop-graphlegend {
 small {
     font-family: "Arial";
     color: #ffff99;
+    font-size: smaller;
+}
+
+notavailable {
+    font-family: "Arial";
+    color:#8a8a5c;
     font-size: smaller;
 }
 

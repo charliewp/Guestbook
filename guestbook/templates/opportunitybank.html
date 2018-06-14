@@ -49,17 +49,17 @@
 </form>
 </div>
 {% endif %}
-   <h2>You have <strong>{{credits}}</strong> service credits available today in the Opportunity Bank.</h2>
+   <h2>You have <strong>{{credits}}</strong> service credits in the Opportunity Bank, Help serve today by selecting from the service opportunities below.</h2>
    {% if device == 'Touch' %} <!--HP Envy Touch -->
-     <button class="kiosk-touch-primary" style="width:100%">Select all of the services you require / Seleccione todos los servicios que necesita</button>
+     <button class="kiosk-touch-primary" style="width:100%">Earn Service Credits in the Opportunity Bank!</button>
    {% else %} <!--Desktop -->
-     <button class="desktop-primary" style="width:100%">Select all of the services you require / Seleccione todos los servicios que necesita</button>
+     <button class="desktop-primary" style="width:100%">Earn Service Credits in the Opportunity Bank!</button>
    {% endif %}
    <div class="form-group badge-checkboxes" style="width:100%;">
       {% if staffrequest %}
-        <form action="/ophouse/services?template=1connection={{connection}}&staff=1" method="post">
+        <form action="/ophouse/services?template=2connection={{connection}}&staff=1" method="post">
       {% else %}
-        <form action="/ophouse/services?template=1&connection={{connection}}" method="post">
+        <form action="/ophouse/services?template=2&connection={{connection}}" method="post">
       {% endif %}
       {% csrf_token %}
        <div class="divTable" style="width:100%">
@@ -67,6 +67,7 @@
                          <div class="divTableRow">
                             <div class="divTableCell" style="width:100%;padding:20px">
                                <div>
+                                  <div>
                                   {% for choice_id, choice_label in form.services.field.widget.choices %}
                                   {% if choice_label in constrainedByUnitsList %}
                                      <label for="id_options_{{ choice_id }}" class="checkbox-inline disabled" >
@@ -110,6 +111,7 @@
                                      </label>                                   
                                   {% endif %}                                     
                                   {% endfor %}
+                                </div>
                                 </div>
                             </div>
                          </div>
