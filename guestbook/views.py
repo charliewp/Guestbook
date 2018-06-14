@@ -719,6 +719,7 @@ def services(request):
           unitsUsed = 0
           #we are looking at ACTIVE snapshots for all Persons here.
           currentSnapshots = PersonSnapshot.objects.all().filter(status=SNAPSHOT_STATUS_ACTIVE)
+          unitsUsed = 0
           for currentSnapshot in currentSnapshots:
             unitsUsed += PersonServiceRequest.objects.all().filter(connection=currentSnapshot).filter(service=constrainedService).count()
           
@@ -738,7 +739,8 @@ def services(request):
             #get all snapshots for this person at or later than the starttime
             personSnapshots = PersonSnapshot.objects.all().filter(person=person_instance).filter(timestamp__gte = windowStartTime)
             log.debug('------%s shapshots being inspected' % (len(personSnapshots)))
-            #we can only fairly count requests that have been cleared from the queue by staff            
+            #we can only fairly count requests that have been cleared from the queue by staff 
+            unitsUsed = 0            
             for personSnapshot in personSnapshots:
                unitsUsed += PersonServiceRequest.objects.all().filter(connection=personSnapshot).filter(service=constrainedService).filter(status=SERVICE_STATUS_COMPLETED).count()
                log.debug('%s %s @ %s unitsInQuotaWindow=%s' % (personSnapshot.idsnapshot, personSnapshot.person, personSnapshot.timestamp, str(unitsUsed)))
