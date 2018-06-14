@@ -734,14 +734,14 @@ def services(request):
           if constrainedService.quotadays>0:            
             now = datetime.today()
             windowStartTime = now - timedelta(days=constrainedService.quotadays)
-            log.debug('calculating quota from startdate=%s' % (windowStartTime))
+            log.debug('calculating %s quota from startdate=%s' % (constrainedService.name, windowStartTime))
             #get all snapshots for this person at or later than the starttime
             personSnapshots = PersonSnapshot.objects.all().filter(person=person_instance).filter(timestamp__gte = windowStartTime)
             log.debug('------%s shapshots being inspected' % (len(personSnapshots)))
             #we can only fairly count requests that have been cleared from the queue by staff            
             for personSnapshot in personSnapshots:
                unitsUsed += PersonServiceRequest.objects.all().filter(connection=personSnapshot).filter(service=constrainedService).filter(status=SERVICE_STATUS_COMPLETED).count()
-               log.debug('unitsInQuotaWindow=%s' % (str(unitsUsed)))
+               log.debug('%s %s @ %s unitsInQuotaWindow=%s' % (personSnapshot.idsnapshot, personSnapshot.person, personSnapshot.timestamp, str(unitsUsed)))
             if unitsUsed >= constrainedService.quotacount:
               constrainedByQuota = True
               log.debug('%s is at quota for Service=%s %s times' % (person_instance.aliasname, constrainedService.name, unitsUsed))
