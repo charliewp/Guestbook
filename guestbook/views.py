@@ -526,7 +526,7 @@ def snapshot_lifecycle(person, autoCreate):
           
          #OpportunityHouse reconciliation moved to the Queue processing view          
          #OpportunityBank reconcile services with SERVICE_STATUS_COMPLETED to Person.credits
-         #print('OpportunityBank reconciliation for %s.' % (person.aliasname))
+         #logger.debug('OpportunityBank reconciliation for %s.' % (person.aliasname))
          #query_attributes = {}
          #query_attributes['connection'] = snapshot
          #query_attributes['status'] = SERVICE_STATUS_COMPLETED
@@ -535,10 +535,10 @@ def snapshot_lifecycle(person, autoCreate):
          #for snapshotService in snapshotServicesCompleted:
          #  completedService = snapshotService.service
          #  if completedService.points!=0:
-         #     print('%s - %s' % (completedService.name, completedService.points))
+         #     logger.debug('%s - %s' % (completedService.name, completedService.points))
          #     credits += completedService.points
          #person.credits = credits;
-         #print('OpportunityBank credits = %s' % (credits))
+         #logger.debug('OpportunityBank credits = %s' % (credits))
          #person.save()
            
          log.info('Archiving STALE PersonSnapshot %s' % (snapshot))
@@ -588,7 +588,7 @@ def services(request):
         log.debug('Using PersonSnapshot pk=%s' % (connection_instance.pk))
         # check whether it's valid:
         if form.is_valid():
-            print('post for template=%s' % (template))
+            logger.debug('post for template=%s' % (template))
             #POST will pass the PersonSnapshot instance we should be using
             log.debug('processing service request form input')
             # set the Services on the PersonSnapshot instance
@@ -627,7 +627,7 @@ def services(request):
                     if queuedService.service.pk == service.pk:
                       foundInRequest = True
                 if not foundInRequest:
-                   print('client deselected %s' % (queuedService.service.name))
+                   logger.debug('client deselected %s' % (queuedService.service.name))
                    queuedService.delete()
         else:
           log.info('Service form input is invalid - no services are selected')
@@ -645,7 +645,7 @@ def services(request):
                   if queuedService.service.pk == service.pk:
                     foundInRequest = True
               if not foundInRequest:
-                 print('client deselected %s' % (queuedService.service.name))
+                 logger.debug('client deselected %s' % (queuedService.service.name))
                  queuedService.delete()
           #query_attributes = {}
           #query_attributes['connection'] = connection_instance_pk
@@ -674,14 +674,14 @@ def services(request):
         #this is a GET request
         #which services should we show here?
         template = int(request.GET.get("template", 1))
-        print('Service page get for template=%s' % (template))
+        logger.debug('Service page get for template=%s' % (template))
         person_instance_pk = int(request.GET.get("person", False))
         staffrequest = int(request.GET.get("staff", 0))
         person_instance = Person.objects.get(pk=person_instance_pk)
         
         #OpportunityBank
         credits = person_instance.credits
-        print('%s has %s credits in the bank.' % (person_instance.aliasname, credits))
+        logger.debug('%s has %s credits in the bank.' % (person_instance.aliasname, credits))
      
         connection_instance = snapshot_lifecycle(person_instance, True)
         #query_attributes = {}
@@ -726,14 +726,14 @@ def services(request):
           #in this way the client is able to uncheck the service and return it to the pool for use by someone else          
           if (unitsUsed >= unitsAvailable and  PersonServiceRequest.objects.all().filter(connection=connection_instance).filter(service=constrainedService).filter(status=SERVICE_STATUS_QUEUED).count()==0):
             constrainedByUnits = True
-            print('%s service has reached capacity.' % (constrainedService.name))
+            logger.debug('%s service has reached capacity.' % (constrainedService.name))
           
           # if quota applies, see if the personal quota is open
           constrainedByQuota = False          
           if constrainedService.quotadays>0:            
             now = datetime.today()
             windowStartTime = now - timedelta(days=constrainedService.quotadays)
-            print('calculating quota on startdate=%s' % (windowStartTime))
+            logger.debug('calculating quota on startdate=%s' % (windowStartTime))
             #get all snapshots for this person at or later than the starttime
             personSnapshots = PersonSnapshot.objects.all().filter(person=person_instance).filter(timestamp__gte = windowStartTime) 
             #we can only fairly count requests that have been cleared from the queue by staff            
@@ -741,13 +741,13 @@ def services(request):
                unitsUsed += PersonServiceRequest.objects.all().filter(connection=personSnapshot).filter(service=constrainedService).filter(status=SERVICE_STATUS_COMPLETED).count()
             if unitsUsed >= constrainedService.quotacount:
               constrainedByQuota = True
-              print('%s is at quota for Service=%s %s times' % (person_instance.aliasname, constrainedService.name, unitsUsed))
+              logger.debug('%s is at quota for Service=%s %s times' % (person_instance.aliasname, constrainedService.name, unitsUsed))
               
         
           #we'll keep three different constraint list so that we can indicate the cause for closing the service
           if ((credits<=0) and (constrainedService.points<0)):
             constrainedByCostList.append(constrainedService.name)            
-            print('cost disabling %s' % (constrainedService.name))
+            logger.debug('cost disabling %s' % (constrainedService.name))
           if constrainedByUnits:
             #need to be careful here, if a client has selected this service already in the current snapshot
             #we don't want to allow them to deselect it and return in to the pool for someone else to use
@@ -755,10 +755,10 @@ def services(request):
             currentInstanceCount = PersonServiceRequest.objects.all().filter(connection=connection_instance).filter(service=constrainedService).count()
             if currentInstanceCount==0:
               constrainedByUnitsList.append(constrainedService.name)
-              print('units disabling %s' % (constrainedService.name))
+              logger.debug('units disabling %s' % (constrainedService.name))
           if constrainedByQuota:
             constrainedByQuotaList.append(constrainedService.name)
-            print('quota disabling %s' % (constrainedService.name))
+            logger.debug('quota disabling %s' % (constrainedService.name))
            
         servicelist = [] 
         #we want to preselect the checkbox options for all QUEUED Services in the active Snapshot
@@ -1069,7 +1069,7 @@ def queue(request):
         
         #OpportunityBank - reconcile services with non-zero points to the Person.credits
         if serviceToComplete.service.points!=0:
-          print('OpportunityBank reconciliation for %s. Service %s points=%s' % (serviceToComplete.connection.person.aliasname, serviceToComplete.service.name, serviceToComplete.service.points))
+          logger.debug('OpportunityBank reconciliation for %s. Service %s points=%s' % (serviceToComplete.connection.person.aliasname, serviceToComplete.service.name, serviceToComplete.service.points))
           serviceToComplete.connection.person.credits += serviceToComplete.service.points
           serviceToComplete.connection.person.save()
           
