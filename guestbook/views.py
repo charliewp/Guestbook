@@ -737,7 +737,7 @@ def services(request):
             log.debug('calculating quota from startdate=%s' % (windowStartTime))
             #get all snapshots for this person at or later than the starttime
             personSnapshots = PersonSnapshot.objects.all().filter(person=person_instance).filter(timestamp__gte = windowStartTime)
-            log.debug('------%s shapshots being inspected' % (len(personSnapshots))
+            log.debug('------%s shapshots being inspected' % (len(personSnapshots)))
             #we can only fairly count requests that have been cleared from the queue by staff            
             for personSnapshot in personSnapshots:
                unitsUsed += PersonServiceRequest.objects.all().filter(connection=personSnapshot).filter(service=constrainedService).filter(status=SERVICE_STATUS_COMPLETED).count()
