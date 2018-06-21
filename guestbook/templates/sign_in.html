@@ -5,8 +5,9 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
+    <!--we don't really need to reload this page, so it's set below to 20minutes -->
 <script type="text/javascript">
-    window.setTimeout("redirectpage();", 120000);    
+    window.setTimeout("redirectpage();", 1200000);    
     function redirectpage(){
     window.top.location.href = '/ophouse/signin';
     }

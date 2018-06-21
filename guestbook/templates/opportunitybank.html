@@ -73,9 +73,9 @@
                                      <label for="id_options_{{ choice_id }}" class="checkbox-inline disabled" >
                                      <input  type="checkbox" id="id_options_{{ choice_id }}" value="{{ choice_id }}" name="services" disabled="true"  {% if choice_id in form.services.value  %} checked="checked"{% endif %}}/>
                                        {% if device == 'Touch' %} <!--HP Envy Touch -->
-                                         <span class="badge" style="background:#ccccb3;color:#8a8a5c;font-size:48px;">{{choice_label}}<br><notavailable>- full -</notavailable></span>
+                                         <span class="badge" style="background:#ccccb3;color:#8a8a5c;font-size:48px;">{{choice_label}}<br><notavailable>- full today -</notavailable></span>
                                        {% else %} <!--Desktop -->
-                                         <span class="badge" style="background:#ccccb3;color:#8a8a5c;font-size:48px;">{{choice_label}}<br><notavailable>- full -</notavailable></span>
+                                         <span class="badge" style="background:#ccccb3;color:#8a8a5c;font-size:48px;">{{choice_label}}<br><notavailable>- full today -</notavailable></span>
                                        {% endif %}
                                      {{choice}}
                                      </label>
@@ -83,9 +83,9 @@
                                      <label for="id_options_{{ choice_id }}" class="checkbox-inline disabled" >
                                      <input  type="checkbox" id="id_options_{{ choice_id }}" value="{{ choice_id }}" name="services" disabled="true"  {% if choice_id in form.services.value  %} checked="checked"{% endif %}}/>
                                        {% if device == 'Touch' %} <!--HP Envy Touch -->
-                                         <span class="badge" style="background:#ccccb3;color:#8a8a5c;font-size:48px;">{{choice_label}}<br><notavailable>- limit -</notavailable></span>
+                                         <span class="badge" style="background:#ccccb3;color:#8a8a5c;font-size:48px;">{{choice_label}}<br><notavailable>- you've reached limit -</notavailable></span>
                                        {% else %} <!--Desktop -->
-                                         <span class="badge" style="background:#ccccb3;color:#8a8a5c;font-size:48px;">{{choice_label}}<br><notavailable>- limit -</notavailable></span>
+                                         <span class="badge" style="background:#ccccb3;color:#8a8a5c;font-size:48px;">{{choice_label}}<br><notavailable>- you've reached limit -</notavailable></span>
                                        {% endif %}
                                      {{choice}}
                                      </label>
@@ -93,9 +93,9 @@
                                      <label for="id_options_{{ choice_id }}" class="checkbox-inline disabled" >
                                      <input  type="checkbox" id="id_options_{{ choice_id }}" value="{{ choice_id }}" name="services" disabled="true"  {% if choice_id in form.services.value  %} checked="checked"{% endif %}}/>
                                        {% if device == 'Touch' %} <!--HP Envy Touch -->
-                                         <span class="badge" style="background:#ccccb3;color:#8a8a5c;font-size:48px;">{{choice_label}}<br><notavailable>- no credits -</notavailable></span>
+                                         <span class="badge" style="background:#ccccb3;color:#8a8a5c;font-size:48px;">{{choice_label}}<br><notavailable>- need credits -</notavailable></span>
                                        {% else %} <!--Desktop -->
-                                         <span class="badge" style="background:#ccccb3;color:#8a8a5c;font-size:48px;">{{choice_label}}<br><notavailable>- no credits -</notavailable></span>
+                                         <span class="badge" style="background:#ccccb3;color:#8a8a5c;font-size:48px;">{{choice_label}}<br><notavailable>- need credits -</notavailable></span>
                                        {% endif %}
                                      {{choice}}
                                      </label>
