@@ -223,6 +223,15 @@ c3 {
     font-style: italic;
 }
 
+c4 {
+    /*color: #000000;*/
+    color: #ffff99;
+    font-family: "Arial";
+    font-size: 10;
+    font-weight: bold;
+    font-style: italic;
+}
+
 /*
  * Desktop Formatting
 */
@@ -323,6 +332,15 @@ desktop-c3 {
     color: #ffff99;
     font-family: "Arial";
     font-size: 24;
+    font-weight: bold;
+    font-style: italic;
+}
+
+desktop-c4 {
+    /*color: #000000;*/
+    color: #ffff99;
+    font-family: "Arial";
+    font-size: 16;
     font-weight: bold;
     font-style: italic;
 }

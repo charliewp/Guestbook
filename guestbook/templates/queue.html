@@ -10,15 +10,15 @@
     
     
     <script type="text/javascript">
-    window.setTimeout("redirectpage();", 10000);    
-    function redirectpage(){
-    window.top.location.href = '/ophouse/queue?servicetype={{servicetype}}';
+      window.setTimeout("redirectpage();", 10000);    
+      function redirectpage(){
+      window.top.location.href = '/ophouse/queue?servicetype={{servicetype}}';
     }
     </script>
     <script>
-    function clicked() {
-    return confirm('Click Ok to Complete, Cancel to go back.');}
-</script>
+      function clicked() {
+      return confirm('Click Ok to Complete, Cancel to go back.');}
+    </script>
 </head>
 <body>
 <div class="container">
@@ -101,10 +101,14 @@
                                  {% if device == 'Touch' %}
                                   <div class="divTableCell" style="width:100%;padding:10px">
                                      <c3>{{ queuemessage }} Select client to complete service</c3>
+                                     <br>
+                                     <c4>(uncheck to remove without applying credits)</c4>
                                   </div>
                                  {% else %}
                                   <div class="divTableCell" style="width:100%;padding:10px">
                                      <desktop-c3>{{ queuemessage }} Select client to complete service</desktop-c3>
+                                     <br>
+                                     <desktop-c4>(uncheck to remove without applying credits)</desktop-c4>
                                   </div>   
                                  {% endif %}
                                </div>
@@ -118,11 +122,15 @@
                                              <form method="post" action="/ophouse/queue?servicetype={{servicetype}}" onsubmit="return clicked();">
                                                {%csrf_token%}
                                                {% if forloop.counter == 1 %}
+                                                 <input type="checkbox" id="{{choice.0}}" name="applyCredits" value="yes" checked>
                                                  <input type="radio" name="services" hidden="true" value="{{choice.0}}" checked="checked"/>
                                                  <button class="gbcheckbox-inline-nextup" style="font-size:32px;" >{{choice.1}}</button>
+                                                 <c3>...<c3>
                                                {% else %}
+                                                 <input type="checkbox" id="{{choice.0}}" name="applyCredits" value="yes" checked>
                                                  <input type="radio" name="services" hidden="true" value="{{choice.0}}" checked="checked"/>
                                                  <button class="gbcheckbox-inline"  style="font-size:32px;">{{choice.1}}</button>
+                                                 <c3>...<c3>
                                                {% endif %}
                                              </form>
                                            </div>
@@ -138,11 +146,15 @@
                                              <form method="post" action="/ophouse/queue?servicetype={{servicetype}}" onsubmit="return clicked();">
                                                {%csrf_token%}
                                                {% if forloop.counter == 1 %}
+                                                 <input type="checkbox" id="{{choice.0}}" name="applyCredits" value="yes" checked>
                                                  <input type="radio" name="services" hidden="true" value="{{choice.0}}" checked="checked"/>
                                                  <button class="gbcheckbox-inline-nextup" style="font-size:32px;" >{{choice.1}}</button>
+                                                 <c3>...<c3>
                                                {% else %}
+                                                 <input type="checkbox" id="{{choice.0}}" name="applyCredits" value="yes" checked>
                                                  <input type="radio" name="services" hidden="true" value="{{choice.0}}" checked="checked"/>
                                                  <button class="gbcheckbox-inline"  style="font-size:32px;">{{choice.1}}</button>
+                                                 <c3>...<c3>
                                                {% endif %}
                                              </form>
                                            </div>

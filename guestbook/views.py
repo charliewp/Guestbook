@@ -65,6 +65,7 @@ auth_token  = "b26623c93d3a50ed38cad1cc8769e167"
 SERVICE_STATUS_QUEUED          = 500
 SERVICE_STATUS_COMPLETED       = 501
 SERVICE_STATUS_NOTCOMPLETED    = 502
+SERVICE_STATUS_REMOVED         = 503
 
 SNAPSHOT_STATUS_ACTIVE         = 800
 SNAPSHOT_STATUS_STALE          = 801
@@ -1067,17 +1068,27 @@ def queue(request):
         log.debug('Service PK=%s' % (service.pk))
         serviceToComplete = service 
         #Service.objects.get(pk=service.pk)
-        log.debug('Service %s is marked for completion.' % (serviceToComplete))
-        log.info('Service %s has been completed for Username %s.' % (serviceToComplete.service.name, serviceToComplete.connection.person.aliasname ))
-        serviceToComplete.status = SERVICE_STATUS_COMPLETED
+        
+        if 'yes' in request.POST.getlist('applyCredits'):
+          applyCredits = True
+          log.debug('Service %s is marked for completion.' % (serviceToComplete))
+          log.info('Service %s has been completed for Username %s.' % (serviceToComplete.service.name, serviceToComplete.connection.person.aliasname ))
+          serviceToComplete.status = SERVICE_STATUS_COMPLETED
+        else:
+          applyCredits = False
+          log.debug('Service %s is marked for removal.' % (serviceToComplete))
+          log.info('Service %s has been removed for Username %s.' % (serviceToComplete.service.name, serviceToComplete.connection.person.aliasname ))
+          serviceToComplete.status = SERVICE_STATUS_REMOVED
+          
         serviceToComplete.save()
         
         #OpportunityBank - reconcile services with non-zero points to the Person.credits
-        if serviceToComplete.service.points!=0:
+        if serviceToComplete.service.points!=0 and applyCredits:
+          print('OpportunityBank reconciliation for %s. Service %s points=%s' % (serviceToComplete.connection.person.aliasname, serviceToComplete.service.name, serviceToComplete.service.points))
           log.debug('OpportunityBank reconciliation for %s. Service %s points=%s' % (serviceToComplete.connection.person.aliasname, serviceToComplete.service.name, serviceToComplete.service.points))
           serviceToComplete.connection.person.credits += serviceToComplete.service.points
           serviceToComplete.connection.person.save()
-          
+         
         
         #now. take care of the PersonSnapshot status
         query_attributes = {}
