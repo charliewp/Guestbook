@@ -172,7 +172,7 @@ class ServicesForm(forms.Form):
         elif serviceType == 2:
           serviceTypeQuerySet = dowQuerySet.filter(points__gt = 0)
           
-        services = forms.ModelMultipleChoiceField(queryset=serviceTypeQuerySet, widget=forms.CheckboxSelectMultiple(attrs={'name':'charlie'}))
+        services = forms.ModelMultipleChoiceField(queryset=serviceTypeQuerySet, widget=forms.CheckboxSelectMultiple(attrs={'name':'charlie'})) 
          
         self.fields['services'] = services
         

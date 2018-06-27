@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> -->
     <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
 <script type="text/javascript">
-    window.setTimeout("redirectpage();", 120000);    
+    window.setTimeout("redirectpage();", 60000);    
     function redirectpage(){
     window.top.location.href = '/ophouse/signin';
     }
@@ -103,9 +103,21 @@
                                        <label for="id_options_{{ choice_id }}" class="checkbox-inline enabled" >
                                        <input  type="checkbox" id="id_options_{{ choice_id }}" value="{{ choice_id }}" name="services" {% if choice_id in form.services.value  %} checked="checked"{% endif %}}/>
                                        {% if device == 'Touch' %} <!--HP Envy Touch -->
-                                         <span class="badge" style="font-size:48px;">{{choice_label}}</span>
+                                         <span class="badge" style="font-size:48px;">{{choice_label}}
+                                         {% for key, value in points.items %}
+                                           {% if key == choice_id and value != 0 %}
+                                             <br><kiosk-button-points>adds {{value}} credit(s)</kiosk-button-points>
+                                           {% endif %}
+                                         {% endfor %}
+                                         </span>
                                        {% else %} <!--Desktop -->
-                                         <span class="badge" style="font-size:48px;">{{choice_label}}</span>
+                                         <span class="badge" style="font-size:48px;">{{choice_label}}
+                                         {% for key, value in points.items %}
+                                           {% if key == choice_id and value != 0 %}
+                                             <br><desktop-button-points>adds {{value}} credit(s)</desktop-button-points>
+                                           {% endif %}
+                                         {% endfor %}
+                                         </span>
                                        {% endif %}
                                        {{choice}}
                                      </label>                                   

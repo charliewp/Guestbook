@@ -54,16 +54,16 @@
                                   {% for tup in servicelinks %}
                                     {% if tup.2 == 0 %}
                                       {% if tup.0 == servicetype %}
-                                         <a class="btn:hover" href="/ophouse/queue?servicetype={{tup.0}}"><button class="gbcheckbox-watching" style="font-size:32px;">{{tup.1}}{{ tup.3 }}</button></a>
+                                         <a class="btn:hover" href="/ophouse/queue?servicetype={{tup.0}}"><button class="gbcheckbox-watching" style="font-size:32px;">{{tup.1}}<kiosk-button-queuesize>{{ tup.3 }}</kiosk-button-queuesize></button></a>
                                       {% else %}
-                                         <a class="btn:hover" href="/ophouse/queue?servicetype={{tup.0}}"><button class="gbcheckbox-inline" style="font-size:32px;">{{tup.1}}{{ tup.3 }}</button></a>                                       
+                                         <a class="btn:hover" href="/ophouse/queue?servicetype={{tup.0}}"><button class="gbcheckbox-inline" style="font-size:32px;">{{tup.1}}<kiosk-button-queuesize>{{ tup.3 }}</kiosk-button-queuesize></button></a>                                       
                                       {% endif %}   
                                     {% endif %}
                                     {% if tup.2 == 1 %}
                                       {% if tup.0 == servicetype %}
-                                        <a class="btn:hover" href="/ophouse/queue?servicetype={{tup.0}}"><button class="gbcheckbox-watching" style="font-size:32px;">{{tup.1}}{{ tup.3 }}</button></a>
+                                        <a class="btn:hover" href="/ophouse/queue?servicetype={{tup.0}}"><button class="gbcheckbox-watching" style="font-size:32px;">{{tup.1}}<kiosk-button-queuesize>{{ tup.3 }}</kiosk-button-queuesize></button></a>
                                       {% else %}
-                                        <a class="btn:hover" href="/ophouse/queue?servicetype={{tup.0}}"><button class="gbcheckbox-inline-highlight" style="font-size:32px;">{{tup.1}}{{ tup.3 }}</button></a>                                    
+                                        <a class="btn:hover" href="/ophouse/queue?servicetype={{tup.0}}"><button class="gbcheckbox-inline-highlight" style="font-size:32px;">{{tup.1}}<kiosk-button-queuesize>{{ tup.3 }}</kiosk-button-queuesize></button></a>                                    
                                       {% endif %}  
                                     {% endif %}    
                                   {% endfor %}
@@ -73,16 +73,16 @@
                                   {% for tup in servicelinks %}
                                     {% if tup.2 == 0 %}
                                       {% if tup.0 == servicetype %}
-                                         <a class="btn:hover" href="/ophouse/queue?servicetype={{tup.0}}"><button class="gbcheckbox-watching" style="font-size:32px;">{{tup.1}}{{ tup.3 }}</button></a>
+                                         <a class="btn:hover" href="/ophouse/queue?servicetype={{tup.0}}"><button class="gbcheckbox-watching" style="font-size:32px;color:white;">{{tup.1}}<br><desktop-button-queuesize>{{ tup.3 }}</desktop-button-queuesize></button></a>
                                       {% else %}
-                                         <a class="btn:hover" href="/ophouse/queue?servicetype={{tup.0}}"><button class="gbcheckbox-inline" style="font-size:32px;">{{tup.1}}{{ tup.3 }}</button></a>                                       
+                                         <a class="btn:hover" href="/ophouse/queue?servicetype={{tup.0}}"><button class="gbcheckbox-inline" style="font-size:32px;color:white;">{{tup.1}}<br><desktop-button-queuesize>{{ tup.3 }}</desktop-button-queuesize></button></a>                                       
                                       {% endif %}   
                                     {% endif %}
                                     {% if tup.2 == 1 %}
                                       {% if tup.0 == servicetype %}
-                                        <a class="btn:hover" href="/ophouse/queue?servicetype={{tup.0}}"><button class="gbcheckbox-watching" style="font-size:32px;">{{tup.1}}{{ tup.3 }}</button></a>
+                                        <a class="btn:hover" href="/ophouse/queue?servicetype={{tup.0}}"><button class="gbcheckbox-watching" style="font-size:32px;color:white;">{{tup.1}}<br><desktop-button-queuesize>{{ tup.3 }}</desktop-button-queuesize></button></a>
                                       {% else %}
-                                        <a class="btn:hover" href="/ophouse/queue?servicetype={{tup.0}}"><button class="gbcheckbox-inline-highlight" style="font-size:32px;">{{tup.1}}{{ tup.3 }}</button></a>                                    
+                                        <a class="btn:hover" href="/ophouse/queue?servicetype={{tup.0}}"><button class="gbcheckbox-inline-highlight" style="font-size:32px;color:white;">{{tup.1}}<br><desktop-button-queuesize>{{ tup.3 }}</desktop-button-queuesize></button></a>                                    
                                       {% endif %}  
                                     {% endif %}    
                                   {% endfor %}

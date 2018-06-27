@@ -232,9 +232,46 @@ c4 {
     font-style: italic;
 }
 
+kiosk-button-points {
+    /*color: #000000;*/
+    color: #999;
+    font-family: "Arial";
+    font-size: 24;
+    font-weight: bold;
+    font-style: italic;
+}
+
+kiosk-button-queuesize {
+    /*color: #000000;*/
+    color: #FFFFFF;
+    font-family: "Arial";
+    font-size: 16;
+    font-weight: bold;
+    font-style: italic;
+}
+
+
+
 /*
  * Desktop Formatting
 */
+desktop-button-points {
+    /*color: #000000;*/
+    color: #999;
+    font-family: "Arial";
+    font-size: 18;
+    font-weight: bold;
+    font-style: italic;
+}
+
+desktop-button-queuesize {
+    /*color: #000000;*/
+    color: #FFFFFF;
+    font-family: "Arial";
+    font-size: 16;
+    font-weight: bold;
+    font-style: italic;
+}
 
 .desktop-form-control {
   display: block;

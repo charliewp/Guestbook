@@ -767,8 +767,10 @@ def services(request):
             log.debug('quota disabling %s' % (constrainedService.name))
            
         servicelist = [] 
+        points = {}
         #we want to preselect the checkbox options for all QUEUED Services in the active Snapshot
         for serviceType in serviceTypes:
+           points[serviceType.idservice] = abs(serviceType.points)
            for service in services:
               if service.status != SERVICE_STATUS_COMPLETED:
                 if service.service.pk == serviceType.pk:
@@ -779,9 +781,9 @@ def services(request):
           return HttpResponseRedirect('/ophouse/prompt?connection=%s' % (connection_instance.pk))
         else:
           if template == 1:
-            return render(request, 'services.html', {'form': form, 'error': error, 'device': device, 'credits': str(credits), 'connection': connection_instance.pk, 'staffrequest': staffrequest,  'constrainedByUnitsList': constrainedByUnitsList, 'constrainedByQuotaList': constrainedByQuotaList, 'constrainedByCostList': constrainedByCostList})
+            return render(request, 'services.html', {'form': form, 'points': points, 'error': error, 'device': device, 'credits': str(credits), 'connection': connection_instance.pk, 'staffrequest': staffrequest,  'constrainedByUnitsList': constrainedByUnitsList, 'constrainedByQuotaList': constrainedByQuotaList, 'constrainedByCostList': constrainedByCostList})
           elif template == 2:
-            return render(request, 'opportunitybank.html', {'form': form, 'error': error, 'device': device, 'credits': str(credits), 'connection': connection_instance.pk, 'staffrequest': staffrequest,  'constrainedByUnitsList': constrainedByUnitsList, 'constrainedByQuotaList': constrainedByQuotaList, 'constrainedByCostList': constrainedByCostList})
+            return render(request, 'opportunitybank.html', {'form': form, 'points': points, 'error': error, 'device': device, 'credits': str(credits), 'connection': connection_instance.pk, 'staffrequest': staffrequest,  'constrainedByUnitsList': constrainedByUnitsList, 'constrainedByQuotaList': constrainedByQuotaList, 'constrainedByCostList': constrainedByCostList})
                     
 
 def inference_engine(person, snapshotTimestamp):
@@ -1124,7 +1126,7 @@ def queue(request):
          #  queueSizeString = ''
          #serviceTuple = (str(serviceType.pk), serviceType.name, queueSizeString)
          if queueSize > 0:
-           queueSizeString = '[%s]' % (queueSize)
+           queueSizeString = '%s queued' % (queueSize)
          else:
            queueSizeString = ''
          
