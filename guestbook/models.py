@@ -207,7 +207,7 @@ class Person(models.Model):
     city = models.CharField(max_length=16,blank=True)
     state = USStateField(blank=True)
     zip = USZipCodeField(blank=True)
-    timelineStartDate = models.DateField(auto_now=True)
+    timelineStartDate = models.DateField(null=True, blank=True)
     gender = models.ForeignKey(GenderResponse,on_delete=models.PROTECT, default=1)
     ethnicity = models.ForeignKey(EthnicityResponse, on_delete=models.PROTECT, default=1)
     language = models.ForeignKey(LanguageResponse, on_delete=models.PROTECT, default=1)

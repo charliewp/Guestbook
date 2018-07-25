@@ -411,6 +411,7 @@ def createalias(request):
                  person.aliasname = aliasname.upper()
                  person.aliaspin = aliaspin
                  person.shortssn = shortssn
+                 person.timelineStartDate = datetime.now()
                  person.save()
                  log.info('%s %s has created Username=%s from the Client Kiosk.' % (person.firstname, person.lastname, person.aliasname))
                  message = 'Welcome ' + aliasname + ', your PIN is ' + aliaspin + " Go Back and sign-In now!"
