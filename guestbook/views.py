@@ -54,6 +54,10 @@ import re
 import django
 from django.apps import apps
 
+#Change History
+# ------------------------------------------------------------------------
+#   08/28/2018  When credits>30 do not show the opportunity signups
+
 #charts
 from django.views.generic import TemplateView
 
@@ -269,11 +273,15 @@ def index(request):
     return HttpResponseRedirect('/ophouse/login/')
     
 def select(request):
+    #Start a Client Kiosk
+    #Start a Volunteer Kiosk
+    #...
     if mobile(request):
       device='Touch'
     else:
       device='Laptop'
     #this is the entry point at the beginning of the day, let's clean-up old snapshots here
+    #07/28/2018 not necessarily activated at the beginning of the day!
     # should we do lifecycle management here?
     snapshots = PersonSnapshot.objects.all().filter(status=SNAPSHOT_STATUS_ACTIVE)
     for snapshot in snapshots:
@@ -575,6 +583,8 @@ def services(request):
       device='Laptop'
     error = False
     today = datetime.today().weekday()
+    #preference = Preference.objects.all().filter(name=_ENV).first()    
+    MAXCREDITS = 30 #preference.maxCredits
     if request.method == 'POST':
         template = int(request.GET.get("template", 1))
         connection_instance_pk = int(request.GET.get("connection", False))
@@ -783,8 +793,10 @@ def services(request):
         else:
           if template == 1:
             return render(request, 'services.html', {'form': form, 'points': points, 'error': error, 'device': device, 'credits': str(credits), 'connection': connection_instance.pk, 'staffrequest': staffrequest,  'constrainedByUnitsList': constrainedByUnitsList, 'constrainedByQuotaList': constrainedByQuotaList, 'constrainedByCostList': constrainedByCostList})
-          elif template == 2:
+          elif credits <= MAXCREDITS and template == 2:     # CH047 08/28/2018 add .. or if the person has more than 30 credits
             return render(request, 'opportunitybank.html', {'form': form, 'points': points, 'error': error, 'device': device, 'credits': str(credits), 'connection': connection_instance.pk, 'staffrequest': staffrequest,  'constrainedByUnitsList': constrainedByUnitsList, 'constrainedByQuotaList': constrainedByQuotaList, 'constrainedByCostList': constrainedByCostList})
+          else:
+            return HttpResponseRedirect('/ophouse/prompt?connection=%s' % (connection_instance.pk))          
                     
 
 def inference_engine(person, snapshotTimestamp):

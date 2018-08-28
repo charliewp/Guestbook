@@ -101,6 +101,12 @@ SELECT to_char(timestamp,'dy'), COUNT(*) from guestbook_personsnapshot
 WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '30 days'
 GROUP BY (to_char(timestamp,'dy')) ORDER BY COUNT(*) DESC;
 
+//new (first-time) clients in the last 7 days
+SELECT firstname, lastname, aliasname FROM guestbook_person WHERE "timelineStartDate">=NOW() - INTERVAL '7 days'
+
+//clients not seen
+
+
 \copy (SELECT to_char(timestamp,'dy'), COUNT(*) from guestbook_personsnapshot WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '30 days' GROUP BY (to_char(timestamp,'dy')) ORDER BY COUNT(*) DESC) TO 'busydays.csv' CSV HEADER 
 
 //what is our busiest day of the week in the past 30days (this counts service requests, better measure of business than simply # of clients)
@@ -115,5 +121,21 @@ SELECT COUNT(*) from guestbook_personservicerequest
 INNER JOIN guestbook_personsnapshot
 ON guestbook_personservicerequest.connection_id = guestbook_personsnapshot.idsnapshot
 WHERE guestbook_personsnapshot.timestamp > NOW() - INTERVAL '30 days'
+
+
+SELECT snapshot.timestamp 
+FROM
+  (SELECT 
+     snapshot2.timestamp, 
+     lead(snapshot2.timestamp) OVER (ORDER BY snapshot2.timestamp desc) as prev_timestamp
+   FROM 
+     guestbook_personsnapshot snapshot2
+   ORDER BY 
+     snapshot2.timestamp desc
+   ) as snapshot
+WHERE
+  snapshot.timestamp IS DISTINCT FROM snapshot2.prev_timestamp
+ORDER BY
+  snapshot.timestamp desc;
 
 
