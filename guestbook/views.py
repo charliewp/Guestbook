@@ -56,7 +56,7 @@ from django.apps import apps
 
 #Change History
 # ------------------------------------------------------------------------
-#   08/28/2018  When credits>30 do not show the opportunity signups
+#   08/28/2018  CH047 When credits>30 do not show the opportunity signups
 
 #charts
 from django.views.generic import TemplateView
@@ -583,8 +583,8 @@ def services(request):
       device='Laptop'
     error = False
     today = datetime.today().weekday()
-    #preference = Preference.objects.all().filter(name=_ENV).first()    
-    MAXCREDITS = 30 #preference.maxCredits
+    preference = Preference.objects.all().filter(name=_ENV).first()    
+    MAXCREDITS = preference.maxcredits
     if request.method == 'POST':
         template = int(request.GET.get("template", 1))
         connection_instance_pk = int(request.GET.get("connection", False))
