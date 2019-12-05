@@ -374,7 +374,7 @@ class Preference(models.Model):
     name = models.CharField(max_length=32)
     language = models.ForeignKey(LanguageResponse, on_delete=models.PROTECT, default=2)
     maxPrompts = models.PositiveIntegerField(default=2)
-    maxcredits = models.PositiveIntegerField()
+    maxcredits = models.PositiveIntegerField(default=0)
     snapshotTimeout = models.PositiveIntegerField(default=0)
     timewarp = models.PositiveIntegerField(default=1) 
     def __str__(self):
