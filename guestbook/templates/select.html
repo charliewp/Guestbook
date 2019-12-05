@@ -90,5 +90,16 @@
                   
                 </form>
             </div>
+            <div style="width:100%">
+                <form name="login" action="/ophouse/whoishere/" method="get">
+                  {%csrf_token%}
+                  {% if device == 'Touch' %}
+                                <button class="kiosk-touch-primary" style="width:100%">Who has Logged in Today?</button>
+                  {% else %}
+                                <button class="desktop-primary" style="width:100%">Who has Logged in Today?</button>
+                  {% endif %}
+                  
+                </form>
+            </div>
 </body>
 </html>

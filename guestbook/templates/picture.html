@@ -1,0 +1,83 @@
+{% load staticfiles %}
+
+<html>
+<head>
+    <title>Picture Booth</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!--    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> -->
+    <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
+<script type="text/javascript">
+    window.setTimeout("redirectpage();", 60000);    
+    function redirectpage(){
+    window.top.location.href = '/ophouse/signin';
+    }
+</script>
+</head>
+<body>
+<div class="container">
+<c><small> charliewp/Guestbook v1.02 uses the GNU GPL v3.0 [v20180725]</small></c>
+</div>
+<div class="container" id="screenshot" >
+ <h1>Can we have a picture to remember you by?</h1>
+    <div class="divTable" style="align:center">
+                       <div class="divTableBody" style="padding:15px;">
+                         <div class="divTableRow" style="padding:15px;">                            
+                              <div class="divTableCell" style="padding:15px;">
+                                <p><video class="videostream" autoplay style="width:160px;height:120px;border:5px solid white">Video</video>
+                                <p><h2>Live@OppHouse</h2>
+                              </div>
+                              <div class="divTableCell" style="padding:15px;">
+                                 <p><button id="screenshot-snap"class="desktop-primary" >Smile & Snap!</button></p>
+                              </div>  
+                              <div class="divTableCell" style="padding:15px;">
+                                    <p><img id="screenshot-img" style="border:5px solid white" src="{% static 'media/' %}{{filename}}" onerror="this.src='{% static 'media/default.jpg' %}'" alt="blank"> 
+                                    <p><h2>Our photobook</h2>
+                                </figure>
+                              </div> 
+                         </div>
+                       </div>
+    </div>
+    <form action="/ophouse/postimage?idperson={{idperson}}" method="POST" id="post-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" id="imageb64" name="imageb64" >
+        <button type="submit" class="desktop-success" style="width:100%" >Next / Siguiente</button>
+    </form>
+</div>
+
+<script>
+const constraints = {
+  //video: true
+  video: {width: {exact: 160 }, height: {exact: 120}}
+};
+
+const video = document.querySelector('video');
+const screenshotSnapButton = document.querySelector('#screenshot-snap');
+const screenshotSaveButton = document.querySelector('#screenshot-save');
+const img = document.querySelector('#screenshot img');
+navigator.mediaDevices.getUserMedia(constraints).then((stream) => {video.srcObject = stream});
+
+const canvas = document.createElement('canvas');
+
+screenshotSnapButton.onclick = video.onclick = function() {
+  console.log("click!");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  // Other browsers will fall back to image/png
+  img.src = canvas.toDataURL('image/webp');
+  //var dataURL = document.getElementById('screenshot-img').toDataURL("image/webp");
+  var dataURL = canvas.toDataURL("image/png");
+  document.getElementById('imageb64').value = dataURL;
+};
+
+function handleSuccess(stream) {
+  screenshotButton.disabled = false;
+  video.srcObject = stream;
+}
+
+</script>
+</body>
+</html>

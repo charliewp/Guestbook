@@ -1,6 +1,10 @@
 //CONNECT TO THE GUESTBOOKDB
 
-\c guestbookdb postgres 127.0.0.1 2346
+\c guestbookdb gb_readonly 127.0.0.1 2345
+\f ','
+\a
+\t
+\o 'hud.csv'
 
 //fix integrity problem
 SELECT setval('guestbook_service_idservice_seq', (SELECT MAX(idservice) FROM guestbook_service));
@@ -139,3 +143,63 @@ ORDER BY
   snapshot.timestamp desc;
 
 
+//SHOWS ALL OCCURENCES IN A DATE-RANGE OF SURVEYS WHERE UNSHELTERED HOUSING IS THE RESPONSE
+SELECT person.aliasname, snapshot.person_id, snapshot.timestamp, survey.idpersonsurvey, survey.points from guestbook_personsnapshot snapshot 
+JOIN guestbook_personsurvey survey ON (snapshot.idsnapshot=survey.connection_id) 
+JOIN guestbook_person person ON (person.idperson=snapshot.person_id) 
+WHERE (survey.prompt_id=8 AND survey.points=1 AND snapshot.timestamp >= '2018-07-01' AND snapshot.timestamp <= '2018-12-31') 
+GROUP BY (person.aliasname, snapshot.person_id, snapshot.timestamp, survey.idpersonsurvey) ORDER BY (snapshot.person_id) asc;
+
+//SHOWS COUNT OF UNSHELTERED NIGHTS FOR EACH PERSON IN A DATE-RANGE 
+SELECT person.firstname, person.lastname, person.aliasname, COUNT(*) as UNSHELTERED_NIGHTS from guestbook_personsnapshot snapshot 
+JOIN guestbook_personsurvey survey ON (snapshot.idsnapshot=survey.connection_id) 
+JOIN guestbook_person person ON (person.idperson=snapshot.person_id) 
+WHERE (survey.prompt_id=8 AND survey.points=1 AND snapshot.timestamp >= '2018-07-01' AND snapshot.timestamp <= '2018-12-31') 
+GROUP BY (person.firstname, person.lastname, person.aliasname)
+ORDER BY (COUNT(*)) desc; 
+
+//SHOWS COUNT OF UNSHELTERED NIGHTS FOR EACH PERSON IN A DATE-RANGE AND LATEST DATE UNSHELTERED
+SELECT person.firstname, person.lastname, person.aliasname, COUNT(*) as NUMBER_UNSHELTERED_NIGHTS, MAX(snapshot.timestamp) as LATEST_UNSHELTERED_DATE from guestbook_personsnapshot snapshot 
+JOIN guestbook_personsurvey survey ON (snapshot.idsnapshot=survey.connection_id) 
+JOIN guestbook_person person ON (person.idperson=snapshot.person_id) 
+WHERE (survey.prompt_id=8 AND survey.points=1 AND snapshot.timestamp >= '2018-07-01' AND snapshot.timestamp <= '2018-12-31') 
+GROUP BY (person.firstname, person.lastname, person.aliasname)
+ORDER BY (COUNT(*)) desc;
+
+//one line
+SELECT person.firstname, person.lastname, person.aliasname, COUNT(*) as NUMBER_UNSHELTERED_NIGHTS, MAX(snapshot.timestamp) as LATEST_UNSHELTERED_DATE from guestbook_personsnapshot snapshot JOIN guestbook_personsurvey survey ON (snapshot.idsnapshot=survey.connection_id) JOIN guestbook_person person ON (person.idperson=snapshot.person_id) WHERE (survey.prompt_id=8 AND survey.points=1 AND snapshot.timestamp >= '2018-07-01' AND snapshot.timestamp <= '2018-12-31') GROUP BY (person.firstname, person.lastname, person.aliasname)ORDER BY (COUNT(*)) desc;
+
+
+05/14/2019
+
+SELECT 
+person.firstname AS FIRST, person.lastname AS LAST, person.aliasname AS ALIAS, person.aliaspin AS PIN,
+person.birthdate AS DoB, gender.name AS Gender, ethnicity.name AS Race, language.name AS Language,
+person."timelineStartDate" AS "1st sign in ever",
+MIN(timestamp)::date AS "First seen",
+MAX(timestamp)::date AS "Last sign in ever",
+COUNT(*) AS "#days signed in",
+COUNT(1) FILTER (WHERE service.service_id=1) AS Meals,
+COUNT(1) FILTER (WHERE service.service_id=2) AS Showers,
+COUNT(1) FILTER (WHERE service.service_id=4) AS Laundry,
+COUNT(1) FILTER (WHERE service.service_id=3) AS Clothing,
+COUNT(1) FILTER (WHERE service.service_id=5) AS Computers,
+COUNT(1) FILTER (WHERE service.service_id=6) AS Nurse,
+COUNT(1) FILTER (WHERE service.service_id=10) AS Consult,
+COUNT(1) FILTER (WHERE survey.prompt_id=8 AND survey.points=4) AS StableHsg,
+COUNT(1) FILTER (WHERE survey.prompt_id=8 AND survey.points=3) AS UnstableHsg,
+COUNT(1) FILTER (WHERE survey.prompt_id=8 AND survey.points=2) AS Sheltered,
+COUNT(1) FILTER (WHERE survey.prompt_id=8 AND survey.points=1) AS Unsheltered,
+COUNT(1) FILTER (WHERE survey.prompt_id=8 AND survey.points=0) AS Incarcerated
+
+FROM guestbook_personsnapshot snapshot 
+JOIN guestbook_person person ON (snapshot.person_id=person.idperson)
+JOIN guestbook_ethnicityresponse ethnicity ON (person.ethnicity_id=ethnicity.idethnicity)
+JOIN guestbook_genderresponse gender ON (person.gender_id=gender.idgender)
+JOIN guestbook_languageresponse language ON (person.language_id=language.idlanguage)
+JOIN guestbook_personservicerequest service ON (snapshot.idsnapshot=service.connection_id)
+JOIN guestbook_personsurvey survey ON (snapshot.idsnapshot=survey.connection_id) 
+WHERE (snapshot.timestamp >= '2018-05-10' AND snapshot.timestamp <= '2019-05-14')
+GROUP BY (person.firstname, person.lastname, person.aliasname, 
+person.aliaspin, person.birthdate, gender.name, ethnicity.name, language.name,
+person."timelineStartDate") ORDER BY COUNT(*) desc;

@@ -25,4 +25,7 @@ urlpatterns = [
     url(r'createalias/', views.createalias, name='createalias'),
     url(r'resetalias/', views.resetalias, name='resetalias'),
     url(r'thankyou*', views.thankyou, name='thankyou'),
+    url(r'picture*', views.picture, name='picture'),
+    url(r'postimage*', views.postimage, name='postimage'),
+    url(r'whoishere*', views.whoishere, name='whoishere')
 ]

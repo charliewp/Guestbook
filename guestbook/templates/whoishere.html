@@ -1,0 +1,80 @@
+{% load staticfiles %}
+<html>
+<head>
+    <title>Who's Here Today?</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'css/guestbook.css' %}">
+</head>
+<body>
+<div class="container">
+<c><small> charliewp/Guestbook v1.02 uses the GNU GPL v3.0 [v20180725]</small></c>
+</div>
+{% if message %}
+   <p style="color: red;padding:10px">
+   <div class="container">
+      <div style="width:100%; padding:10px">
+        <c3>{{message}}</c3>
+      </div>
+   </div>
+   </p>
+{% endif %}
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="container">
+<div style="width:100%; padding:10px">
+                <form name="login" action="/ophouse/select/" method="get">
+                    {%csrf_token%}
+                    {% for error in form.non_field_errors %}
+                    <div class="form-group has-errors text-danger small">
+                        {{error}}
+                    </div>
+                    {% endfor %}
+                    <div class="divTable">
+                       <div class="divTableBody">
+                         <div class="divTableRow">
+                            {% if device == 'Touch' %} <!--HP Envy Touch -->
+                            <div class="divTableCell">
+                              <button class="kiosk-touch-primary" style="width:100%">Go Back / Regresa</button>
+                            </div>
+                            {% else %}
+                            <div class="divTableCell">
+                              <button class="desktop-primary" style="width:100%">Go Back / Regresa</button>
+                            </div>
+                            {% endif %}
+                         </div>
+                        </div>
+                    </div>
+                </form>
+</div>
+<div class="divTableRow">
+   {% if device == 'Touch' %} <!--HP Envy Touch -->
+       <div class="divTableCell" style="width:100%;padding:10px">
+          <touch-c3>These clients have logged in today...</touch-c3>
+       </div>
+   {% else %}
+       <div class="divTableCell" style="width:100%;padding:10px">
+          <desktop-c3>These clients have logged in today...</desktop-c3>
+       </div>
+   {% endif %}
+</div>
+<div>
+    {% for personsnapshot in personsnapshots %}
+        <button class="gbcheckbox-inline" style="font-size:24px;">{{personsnapshot}}</button>
+        <strong>{{ personsnapshot }}</strong>
+    {% endfor %}
+</div>
+</body>
+</html>

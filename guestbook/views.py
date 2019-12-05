@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, time
 from django.utils import timezone
 from datetime import timedelta
 import operator
@@ -8,6 +8,7 @@ from datetime import datetime
 from random import sample, randint
 from django.db import IntegrityError, DataError
 from django.conf import settings
+#from django.conf import settings as djangoSettings
 
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -46,6 +47,9 @@ from guestbook.forms import ServicesForm
 from guestbook.forms import LoginForm
 from guestbook.forms import ReporterForm
 
+import base64
+from django.core.files.storage import FileSystemStorage
+
 #from guestbook.forms import VolunteerForm
 from django.forms import CharField, ModelChoiceField, RadioSelect, BaseForm
 
@@ -53,6 +57,8 @@ from twilio.rest import Client
 import re
 import django
 from django.apps import apps
+
+import json
 
 #Change History
 # ------------------------------------------------------------------------
@@ -197,7 +203,7 @@ def login(request):
             #create the session
             request.session['username'] = username
             log.info('Guestbook Admin login complete. This is Django version= %s.%s.%s' % (django.VERSION[0], django.VERSION[1], django.VERSION[2]))
-            return HttpResponseRedirect('/ophouse/select/')
+            return HttpResponseRedirect('/ophouse/select/')            
           else:
             log.warn('userid %s  is not-an authorized.Guestbook Admin.' % (username))
             error = True
@@ -218,6 +224,19 @@ def login(request):
         form = LoginForm()
         return render(request,'login.html', {'form': form, 'device': device, 'error': error, 'message': message,})
 
+def picture(request):
+    #Security
+    if not checksession(request):
+       return HttpResponseRedirect('/ophouse/login/')
+    else:
+       username = request.session['username']
+    #End-Security
+    if mobile(request):
+      device='Touch'
+    else:
+      device='Laptop'
+    return render(request, 'picture.html', {'device': device})
+        
 def staff(request):
     error = False
     message = ''
@@ -289,7 +308,49 @@ def select(request):
       snapshot_lifecycle(snapshot.person, False)
         
     return render(request, 'select.html', {'device': device})
+    
+def postimage(request):
+    #
+    # Used to grab a picture of the client and store it in the filesystem
+    #
+    if request.method == 'POST':
+        idperson = int(request.GET.get("idperson", "unknown"))
+        person = Person.objects.get(pk=idperson)
+        dataUrlPattern = re.compile('data:image/(png|jpeg);base64,(.*)$')
+        base64_code = request.POST.get('imageb64')
+        #ImageData = dataUrlPattern.match(ImageData).group(2)
+        
+        response_data = {}
+        if (base64_code == None or len(base64_code) == 0):
+            print("Bad upload")
+            response_data['result'] = 'Upload failed!'
+        else:
+            print("{0} bytes received.".format(len(base64_code)))
+            response_data['result'] = 'Image submit successful!'
+            while (len(base64_code)%4) != 0:
+               base64_code = base64_code + "="
+            print("{0} bytes received.".format(len(base64_code)))   
+            filename = settings.MEDIA_ROOT + "/{0}_{1}_{2}.png".format(person.firstname, person.lastname, person.aliasname)
+            image_result = open(filename, 'wb')
+            #writes a valid PNG to the filesystem
+            # base64 encoded string starts with data:image/png;base64,
+            # need to split that off before the decode                22:
+            imagebytes = base64.decodebytes(bytes(base64_code[22:], 'utf-8'))
+            image_result.write(imagebytes)
+                        
+            #fs = FileSystemStorage()
+            #if fs.exists(filename):
+            #    fs.delete(filename)
+            #fs.save(filename, imagebytes)
 
+        return HttpResponseRedirect('/ophouse/services?template=1&person=%s' % (person.pk))
+        
+    else:
+        return HttpResponse(
+            json.dumps({"nothing to see": "this isn't happening"}),
+            content_type="application/json"
+        )
+        
 def sign_in(request):
     #Security
     if not checksession(request):
@@ -364,7 +425,13 @@ def sign_in(request):
                 log.debug('Wipe is complete!')
                 form = SignInForm()
               #let's go to the services page, adding a parameter to allow us to put services and opportunities in two templates
-              return HttpResponseRedirect('/ophouse/services?template=1&person=%s' % (person_instance.pk))              
+              #12-27-18 return HttpResponseRedirect('/ophouse/services?template=1&person=%s' % (person_instance.pk))   
+              #return HttpResponseRedirect('/ophouse/picture/')
+              
+              #cp later print("person_instance = {0}".format(person_instance.pk))
+              #cp filename = "{0}_{1}_{2}.png".format(person_instance.firstname, person_instance.lastname, person_instance.aliasname)
+              #cp return render(request, 'picture.html', {'idperson': person_instance.pk, 'filename': filename})
+              return HttpResponseRedirect('/ophouse/services?template=1&person=%s' % (person_instance.pk))
             else:
               error = True
               log.warn('Username %s/%s is not authorized for the Client Kiosk.' % (aliasname, aliaspin))
@@ -1214,6 +1281,7 @@ def staffqueue(request):
     else:
       query_attributes = {}
       #query_attributes['isDiscretionary'] = False
+            
       serviceTypes = Service.objects.all().filter(**query_attributes)
       serviceLinks = []
       for serviceType in serviceTypes:
@@ -1285,7 +1353,27 @@ def note(request):
       timestamp = snapshot.timestamp.strftime("%A %B-%d")
       return render(request, 'note.html', {'form': form, 'connection': connection_pk, 'displayname': displayname, 'timestamp': timestamp})
 
-
+def whoishere(request):
+    #Security
+    if not checksession(request):
+       return HttpResponseRedirect('/ophouse/login/')
+    else:
+       username = request.session['username']
+    #End-Security
+    
+    startoftoday = datetime.combine(datetime.today(), time.min)
+    print("startoftoday = {}".format(startoftoday))
+    personsnapshots = PersonSnapshot.objects.all().filter(timestamp__gte = startoftoday)
+    print("HERE TODAY:")
+    for personsnapshot in personsnapshots:
+      print(personsnapshots)
+    print("-----------")
+    
+    if mobile(request):
+      device='Touch'
+    else:
+      device='Laptop'
+    return render(request, 'whoishere.html', {'device': device, 'personsnapshots': personsnapshots})
 
 def thankyou(request):
     #Security

@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'ks4g5u_$xb50+pb&e_4=wa5ku&f_6bot*5qiy-bji8rg&w%#f5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 #ALLOWED_HOSTS = [127.0.0.1', '192.168.1.128','localhost']
 ALLOWED_HOSTS = ['*']
@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'sslserver',
     'guestbook',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -131,6 +132,9 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'guestbook/static/media')
 
 LOGGING = {
     'version': 1,

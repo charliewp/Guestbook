@@ -326,7 +326,8 @@ class PersonSnapshot(models.Model):
         statusString = 'OPEN'
         if self.isArchived:
           statusString = 'CLOSED'
-        return statusString + "-" + str(self.timestamp.strftime("%A - %B %d, %Y %I:%M%p")) + " with " + self.person.firstname + " " + self.person.lastname
+        #was return statusString + "-" + str(self.timestamp.strftime("%A - %B %d, %Y %I:%M%p")) + " with " + self.person.firstname + " " + self.person.lastname
+        return self.person.firstname + " " + self.person.lastname + "/"  + self.person.aliasname + " " + self.timestamp.strftime("%I:%M%p")
 
 class PersonServiceRequest(models.Model):
     idservice = models.BigAutoField(primary_key=True)
