@@ -1363,7 +1363,7 @@ def whoishere(request):
     
     startoftoday = datetime.combine(datetime.today(), time.min)
     print("startoftoday = {}".format(startoftoday))
-    personsnapshots = PersonSnapshot.objects.all().filter(timestamp__gte = startoftoday)
+    personsnapshots = PersonSnapshot.objects.all().filter(timestamp__gte = startoftoday).order_by('timestamp')
     print("HERE TODAY:")
     for personsnapshot in personsnapshots:
       print(personsnapshots)

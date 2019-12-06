@@ -70,11 +70,24 @@
        </div>
    {% endif %}
 </div>
-<div>
-    {% for personsnapshot in personsnapshots %}
-        <button class="gbcheckbox-inline" style="font-size:24px;">{{personsnapshot}}</button>
-        <strong>{{ personsnapshot }}</strong>
-    {% endfor %}
+<div>    
+    <div class="divTable">
+         <div class="divTableBody">
+              {% for personsnapshot in personsnapshots %} 
+                 <div class="divTableRow">
+                            {% if device == 'Touch' %} <!--HP Envy Touch -->
+                            <div class="divTableCell">
+                              <button class="gbcheckbox-inline" style="font-size:24px;">{{personsnapshot}}</button>
+                            </div>
+                            {% else %}
+                            <div class="divTableCell">
+                              <button class="gbcheckbox-inline" style="font-size:24px;">{{personsnapshot}}</button>
+                            </div>
+                            {% endif %}
+                 </div>
+            {% endfor %}
+        </div>
+   </div>
 </div>
 </body>
 </html>
